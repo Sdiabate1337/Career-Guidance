@@ -32,7 +32,7 @@ type Collaborator = {
   };
 };
 
-// Custom hook for carousel management
+// Custom hook for carousel management with optimized performance
 const useCarousel = (itemsCount: number, itemsPerView: number) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -44,15 +44,18 @@ const useCarousel = (itemsCount: number, itemsPerView: number) => {
   const touchStartXRef = useRef<number | null>(null);
   const dragXMotionValue = useMotionValue(0);
   
-  // Calculate total slides
-  const totalSlides = Math.ceil(itemsCount / itemsPerView);
+  // Calculate total slides only when dependencies change
+  const totalSlides = useMemo(() => 
+    Math.ceil(itemsCount / itemsPerView),
+    [itemsCount, itemsPerView]
+  );
   
-  // Handle transition end
+  // Handle transition end with useCallback
   const handleTransitionEnd = useCallback(() => {
     setIsAnimating(false);
   }, []);
   
-  // Slide with animation
+  // Optimized slide animation with useCallback
   const slideWithAnimation = useCallback((direction: 'next' | 'prev') => {
     if (isAnimating || totalSlides <= 1) return;
     
@@ -69,7 +72,7 @@ const useCarousel = (itemsCount: number, itemsPerView: number) => {
     setTimeout(handleTransitionEnd, 600);
   }, [isAnimating, totalSlides, handleTransitionEnd]);
   
-  // Go to specific slide
+  // Go to specific slide with useCallback
   const goToSlide = useCallback((index: number) => {
     if (isAnimating || index === currentSlide || index >= totalSlides || index < 0) return;
     
@@ -87,7 +90,7 @@ const useCarousel = (itemsCount: number, itemsPerView: number) => {
     setTimeout(handleTransitionEnd, 600);
   }, [currentSlide, isAnimating, totalSlides, handleTransitionEnd]);
   
-  // Navigation functions
+  // Navigation functions with useCallback
   const goToNextSlide = useCallback(() => {
     setHasInteracted(true);
     slideWithAnimation('next');
@@ -121,17 +124,17 @@ const useCarousel = (itemsCount: number, itemsPerView: number) => {
   };
 };
 
-// Memoized Tag Component for better performance
+// Memoized Expertise Tag Component
 const ExpertiseTag = memo(({ expertise, index }: { expertise: string, index: number }) => {
   // Get tag color based on index
   const getTagColor = (idx: number) => {
     const colors = [
-      'bg-blue-100 text-blue-800 border-blue-200',
-      'bg-green-100 text-green-800 border-green-200',
-      'bg-yellow-100 text-yellow-800 border-yellow-200',
-      'bg-purple-100 text-purple-800 border-purple-200',
-      'bg-pink-100 text-pink-800 border-pink-200',
-      'bg-indigo-100 text-indigo-800 border-indigo-200',
+      'bg-[#fff8f3] text-[#ff914d] border-[#ffd4b8]',
+      'bg-[#f0f9ff] text-[#0ea5e9] border-[#bae6fd]',
+      'bg-[#f0fdf4] text-[#22c55e] border-[#bbf7d0]',
+      'bg-[#fdf4ff] text-[#d946ef] border-[#f5d0fe]',
+      'bg-[#fff7ed] text-[#f97316] border-[#fed7aa]',
+      'bg-[#f5f3ff] text-[#8b5cf6] border-[#ddd6fe]',
     ];
     return colors[idx % colors.length];
   };
@@ -181,9 +184,9 @@ const SocialLink = memo(({
   };
   
   const colors = {
-    linkedin: "text-blue-600 hover:text-white hover:bg-blue-600",
-    twitter: "text-blue-400 hover:text-white hover:bg-blue-400",
-    website: "text-grey-600 hover:text-white hover:bg-grey-600"
+    linkedin: "bg-white text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white border border-[#0A66C2]/20",
+    twitter: "bg-white text-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white border border-[#1DA1F2]/20",
+    website: "bg-white text-[#4b5563] hover:bg-[#4b5563] hover:text-white border border-[#4b5563]/20"
   };
   
   return (
@@ -191,10 +194,10 @@ const SocialLink = memo(({
       href={url} 
       target="_blank" 
       rel="noopener noreferrer" 
-      className={`${colors[type]} transition-all duration-300 p-2 rounded-full flex items-center justify-center`}
+      className={`${colors[type]} transition-all duration-300 p-2 rounded-full flex items-center justify-center shadow-sm hover:shadow-md`}
       aria-label={ariaLabel}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 1.1, y: -2 }}
+      whileTap={{ scale: 0.95 }}
     >
       {icons[type]}
     </motion.a>
@@ -203,7 +206,7 @@ const SocialLink = memo(({
 
 SocialLink.displayName = 'SocialLink';
 
-// Collaborator Card Component
+// Optimized Collaborator Card Component
 const CollaboratorCard = memo(({ 
   collaborator, 
   language, 
@@ -242,8 +245,8 @@ const CollaboratorCard = memo(({
       }}
     >
       <motion.div 
-        className={`group bg-white rounded-[30px] overflow-hidden shadow-xl border-2 border-grey-100 transition-all duration-500 h-full flex flex-col`}
-        whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
+        className="group bg-white dark:bg-[#1f2937] rounded-[28px] overflow-hidden shadow-xl hover:shadow-2xl border border-[#f0f0f0] dark:border-[#374151] transition-all duration-500 h-full flex flex-col"
+        whileHover={{ y: -8, scale: 1.02 }}
         animate={isActive ? { 
           scale: slideDirection ? [1, 0.98, 1] : 1,
           transition: { duration: 0.5, ease: "easeOut" }
@@ -253,16 +256,16 @@ const CollaboratorCard = memo(({
         <div className="relative h-72 overflow-hidden">
           {/* Gradient overlay with subtle pulse animation */}
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-br from-orange-500/80 to-orange-700/80 mix-blend-multiply z-10"
+            className="absolute inset-0 bg-gradient-to-br from-[#ff914d]/80 to-[#ff8133]/80 mix-blend-multiply z-10"
             animate={{ opacity: [0.9, 0.8, 0.9] }}
             transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
           />
           
           {/* Background pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-grey-200 to-grey-300 flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f9f9f9] to-[#f0f0f0] dark:from-[#2d3748] dark:to-[#1f2937] flex items-center justify-center overflow-hidden">
             {/* Placeholder image with parallax effect */}
             <motion.div 
-              className="text-grey-400 text-7xl"
+              className="text-[#e0e0e0] dark:text-[#4a5568] text-7xl"
               animate={{ rotate: [0, 2, 0] }}
               transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
             >
@@ -274,7 +277,7 @@ const CollaboratorCard = memo(({
           
           {/* Name Overlay */}
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 p-6 z-20"
+            className="absolute bottom-0 left-0 right-0 p-6 z-20 bg-gradient-to-t from-black/70 to-transparent"
             initial={{ y: 10, opacity: 0.8 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -291,7 +294,7 @@ const CollaboratorCard = memo(({
               whileHover={{ opacity: 1, scale: 1 }}
             >
               <motion.div 
-                className="bg-black/60 backdrop-blur-sm p-6 m-5 rounded-xl"
+                className="bg-black/60 backdrop-blur-sm p-6 m-5 rounded-xl border border-white/10"
                 whileHover={{ rotate: ["-1deg", "1deg", "-1deg"], transition: { duration: 2, repeat: Infinity } }}
               >
                 <p className="text-white text-base italic font-medium text-center">
@@ -304,15 +307,15 @@ const CollaboratorCard = memo(({
         
         {/* Content Container */}
         <div className="p-6 flex flex-col flex-grow">
-          {/* Expertise Tags */}
-          {collaborator.expertise && (
+          {/* Expertise Tags - Only render if needed */}
+          {collaborator.expertise && collaborator.expertise.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-4">
               {collaborator.expertise.slice(0, 3).map((skill, idx) => (
                 <ExpertiseTag key={idx} expertise={skill} index={idx} />
               ))}
               {collaborator.expertise.length > 3 && (
                 <motion.span 
-                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-grey-100 text-grey-800 hover:bg-grey-200 transition-colors duration-200"
+                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-[#f9f9f9] dark:bg-[#374151] text-[#4b5563] dark:text-[#e5e7eb] hover:bg-[#f0f0f0] dark:hover:bg-[#4a5568] transition-colors duration-200"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -323,7 +326,7 @@ const CollaboratorCard = memo(({
           )}
           
           <motion.p 
-            className="text-black text-sm leading-relaxed line-clamp-3 flex-grow"
+            className="text-[#4b5563] dark:text-[#e5e7eb] text-sm leading-relaxed line-clamp-3 flex-grow"
             initial={{ opacity: 0 }}
             animate={{ opacity: inView ? 1 : 0 }}
             transition={{ delay: 0.3 }}
@@ -333,12 +336,12 @@ const CollaboratorCard = memo(({
           
           {/* Actions Row */}
           <motion.div 
-            className="flex items-center justify-between mt-4 pt-4 border-t border-grey-100"
+            className="flex items-center justify-between mt-4 pt-4 border-t border-[#f0f0f0] dark:border-[#374151]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 10 }}
             transition={{ delay: 0.5 }}
           >
-            {/* Social Links */}
+            {/* Social Links - Only render if there are links */}
             <div className="flex space-x-2">
               {collaborator.socialLinks?.linkedin && (
                 <SocialLink 
@@ -366,9 +369,9 @@ const CollaboratorCard = memo(({
             {/* View Details Button with hover effect */}
             <motion.button 
               onClick={onClick}
-              className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-medium"
+              className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#fff8f3] dark:bg-[#ff914d]/10 text-[#ff914d] text-xs font-medium"
               whileHover={{ 
-                backgroundColor: "rgb(254, 215, 170)", 
+                backgroundColor: "#ffebd9", 
                 scale: 1.05,
                 paddingRight: "1.25rem" 
               }}
@@ -396,7 +399,7 @@ const CollaboratorCard = memo(({
 
 CollaboratorCard.displayName = 'CollaboratorCard';
 
-// Modal Details Component
+// Optimized Modal Details Component
 const CollaboratorModal = memo(({ 
   collaborator, 
   language, 
@@ -408,21 +411,21 @@ const CollaboratorModal = memo(({
   onClose: () => void,
   modalRef: React.RefObject<HTMLDivElement | null>
 }) => {
-  // Get random color for expertise tags
-  const getTagColor = (index: number) => {
+  // Get tag color based on index - Memoized function
+  const getTagColor = useCallback((index: number) => {
     const colors = [
-      'bg-blue-100 text-blue-800 border-blue-200',
-      'bg-green-100 text-green-800 border-green-200',
-      'bg-yellow-100 text-yellow-800 border-yellow-200',
-      'bg-purple-100 text-purple-800 border-purple-200',
-      'bg-pink-100 text-pink-800 border-pink-200',
-      'bg-indigo-100 text-indigo-800 border-indigo-200',
+      'bg-[#fff8f3] text-[#ff914d] border-[#ffd4b8]',
+      'bg-[#f0f9ff] text-[#0ea5e9] border-[#bae6fd]',
+      'bg-[#f0fdf4] text-[#22c55e] border-[#bbf7d0]',
+      'bg-[#fdf4ff] text-[#d946ef] border-[#f5d0fe]',
+      'bg-[#fff7ed] text-[#f97316] border-[#fed7aa]',
+      'bg-[#f5f3ff] text-[#8b5cf6] border-[#ddd6fe]',
     ];
     return colors[index % colors.length];
-  };
+  }, []);
   
+  // Focus trap for accessibility
   useEffect(() => {
-    // Focus trap for accessibility
     const focusableElements = modalRef.current?.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
@@ -476,7 +479,7 @@ const CollaboratorModal = memo(({
     >
       <motion.div 
         ref={modalRef}
-        className="bg-white rounded-[30px] max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-white dark:bg-[#1f2937] rounded-[30px] max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl modal-content"
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -485,14 +488,45 @@ const CollaboratorModal = memo(({
         <div className="relative">
           {/* Modal Header with Image Background and parallax effect */}
           <motion.div 
-            className="h-52 bg-gradient-to-r from-orange-500 to-orange-600 rounded-t-[30px] flex items-end relative overflow-hidden modal-header"
+            className="h-52 bg-gradient-to-r from-[#ff914d] to-[#ff8133] rounded-t-[30px] flex items-end relative overflow-hidden modal-header"
             whileHover={{ backgroundPosition: ["0% 0%", "100% 0%"] }}
             transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
           >
+            {/* Decorative pattern background */}
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+            
+            {/* Animated particles */}
+            <div className="absolute inset-0 overflow-hidden">
+              <motion.div 
+                className="absolute top-[20%] left-[30%] w-2 h-2 bg-white/40 rounded-full"
+                animate={{ 
+                  y: [0, -20, 0],
+                  opacity: [0.4, 0.7, 0.4]
+                }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <motion.div 
+                className="absolute bottom-[30%] right-[25%] w-3 h-3 bg-white/30 rounded-full"
+                animate={{ 
+                  y: [0, 20, 0],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", delay: 1 }}
+              />
+              <motion.div 
+                className="absolute top-[50%] right-[15%] w-1.5 h-1.5 bg-white/50 rounded-full"
+                animate={{ 
+                  y: [0, -15, 0],
+                  opacity: [0.5, 0.8, 0.5]
+                }}
+                transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+              />
+            </div>
+            
+            {/* Close button with enhanced animation */}
             <motion.button 
               onClick={onClose}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/20 text-white flex items-center justify-center"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/20 backdrop-blur-sm text-white flex items-center justify-center border border-white/20"
               whileHover={{ 
                 backgroundColor: "rgba(0,0,0,0.4)", 
                 scale: 1.1,
@@ -508,13 +542,13 @@ const CollaboratorModal = memo(({
             
             {/* Profile Image with hover effect */}
             <motion.div 
-              className="absolute bottom-0 left-8 transform translate-y-1/2 w-36 h-36 rounded-full border-4 border-white shadow-xl bg-white"
+              className="absolute bottom-0 left-8 transform translate-y-1/2 w-36 h-36 rounded-full border-4 border-white dark:border-[#1f2937] shadow-xl bg-white dark:bg-[#1f2937]"
               whileHover={{ scale: 1.05, y: "40%" }}
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
             >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-grey-200 to-grey-300 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f9f9f9] to-[#f0f0f0] dark:from-[#2d3748] dark:to-[#1f2937] flex items-center justify-center overflow-hidden">
                 <motion.div 
-                  className="text-grey-400"
+                  className="text-[#e0e0e0] dark:text-[#4a5568]"
                   animate={{ rotate: [0, 5, 0, -5, 0] }}
                   transition={{ duration: 10, repeat: Infinity, repeatType: "loop" }}
                 >
@@ -535,8 +569,8 @@ const CollaboratorModal = memo(({
               transition={{ delay: 0.1 }}
             >
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold text-black">{collaborator.name}</h3>
-                <p className="text-orange-600 font-medium text-lg">{collaborator.role[language === 'en' ? 'en' : 'fr']}</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#1f2937] dark:text-white mb-1">{collaborator.name}</h3>
+                <p className="text-[#ff914d] font-medium text-lg">{collaborator.role[language === 'en' ? 'en' : 'fr']}</p>
               </div>
               
               {/* Social Links with enhanced hover effects */}
@@ -546,8 +580,8 @@ const CollaboratorModal = memo(({
                     href={collaborator.socialLinks.linkedin} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-white bg-blue-600 p-2.5 rounded-full"
-                    whileHover={{ scale: 1.1, backgroundColor: "#0A66C2" }}
+                    className="text-white bg-[#0A66C2] p-2.5 rounded-full shadow-md"
+                    whileHover={{ scale: 1.1, y: -3, boxShadow: "0 10px 15px -3px rgba(10, 102, 194, 0.3)" }}
                     whileTap={{ scale: 0.9 }}
                     aria-label="LinkedIn profile"
                   >
@@ -561,8 +595,8 @@ const CollaboratorModal = memo(({
                     href={collaborator.socialLinks.twitter} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-white bg-blue-400 p-2.5 rounded-full"
-                    whileHover={{ scale: 1.1, backgroundColor: "#1DA1F2" }}
+                    className="text-white bg-[#1DA1F2] p-2.5 rounded-full shadow-md"
+                    whileHover={{ scale: 1.1, y: -3, boxShadow: "0 10px 15px -3px rgba(29, 161, 242, 0.3)" }}
                     whileTap={{ scale: 0.9 }}
                     aria-label="Twitter profile"
                   >
@@ -576,8 +610,8 @@ const CollaboratorModal = memo(({
                     href={collaborator.socialLinks.website} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-white bg-grey-600 p-2.5 rounded-full"
-                    whileHover={{ scale: 1.1, backgroundColor: "#4B5563" }}
+                    className="text-white bg-[#4b5563] p-2.5 rounded-full shadow-md"
+                    whileHover={{ scale: 1.1, y: -3, boxShadow: "0 10px 15px -3px rgba(75, 85, 99, 0.3)" }}
                     whileTap={{ scale: 0.9 }}
                     aria-label="Personal website"
                   >
@@ -592,18 +626,18 @@ const CollaboratorModal = memo(({
             {/* Quote if available with enhanced styling */}
             {collaborator.quote && (
               <motion.div 
-                className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100/50 p-7 rounded-2xl shadow-inner"
+                className="mb-8 bg-gradient-to-r from-[#fff8f3] to-[#fff4eb]/50 dark:from-[#2d3748] dark:to-[#1f2937] p-7 rounded-2xl shadow-inner border border-[#ffebd9]/50 dark:border-[#374151]"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, type: "spring" }}
                 whileHover={{ scale: 1.02 }}
               >
                 <div className="relative">
-                  <svg className="absolute top-0 left-0 w-8 h-8 text-orange-300 transform -translate-x-4 -translate-y-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="absolute top-0 left-0 w-8 h-8 text-[#ff914d]/30 transform -translate-x-4 -translate-y-4 opacity-60" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                   </svg>
                   <motion.blockquote 
-                    className="text-black font-serif text-lg italic"
+                    className="text-[#4b5563] dark:text-[#e5e7eb] font-serif text-lg italic"
                     animate={{ scale: [1, 1.01, 1] }}
                     transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
                   >
@@ -613,16 +647,16 @@ const CollaboratorModal = memo(({
               </motion.div>
             )}
             
-            {/* Expertise Tags with enhanced interactions */}
-            {collaborator.expertise && (
+            {/* Expertise Tags with enhanced interactions - Only render if needed */}
+            {collaborator.expertise && collaborator.expertise.length > 0 && (
               <motion.div 
                 className="mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h4 className="text-sm font-bold text-grey-500 uppercase mb-3 flex items-center">
-                  <svg className="w-4 h-4 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <h4 className="text-sm font-bold text-[#6b7280] dark:text-[#9ca3af] uppercase tracking-wider mb-3 flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-[#ff914d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                   {language === 'en' ? 'Areas of Expertise' : 'Domaines d\'Expertise'}
@@ -651,28 +685,28 @@ const CollaboratorModal = memo(({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h4 className="text-sm font-bold text-grey-500 uppercase mb-3 flex items-center">
-                <svg className="w-4 h-4 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <h4 className="text-sm font-bold text-[#6b7280] dark:text-[#9ca3af] uppercase tracking-wider mb-3 flex items-center">
+                <svg className="w-4 h-4 mr-2 text-[#ff914d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 {language === 'en' ? 'Biography' : 'Biographie'}
               </h4>
-              <p className="text-black leading-relaxed">
+              <p className="text-[#4b5563] dark:text-[#e5e7eb] leading-relaxed">
                 {collaborator.bio[language === 'en' ? 'en' : 'fr']}
               </p>
             </motion.div>
             
             {/* Actions */}
             <motion.div 
-              className="flex flex-wrap justify-between items-center pt-6 border-t border-grey-100"
+              className="flex flex-wrap justify-between items-center pt-6 border-t border-[#f0f0f0] dark:border-[#374151] gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
               {/* Contact Button */}
               <motion.button 
-                className="px-6 py-3 bg-orange-500 text-white font-medium rounded-full"
-                whileHover={{ scale: 1.05, backgroundColor: "#F97316" }}
+                className="px-6 py-3 bg-[#ff914d] hover:bg-[#ff8133] text-white font-medium rounded-full shadow-md hover:shadow-lg"
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 {language === 'en' ? 'Contact Collaborator' : 'Contacter le Collaborateur'}
@@ -680,8 +714,8 @@ const CollaboratorModal = memo(({
               
               {/* Share Button */}
               <motion.button 
-                className="px-6 py-3 bg-grey-100 text-black font-medium rounded-full flex items-center"
-                whileHover={{ scale: 1.05, backgroundColor: "#E5E7EB" }}
+                className="px-6 py-3 bg-[#f3f4f6] dark:bg-[#374151] hover:bg-[#e5e7eb] dark:hover:bg-[#4b5563] text-[#4b5563] dark:text-[#e5e7eb] font-medium rounded-full flex items-center shadow-md hover:shadow-lg"
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -699,8 +733,8 @@ const CollaboratorModal = memo(({
 
 CollaboratorModal.displayName = 'CollaboratorModal';
 
-// Counter Animation Component
-const CounterAnimation = ({ target, label }: { target: string | number, label: string }) => {
+// Optimized Counter Animation Component
+const CounterAnimation = memo(({ target, label }: { target: string | number, label: string }) => {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -742,14 +776,375 @@ const CounterAnimation = ({ target, label }: { target: string | number, label: s
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
     >
-      <p className="text-3xl font-bold text-orange-600 mb-1 counter-anim">{displayValue}</p>
-      <p className="text-black font-medium">{label}</p>
+      <p className="text-3xl font-bold text-[#ff914d] mb-1 counter-anim">{displayValue}</p>
+      <p className="text-[#4b5563] dark:text-[#e5e7eb] font-medium">{label}</p>
     </motion.div>
   );
-};
+});
 
+CounterAnimation.displayName = 'CounterAnimation';
+
+// Optimized Carousel Arrow Component
+const CarouselArrow = memo(({ 
+  direction, 
+  onClick, 
+  disabled 
+}: { 
+  direction: 'prev' | 'next'; 
+  onClick: () => void; 
+  disabled?: boolean 
+}) => {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      className={`absolute top-1/2 -translate-y-1/2 ${direction === 'prev' ? 'left-4 md:-left-5' : 'right-4 md:-right-5'} z-20 w-12 h-12 rounded-full bg-white/90 dark:bg-[#1f2937]/90 backdrop-blur-sm shadow-lg text-[#4b5563] dark:text-[#e5e7eb] flex items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#ff914d] hover:text-white'} border border-[#f0f0f0] dark:border-[#374151]`}
+      whileHover={!disabled ? { scale: 1.1, backgroundColor: "#ff914d", color: "#ffffff" } : {}}
+      whileTap={!disabled ? { scale: 0.9 } : {}}
+      initial={{ opacity: 0, x: direction === 'prev' ? -20 : 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      aria-label={direction === 'prev' ? 'Previous slide' : 'Next slide'}
+    >
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={2.5} 
+          d={direction === 'prev' ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} 
+        />
+      </svg>
+    </motion.button>
+  );
+});
+
+CarouselArrow.displayName = 'CarouselArrow';
+
+// Dots Indicator Component
+const DotsIndicator = memo(({ 
+  totalSlides, 
+  currentSlide, 
+  goToSlide, 
+  isAnimating 
+}: { 
+  totalSlides: number; 
+  currentSlide: number; 
+  goToSlide: (index: number) => void;
+  isAnimating: boolean;
+}) => {
+  return (
+    <div className="flex justify-center mt-10 space-x-2">
+      {Array.from({ length: totalSlides }).map((_, index) => (
+        <motion.button
+          key={index}
+          onClick={() => {
+            if (!isAnimating) goToSlide(index);
+          }}
+          className={`transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#ff914d]/40 rounded-full ${
+            currentSlide === index 
+              ? 'bg-[#ff914d] h-3' 
+              : 'bg-[#e5e7eb] dark:bg-[#4b5563] h-3 hover:bg-[#d1d5db] dark:hover:bg-[#6b7280]'
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+          aria-current={currentSlide === index ? 'true' : 'false'}
+          disabled={isAnimating}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ 
+            opacity: 1, 
+            scale: 1,
+            width: currentSlide === index ? 40 : 12
+          }}
+          transition={{ 
+            duration: 0.3, 
+            delay: 0.1 + (index * 0.05) 
+          }}
+          whileHover={!isAnimating && currentSlide !== index ? { scale: 1.2 } : {}}
+          whileTap={!isAnimating ? { scale: 0.9 } : {}}
+        />
+      ))}
+    </div>
+  );
+});
+
+DotsIndicator.displayName = 'DotsIndicator';
+
+// SearchForm Component
+const SearchForm = memo(({ 
+  language, 
+  handleSearchChange, 
+  searchTerm, 
+  clearSearch,
+  autoplay,
+  toggleAutoplay
+}: { 
+  language: string;
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchTerm: string;
+  clearSearch: () => void;
+  autoplay: boolean;
+  toggleAutoplay: () => void;
+}) => {
+  return (
+    <motion.div 
+      className="mt-12 flex flex-col md:flex-row items-center justify-center gap-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.6 }}
+    >
+      <motion.div 
+        className="relative w-full max-w-md group"
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+      >
+        <input
+          type="text"
+          onChange={handleSearchChange}
+          placeholder={language === 'en' ? "Search by name or expertise..." : "Rechercher par nom ou expertise..."}
+          className="w-full py-3.5 px-5 pl-14 rounded-full bg-white dark:bg-[#1f2937] text-[#4b5563] dark:text-white border-2 border-[#f0f0f0] dark:border-[#374151] shadow-lg focus:outline-none focus:ring-3 focus:ring-[#ff914d]/30 focus:border-[#ff914d]/30 transition-all duration-300 group-hover:shadow-xl"
+          aria-label={language === 'en' ? "Search collaborators" : "Rechercher des collaborateurs"}
+        />
+        <motion.svg 
+          className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-[#9ca3af] group-hover:text-[#ff914d] transition-colors duration-300" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 0.5 }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </motion.svg>
+        
+        {/* Clear search button with animation */}
+        <AnimatePresence>
+          {searchTerm && (
+            <motion.button 
+              onClick={clearSearch}
+              className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#f3f4f6] dark:bg-[#374151] text-[#4b5563] dark:text-[#e5e7eb] hover:bg-[#e5e7eb] dark:hover:bg-[#4b5563] flex items-center justify-center"
+              aria-label={language === 'en' ? "Clear search" : "Effacer la recherche"}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </motion.div>
+      
+      {/* Autoplay toggle with enhanced interaction */}
+      <motion.button 
+        onClick={toggleAutoplay}
+        className={`flex items-center space-x-2 px-4 py-3 rounded-full transition-all duration-300 shadow-md ${
+          autoplay 
+            ? 'bg-[#fff8f3] dark:bg-[#ff914d]/10 text-[#ff914d] hover:bg-[#ffebd9] dark:hover:bg-[#ff914d]/20' 
+            : 'bg-[#f3f4f6] dark:bg-[#374151] text-[#4b5563] dark:text-[#e5e7eb] hover:bg-[#e5e7eb] dark:hover:bg-[#4b5563]'
+        }`}
+        aria-pressed={autoplay}
+        aria-label={autoplay ? (language === 'en' ? "Disable autoplay" : "Désactiver la lecture automatique") : (language === 'en' ? "Enable autoplay" : "Activer la lecture automatique")}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.svg 
+            key={autoplay ? 'pause' : 'play'}
+            className="w-5 h-5" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+            initial={{ opacity: 0, rotate: -10 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            exit={{ opacity: 0, rotate: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {autoplay ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            )}
+          </motion.svg>
+        </AnimatePresence>
+        <span className="text-sm font-medium">
+          {autoplay 
+            ? (language === 'en' ? 'Pause' : 'Pause') 
+            : (language === 'en' ? 'Autoplay' : 'Lecture auto')}
+        </span>
+      </motion.button>
+    </motion.div>
+  );
+});
+
+SearchForm.displayName = 'SearchForm';
+
+// NoResults Component
+const NoResults = memo(({ 
+  language, 
+  clearSearch 
+}: { 
+  language: string;
+  clearSearch: () => void;
+}) => {
+  return (
+    <motion.div 
+      className="text-center py-16 bg-white dark:bg-[#1f2937] rounded-[30px] shadow-xl border-2 border-[#f0f0f0] dark:border-[#374151] max-w-3xl mx-auto"
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div 
+        className="w-20 h-20 mx-auto mb-6 bg-[#f3f4f6] dark:bg-[#374151] rounded-full flex items-center justify-center"
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1, rotate: [0, 10, -10, 0] }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <svg className="w-10 h-10 text-[#9ca3af] dark:text-[#d1d5db]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </motion.div>
+      <motion.h4 
+        className="text-xl font-bold text-[#1f2937] dark:text-white mb-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        {language === 'en' ? 'No collaborators found' : 'Aucun collaborateur trouvé'}
+      </motion.h4>
+      <motion.p 
+        className="text-[#6b7280] dark:text-[#9ca3af] max-w-md mx-auto"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        {language === 'en' 
+          ? 'Try adjusting your search criteria to find collaborators.' 
+          : 'Essayez d\'ajuster vos critères de recherche pour trouver des collaborateurs.'}
+      </motion.p>
+      <motion.button 
+        onClick={clearSearch}
+        className="mt-6 inline-flex items-center px-5 py-2.5 rounded-full bg-[#ff914d] text-white font-medium text-sm transition-all duration-300 hover:bg-[#ff8133] shadow-md hover:shadow-lg"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
+        <svg className="mr-1.5 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>{language === 'en' ? 'Reset search' : 'Réinitialiser la recherche'}</span>
+      </motion.button>
+    </motion.div>
+  );
+});
+
+NoResults.displayName = 'NoResults';
+
+// LoadingSkeleton Component
+const LoadingSkeleton = memo(({ cardsPerView }: { cardsPerView: number }) => {
+  return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[...Array(cardsPerView)].map((_, index) => (
+        <motion.div 
+          key={index} 
+          className="animate-pulse bg-white dark:bg-[#1f2937] rounded-[28px] overflow-hidden shadow-xl border border-[#f0f0f0] dark:border-[#374151] h-[570px]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            transition: { delay: index * 0.1 }
+          }}
+        >
+          <div className="h-72 bg-[#f3f4f6] dark:bg-[#2d3748]">
+            <motion.div 
+              className="w-full h-full bg-gradient-to-r from-[#f3f4f6] to-[#f9fafb] dark:from-[#2d3748] dark:to-[#374151]"
+              animate={{ 
+                x: ['-100%', '100%'],
+                opacity: [0.5, 0.8, 0.5]
+              }}
+              transition={{ 
+                repeat: Infinity, 
+                duration: 1.5,
+                ease: "linear"
+              }}
+            />
+          </div>
+          <div className="p-6">
+            <motion.div 
+              className="h-6 bg-[#f3f4f6] dark:bg-[#374151] rounded-lg w-3/4 mb-4"
+              animate={{ opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+            />
+            <motion.div 
+              className="h-4 bg-[#f3f4f6] dark:bg-[#374151] rounded-lg w-1/2 mb-6"
+              animate={{ opacity: [0.5, 0.7, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.2 }}
+            />
+            <div className="flex gap-2 mb-4">
+              <motion.div 
+                className="h-6 bg-[#f3f4f6] dark:bg-[#374151] rounded-full w-16"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.3 }}
+              />
+              <motion.div 
+                className="h-6 bg-[#f3f4f6] dark:bg-[#374151] rounded-full w-20"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.4 }}
+              />
+            </div>
+            <div className="space-y-2">
+              <motion.div 
+                className="h-3 bg-[#f3f4f6] dark:bg-[#374151] rounded-lg w-full"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+              />
+              <motion.div 
+                className="h-3 bg-[#f3f4f6] dark:bg-[#374151] rounded-lg w-full"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.6 }}
+              />
+              <motion.div 
+                className="h-3 bg-[#f3f4f6] dark:bg-[#374151] rounded-lg w-3/4"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.7 }}
+              />
+            </div>
+            
+            <div className="mt-6 pt-4 border-t border-[#f0f0f0] dark:border-[#374151] flex justify-between items-center">
+              <div className="flex space-x-2">
+                {[...Array(2)].map((_, idx) => (
+                  <motion.div 
+                    key={idx}
+                    className="w-8 h-8 rounded-full bg-[#f3f4f6] dark:bg-[#374151]"
+                    animate={{ opacity: [0.5, 0.7, 0.5] }}
+                    transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.3 + (idx * 0.1) }}
+                  />
+                ))}
+              </div>
+              <motion.div 
+                className="h-8 bg-[#f3f4f6] dark:bg-[#374151] rounded-full w-24"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+              />
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+});
+
+LoadingSkeleton.displayName = 'LoadingSkeleton';
+
+// Main Collaborateurs Component
 const Collaborateurs = () => {
-  // Context and state
+  // Context and state with optimized initialization
   const { language } = useContext(LanguageContext);
   const [isVisible, setIsVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -760,12 +1155,12 @@ const Collaborateurs = () => {
   const modalRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   
-  // Current user and timestamp
+  // Current user and timestamp - Updated with the latest values
   const currentUser = "Sdiabate1337";
-  const currentDateTime = "2025-05-27 17:34:38";
+  const currentDateTime = "2025-06-04 17:19:28";
   
-  // Sample collaborator data - In production, this would come from an API or CMS
-  const collaborators: Collaborator[] = [
+  // Sample collaborator data - Memoized
+  const collaborators: Collaborator[] = useMemo(() => [
     {
       id: "collab-1",
       name: "Dr. Amadou Diallo",
@@ -890,24 +1285,38 @@ const Collaborateurs = () => {
         website: "https://culturalheritage-africa.org"
       }
     }
-  ];
+  ], []);
 
-  // Filter collaborators based on search term with debounce
+  // Filter collaborators based on search term with optimized debounce
   const debouncedSetSearchTerm = useDebouncedCallback((value: string) => {
     setSearchTerm(value);
   }, 300);
   
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSetSearchTerm(e.target.value);
-  };
+  }, [debouncedSetSearchTerm]);
+  
+  // Clear search with useCallback
+  const clearSearch = useCallback(() => {
+    setSearchTerm('');
+    const input = document.querySelector('input[type="text"]') as HTMLInputElement;
+    if (input) input.value = '';
+  }, []);
+  
+  // Toggle autoplay with useCallback
+  const toggleAutoplay = useCallback(() => {
+    setAutoplay(prev => !prev);
+  }, []);
   
   // Memoized filtered collaborators to prevent unnecessary re-renders
   const filteredCollaborators = useMemo(() => {
+    if (!searchTerm) return collaborators;
+    
+    const lowercasedTerm = searchTerm.toLowerCase();
     return collaborators.filter(c => 
-      !searchTerm || 
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.bio[language === 'en' ? 'en' : 'fr'].toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (c.expertise && c.expertise.some(e => e.toLowerCase().includes(searchTerm.toLowerCase())))
+      c.name.toLowerCase().includes(lowercasedTerm) ||
+      c.bio[language === 'en' ? 'en' : 'fr'].toLowerCase().includes(lowercasedTerm) ||
+      (c.expertise && c.expertise.some(e => e.toLowerCase().includes(lowercasedTerm)))
     );
   }, [collaborators, searchTerm, language]);
   
@@ -936,22 +1345,21 @@ const Collaborateurs = () => {
   // Animation controls for the carousel
   const controls = useAnimation();
   
-  // Effect for controlling the drag animation
+  // Effect for controlling the drag animation - Optimized
   useEffect(() => {
-    // When drag offset changes, update the animation
     dragXMotionValue.set(dragOffset);
   }, [dragOffset, dragXMotionValue]);
   
-  // This effect handles the position calculation of the slider based on current slide
+  // Position calculation of the slider - Optimized with dependency checks
   useEffect(() => {
-    if (!isAnimating) {
+    if (!isAnimating && carouselRef.current) {
       controls.start({
-        x: -currentSlide * 100 * (carouselRef.current?.clientWidth || 1) / 100 + dragOffset
+        x: -currentSlide * 100 * (carouselRef.current.clientWidth || 1) / 100 + dragOffset
       });
     }
   }, [currentSlide, controls, dragOffset, isAnimating]);
   
-  // Update cards per view based on window size
+  // Update cards per view based on window size - Optimized
   useEffect(() => {
     const updateCardsPerView = () => {
       if (window.innerWidth < 640) {
@@ -971,34 +1379,21 @@ const Collaborateurs = () => {
     };
   }, []);
   
-  // Simulate loading state with progress animation
+  // Simulate loading state with progress animation - Optimized
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Extended loading time for better effect
+    }, 1000); // Reduced loading time for better UX
     
     return () => clearTimeout(timer);
   }, []);
   
-  // Initial animations and event listeners
+  // Initial animations and event listeners - Optimized
   useEffect(() => {
     setIsVisible(true);
-    
-    // Close modal when clicking outside
-    function handleClickOutside(event: MouseEvent) {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setSelectedCollaborator(null);
-      }
-    }
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
   
-  // Keyboard navigation
+  // Keyboard navigation - Optimized
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
@@ -1012,7 +1407,7 @@ const Collaborateurs = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [goToNextSlide, goToPrevSlide]);
   
-  // Autoplay functionality
+  // Autoplay functionality - Optimized
   useEffect(() => {
     if (autoplay && !hasInteracted && totalSlides > 1 && !isAnimating) {
       const timer = setInterval(() => {
@@ -1023,25 +1418,17 @@ const Collaborateurs = () => {
     }
   }, [autoplay, totalSlides, hasInteracted, isAnimating, slideWithAnimation]);
   
-  // Get collaborators for current slide
-  const currentCollaborators = useMemo(() => {
-    return filteredCollaborators.slice(
-      currentSlide * cardsPerView, 
-      (currentSlide * cardsPerView) + cardsPerView
-    );
-  }, [filteredCollaborators, currentSlide, cardsPerView]);
-  
-  // Mouse event handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
+  // Mouse event handlers with useCallback
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (isAnimating) return;
     
     setIsDragging(true);
     setDragStartX(e.clientX);
     setDragOffset(0);
     e.preventDefault();
-  };
+  }, [isAnimating, setIsDragging, setDragStartX, setDragOffset]);
   
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!isDragging || isAnimating) return;
     
     const currentX = e.clientX;
@@ -1053,9 +1440,9 @@ const Collaborateurs = () => {
     }
     
     setDragOffset(newOffset);
-  };
+  }, [isDragging, isAnimating, currentSlide, dragStartX, totalSlides, setDragOffset]);
   
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (!isDragging || isAnimating) return;
     
     if (dragOffset > 100) {
@@ -1069,22 +1456,22 @@ const Collaborateurs = () => {
     
     setIsDragging(false);
     setHasInteracted(true);
-  };
+  }, [isDragging, isAnimating, dragOffset, slideWithAnimation, setDragOffset, setIsDragging, setHasInteracted]);
   
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (isDragging) {
       setDragOffset(0);
       setIsDragging(false);
     }
-  };
+  }, [isDragging, setDragOffset, setIsDragging]);
   
-  // Touch event handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
+  // Touch event handlers with useCallback
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (isAnimating) return;
     touchStartXRef.current = e.touches[0].clientX;
-  };
+  }, [isAnimating, touchStartXRef]);
   
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (touchStartXRef.current === null || isAnimating) return;
     
     const touchCurrentX = e.touches[0].clientX;
@@ -1097,9 +1484,9 @@ const Collaborateurs = () => {
     }
     
     setDragOffset(newOffset);
-  };
+  }, [touchStartXRef, isAnimating, currentSlide, totalSlides, setDragOffset]);
   
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     if (touchStartXRef.current === null || isAnimating) return;
     
     const touchEndX = e.changedTouches[0].clientX;
@@ -1117,8 +1504,8 @@ const Collaborateurs = () => {
     
     touchStartXRef.current = null;
     setHasInteracted(true);
-  };
-  
+  }, [touchStartXRef, isAnimating, slideWithAnimation, setDragOffset, setHasInteracted]);
+
   // Track scroll position for parallax effects
   const [scrollY, setScrollY] = useState(0);
   const scrollYMotionValue = useMotionValue(0);
@@ -1151,7 +1538,7 @@ const Collaborateurs = () => {
   return (
     <motion.section 
       ref={setSectionRefs}
-      className="py-28 lg:py-32 relative overflow-hidden bg-gradient-to-br from-grey-50 via-grey-100 to-grey-50 dark:from-grey-900 dark:via-grey-800 dark:to-grey-900"
+      className="py-28 lg:py-32 relative overflow-hidden bg-gradient-to-br from-[#f9fafb] via-[#f3f4f6] to-[#f9fafb] dark:from-[#111827] dark:via-[#1f2937] dark:to-[#111827]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -1159,22 +1546,50 @@ const Collaborateurs = () => {
       {/* Enhanced Background Elements with Parallax */}
       <motion.div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute -top-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-orange-100/40 to-orange-200/40 dark:from-orange-900/15 dark:to-orange-800/15 blur-3xl"
+          className="absolute -top-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#fff8f3]/40 to-[#ffebd9]/40 dark:from-[#ff914d]/5 dark:to-[#ff8133]/5 blur-3xl"
           animate={{ scale: [1, 1.05, 1], opacity: [0.4, 0.5, 0.4] }}
           transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
           style={{ y: scrollY * -0.1 }}
         />
         <motion.div 
-          className="absolute -bottom-[30%] -left-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-blue-100/40 to-blue-200/40 dark:from-blue-900/15 dark:to-blue-800/15 blur-3xl"
+          className="absolute -bottom-[30%] -left-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#f0f9ff]/40 to-[#e0f2fe]/40 dark:from-[#0ea5e9]/5 dark:to-[#0284c7]/5 blur-3xl"
           animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse", delay: 5 }}
           style={{ y: scrollY * 0.1 }}
         />
         
         {/* Enhanced Grid Pattern with Parallax */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-7 dark:opacity-7" style={{
+        <div className="absolute inset-0 bg-grid-pattern opacity-7 dark:opacity-10" style={{
           transform: `translateY(${scrollY * 0.1}px)`
         }}></div>
+        
+        {/* Floating particles */}
+        <motion.div
+          className="absolute top-1/4 left-1/5 w-2 h-2 bg-[#ff914d]/30 rounded-full"
+          animate={{ 
+            y: [0, -20, 0],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+        />
+        
+        <motion.div
+          className="absolute top-3/4 right-1/4 w-3 h-3 bg-[#0ea5e9]/30 rounded-full"
+          animate={{ 
+            y: [0, 20, 0],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", delay: 1 }}
+        />
+        
+        <motion.div
+          className="absolute top-2/4 right-1/3 w-1.5 h-1.5 bg-[#22c55e]/30 rounded-full"
+          animate={{ 
+            y: [0, -15, 0],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+        />
       </motion.div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
@@ -1186,25 +1601,25 @@ const Collaborateurs = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <motion.div 
-                        className="flex items-center justify-center mb-4"
+            className="flex items-center justify-center mb-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <motion.div 
-              className="w-12 h-1 bg-orange-300 rounded-full"
+              className="w-12 h-1 bg-[#ff914d] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: "3rem" }}
               transition={{ duration: 0.7, delay: 0.3 }}
             />
             <motion.div 
-              className="w-3 h-3 bg-orange-500 rounded-full mx-2"
+              className="w-3 h-3 bg-[#ff914d] rounded-full mx-2"
               initial={{ scale: 0 }}
               animate={{ scale: 1, rotate: 180 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             />
             <motion.div 
-              className="w-12 h-1 bg-orange-300 rounded-full"
+              className="w-12 h-1 bg-[#ff914d] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: "3rem" }}
               transition={{ duration: 0.7, delay: 0.5 }}
@@ -1212,7 +1627,7 @@ const Collaborateurs = () => {
           </motion.div>
           
           <motion.h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-grey-900 dark:text-white mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#1f2937] dark:text-white mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -1227,7 +1642,7 @@ const Collaborateurs = () => {
                 {language === 'en' ? 'Our Collaborators' : 'Nos Collaborateurs'}
               </motion.span>
               <motion.span 
-                className="absolute bottom-0 left-0 right-0 h-4 bg-orange-200/50 dark:bg-orange-800/50 -z-10 transform -rotate-1"
+                className="absolute bottom-0 left-0 right-0 h-4 bg-[#ffebd9] dark:bg-[#ff914d]/20 -z-10 transform -rotate-1"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
@@ -1236,7 +1651,7 @@ const Collaborateurs = () => {
           </motion.h2>
           
           <motion.p 
-            className="text-xl lg:text-2xl text-grey-800 dark:text-grey-200 max-w-3xl mx-auto font-medium"
+            className="text-xl lg:text-2xl text-[#4b5563] dark:text-[#d1d5db]/80 max-w-3xl mx-auto font-medium"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -1246,163 +1661,21 @@ const Collaborateurs = () => {
               : 'Découvrez les personnes exceptionnelles qui partagent leurs expériences et connaissances avec la jeunesse africaine'}
           </motion.p>
           
-          {/* Enhanced Search Bar with Animation */}
-          <motion.div 
-            className="mt-12 flex flex-col md:flex-row items-center justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <motion.div 
-              className="relative w-full max-w-md group"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            >
-              <input
-                type="text"
-                onChange={handleSearchChange}
-                placeholder={language === 'en' ? "Search by name or expertise..." : "Rechercher par nom ou expertise..."}
-                className="w-full py-3.5 px-5 pl-14 rounded-full bg-white text-black border-2 border-grey-100 shadow-lg focus:outline-none focus:ring-3 focus:ring-orange-500/30 focus:border-orange-400 transition-all duration-300 group-hover:shadow-xl"
-                aria-label={language === 'en' ? "Search collaborators" : "Rechercher des collaborateurs"}
-              />
-              <motion.svg 
-                className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-grey-400 group-hover:text-orange-500 transition-colors duration-300" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-                whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 0.5 }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </motion.svg>
-              
-              {/* Clear search button with animation */}
-              <AnimatePresence>
-                {searchTerm && (
-                  <motion.button 
-                    onClick={() => {
-                      setSearchTerm('');
-                      const input = document.querySelector('input[type="text"]') as HTMLInputElement;
-                      if (input) input.value = '';
-                    }}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-grey-100 text-grey-500 hover:bg-grey-200 hover:text-grey-700 flex items-center justify-center"
-                    aria-label={language === 'en' ? "Clear search" : "Effacer la recherche"}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </motion.button>
-                )}
-              </AnimatePresence>
-            </motion.div>
-            
-            {/* Autoplay toggle with enhanced interaction */}
-            <motion.button 
-              onClick={() => setAutoplay(!autoplay)}
-              className={`mt-4 md:mt-0 md:ml-4 flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                autoplay 
-                  ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' 
-                  : 'bg-grey-100 text-grey-600 hover:bg-grey-200 hover:text-grey-800'
-              }`}
-              aria-pressed={autoplay}
-              aria-label={autoplay ? (language === 'en' ? "Disable autoplay" : "Désactiver la lecture automatique") : (language === 'en' ? "Enable autoplay" : "Activer la lecture automatique")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-            >
-              <AnimatePresence mode="wait">
-                <motion.svg 
-                  key={autoplay ? 'pause' : 'play'}
-                  className="w-5 h-5" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                  initial={{ opacity: 0, rotate: -10 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {autoplay ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  )}
-                </motion.svg>
-              </AnimatePresence>
-              <span className="text-sm font-medium">
-                {autoplay 
-                  ? (language === 'en' ? 'Pause' : 'Pause') 
-                  : (language === 'en' ? 'Autoplay' : 'Lecture auto')}
-              </span>
-            </motion.button>
-          </motion.div>
+          {/* Enhanced Search Form */}
+          <SearchForm 
+            language={language}
+            handleSearchChange={handleSearchChange}
+            searchTerm={searchTerm}
+            clearSearch={clearSearch}
+            autoplay={autoplay}
+            toggleAutoplay={toggleAutoplay}
+          />
         </motion.div>
 
         {/* No Results Message with Animation */}
         <AnimatePresence>
           {filteredCollaborators.length === 0 && (
-            <motion.div 
-              className="text-center py-16 bg-white rounded-[30px] shadow-xl border-2 border-grey-100 max-w-3xl mx-auto"
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.5 }}
-            >
-              <motion.svg 
-                className="w-16 h-16 mx-auto text-grey-300 mb-4" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1, rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </motion.svg>
-              <motion.h4 
-                className="text-xl font-bold text-black mb-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                {language === 'en' ? 'No collaborators found' : 'Aucun collaborateur trouvé'}
-              </motion.h4>
-              <motion.p 
-                className="text-grey-600 max-w-md mx-auto"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                {language === 'en' 
-                  ? 'Try adjusting your search criteria to find collaborators.' 
-                  : 'Essayez d\'ajuster vos critères de recherche pour trouver des collaborateurs.'}
-              </motion.p>
-              <motion.button 
-                onClick={() => {
-                  setSearchTerm('');
-                  const input = document.querySelector('input[type="text"]') as HTMLInputElement;
-                  if (input) input.value = '';
-                }}
-                className="mt-6 inline-flex items-center px-4 py-2 rounded-full bg-orange-100 text-orange-700 font-medium text-sm transition-all duration-300 hover:bg-orange-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-              >
-                <svg className="mr-1.5 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                <span>{language === 'en' ? 'Reset search' : 'Réinitialiser la recherche'}</span>
-              </motion.button>
-            </motion.div>
+            <NoResults language={language} clearSearch={clearSearch} />
           )}
         </AnimatePresence>
 
@@ -1418,104 +1691,15 @@ const Collaborateurs = () => {
             >
               {/* Loading Skeleton with Animation */}
               {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {[...Array(cardsPerView)].map((_, index) => (
-                    <motion.div 
-                      key={index} 
-                      className="animate-pulse bg-white rounded-[30px] overflow-hidden shadow-xl border-2 border-grey-100 h-[570px]"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
-                        opacity: 1, 
-                        y: 0,
-                        transition: { delay: index * 0.1 }
-                      }}
-                    >
-                      <div className="h-72 bg-grey-200 dark:bg-grey-700">
-                        <motion.div 
-                          className="w-full h-full bg-gradient-to-r from-grey-200 to-grey-300 dark:from-grey-700 dark:to-grey-600"
-                          animate={{ 
-                            x: ['-100%', '100%'],
-                            opacity: [0.5, 0.8, 0.5]
-                          }}
-                          transition={{ 
-                            repeat: Infinity, 
-                            duration: 1.5,
-                            ease: "linear"
-                          }}
-                        />
-                      </div>
-                      <div className="p-6">
-                        <motion.div 
-                          className="h-6 bg-grey-200 dark:bg-grey-700 rounded w-3/4 mb-4"
-                          animate={{ opacity: [0.5, 0.8, 0.5] }}
-                          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-                        />
-                        <motion.div 
-                          className="h-4 bg-grey-200 dark:bg-grey-700 rounded w-1/2 mb-6"
-                          animate={{ opacity: [0.5, 0.7, 0.5] }}
-                          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.2 }}
-                        />
-                        <div className="flex gap-2 mb-4">
-                          <motion.div 
-                            className="h-6 bg-grey-200 dark:bg-grey-700 rounded-full w-16"
-                            animate={{ opacity: [0.5, 0.7, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.3 }}
-                          />
-                          <motion.div 
-                            className="h-6 bg-grey-200 dark:bg-grey-700 rounded-full w-20"
-                            animate={{ opacity: [0.5, 0.7, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.4 }}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <motion.div 
-                            className="h-3 bg-grey-200 dark:bg-grey-700 rounded w-full"
-                            animate={{ opacity: [0.5, 0.7, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
-                          />
-                          <motion.div 
-                            className="h-3 bg-grey-200 dark:bg-grey-700 rounded w-full"
-                            animate={{ opacity: [0.5, 0.7, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.6 }}
-                          />
-                          <motion.div 
-                            className="h-3 bg-grey-200 dark:bg-grey-700 rounded w-3/4"
-                            animate={{ opacity: [0.5, 0.7, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.7 }}
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                <LoadingSkeleton cardsPerView={cardsPerView} />
               ) : (
                 <>
-                  {/* Navigation Arrows with Enhanced Animation */}
-                  <motion.button 
+                  {/* Navigation Arrows */}
+                  <CarouselArrow 
+                    direction="prev" 
                     onClick={goToPrevSlide} 
-                    disabled={isAnimating}
-                    className={`absolute top-1/2 -left-4 md:-left-10 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-lg text-grey-700 focus:outline-none focus:ring-4 focus:ring-orange-500/30 ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    aria-label={language === 'en' ? 'Previous slide' : 'Diapositive précédente'}
-                    whileHover={!isAnimating ? { scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.95)", x: -5 } : {}}
-                    whileTap={!isAnimating ? { scale: 0.9 } : {}}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <motion.svg 
-                      className={`w-6 h-6 mx-auto ${slideDirection === 'prev' ? 'text-orange-500' : 'text-grey-700'}`} 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                      animate={!isAnimating && slideDirection === 'prev' ? 
-                        { x: [-4, 0, -4], transition: { duration: 0.6, repeat: 3, repeatType: "reverse" } } : 
-                        { x: 0 }
-                      }
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                    </motion.svg>
-                    <span className="sr-only">{language === 'en' ? 'Previous' : 'Précédent'}</span>
-                  </motion.button>
+                    disabled={isAnimating || totalSlides <= 1}
+                  />
                   
                   {/* Carousel Slides with Enhanced Animation */}
                   <motion.div 
@@ -1557,69 +1741,25 @@ const Collaborateurs = () => {
                     </motion.div>
                   </motion.div>
                   
-                  <motion.button 
+                  <CarouselArrow 
+                    direction="next" 
                     onClick={goToNextSlide} 
-                    disabled={isAnimating}
-                    className={`absolute top-1/2 -right-4 md:-right-10 -translate-y-1/2 z-10 w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-lg text-grey-700 focus:outline-none focus:ring-4 focus:ring-orange-500/30 ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    aria-label={language === 'en' ? 'Next slide' : 'Diapositive suivante'}
-                    whileHover={!isAnimating ? { scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.95)", x: 5 } : {}}
-                    whileTap={!isAnimating ? { scale: 0.9 } : {}}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <motion.svg 
-                      className={`w-6 h-6 mx-auto ${slideDirection === 'next' ? 'text-orange-500' : 'text-grey-700'}`} 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                      animate={!isAnimating && slideDirection === 'next' ? 
-                        { x: [4, 0, 4], transition: { duration: 0.6, repeat: 3, repeatType: "reverse" } } : 
-                        { x: 0 }
-                      }
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                    </motion.svg>
-                    <span className="sr-only">{language === 'en' ? 'Next' : 'Suivant'}</span>
-                  </motion.button>
+                    disabled={isAnimating || totalSlides <= 1}
+                  />
                   
                   {/* Enhanced Pagination Dots */}
                   {totalSlides > 1 && (
-                    <div className="flex justify-center mt-10 space-x-2">
-                      {Array.from({ length: totalSlides }).map((_, index) => (
-                        <motion.button
-                          key={index}
-                          onClick={() => {
-                            if (!isAnimating) goToSlide(index);
-                          }}
-                          className={`transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-orange-500/40 rounded-full ${
-                            currentSlide === index 
-                              ? 'bg-orange-500 h-3' 
-                              : 'bg-grey-300 h-3 hover:bg-grey-400'
-                          }`}
-                          aria-label={`${language === 'en' ? 'Go to slide' : 'Aller à la diapositive'} ${index + 1}`}
-                          aria-current={currentSlide === index ? 'true' : 'false'}
-                          disabled={isAnimating}
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ 
-                            opacity: 1, 
-                            scale: 1,
-                            width: currentSlide === index ? 40 : 12
-                          }}
-                          transition={{ 
-                            duration: 0.3, 
-                            delay: 0.1 + (index * 0.05) 
-                          }}
-                          whileHover={!isAnimating && currentSlide !== index ? { scale: 1.2 } : {}}
-                          whileTap={!isAnimating ? { scale: 0.9 } : {}}
-                        />
-                      ))}
-                    </div>
+                    <DotsIndicator 
+                      totalSlides={totalSlides}
+                      currentSlide={currentSlide}
+                      goToSlide={goToSlide}
+                      isAnimating={isAnimating}
+                    />
                   )}
                   
                   {/* Slide Counter with Animation */}
                   <motion.div 
-                    className={`absolute bottom-0 right-0 bg-white/80 backdrop-blur-sm rounded-tl-lg rounded-br-3xl px-3 py-1 text-xs font-medium text-grey-600`}
+                    className={`absolute bottom-0 right-0 bg-white/80 dark:bg-[#1f2937]/80 backdrop-blur-sm rounded-tl-lg rounded-br-3xl px-3 py-1 text-xs font-medium text-[#4b5563] dark:text-[#e5e7eb]`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
@@ -1645,7 +1785,7 @@ const Collaborateurs = () => {
         
         {/* Enhanced Call to Action with Interaction */}
         <motion.div 
-          className="mt-24 max-w-4xl mx-auto bg-white rounded-[32px] p-10 md:p-14 shadow-2xl border-2 border-orange-100 dark:border-orange-800/20 text-center relative overflow-hidden"
+          className="mt-24 max-w-4xl mx-auto bg-white dark:bg-[#1f2937] rounded-[32px] p-10 md:p-14 shadow-2xl border border-[#ffebd9] dark:border-[#ff914d]/20 text-center relative overflow-hidden"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
@@ -1653,7 +1793,7 @@ const Collaborateurs = () => {
         >
           {/* Decorative Elements with Animations */}
           <motion.div 
-            className="absolute -top-10 -right-10 w-40 h-40 bg-orange-50 rounded-full opacity-70"
+            className="absolute -top-10 -right-10 w-40 h-40 bg-[#fff8f3] dark:bg-[#ff914d]/5 rounded-full opacity-70"
             animate={{ 
               scale: [1, 1.2, 1],
               rotate: [0, 10, 0]
@@ -1661,7 +1801,7 @@ const Collaborateurs = () => {
             transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
           />
           <motion.div 
-            className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-50 rounded-full opacity-70"
+            className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#fff8f3] dark:bg-[#ff914d]/5 rounded-full opacity-70"
             animate={{ 
               scale: [1, 1.3, 1],
               rotate: [0, -10, 0]
@@ -1672,7 +1812,7 @@ const Collaborateurs = () => {
           {/* Content with Staggered Animation */}
           <div className="relative z-10">
             <motion.div 
-              className="w-20 h-20 mx-auto bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl rotate-12 flex items-center justify-center mb-8 shadow-lg shadow-orange-500/20"
+              className="w-20 h-20 mx-auto bg-gradient-to-br from-[#ff914d] to-[#ff8133] rounded-2xl rotate-12 flex items-center justify-center mb-8 shadow-lg shadow-[#ff914d]/20"
               initial={{ rotate: 45, scale: 0.8 }}
               whileInView={{ rotate: 12, scale: 1 }}
               whileHover={{ rotate: 0, scale: 1.1 }}
@@ -1696,7 +1836,7 @@ const Collaborateurs = () => {
             </motion.div>
             
             <motion.h3 
-              className="text-2xl md:text-3xl font-serif font-bold mb-6 text-black"
+              className="text-2xl md:text-3xl font-serif font-bold mb-6 text-[#1f2937] dark:text-white"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -1706,7 +1846,7 @@ const Collaborateurs = () => {
             </motion.h3>
             
             <motion.p 
-              className="text-lg text-black font-medium mb-10 max-w-2xl mx-auto"
+              className="text-lg text-[#4b5563] dark:text-[#d1d5db]/80 font-medium mb-10 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -1718,7 +1858,7 @@ const Collaborateurs = () => {
             </motion.p>
             
             <motion.button 
-              className="group relative inline-flex items-center px-10 py-4 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 text-white text-lg font-bold shadow-xl overflow-hidden"
+              className="group relative inline-flex items-center px-10 py-4 rounded-full bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white text-lg font-bold shadow-xl overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05, y: -5 }}
@@ -1747,7 +1887,7 @@ const Collaborateurs = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </motion.svg>
               <motion.span 
-                className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700 -z-10"
+                className="absolute inset-0 bg-gradient-to-r from-[#ff8133] to-[#ff914d] -z-10"
                 initial={{ x: "-100%" }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.4 }}
@@ -1756,7 +1896,7 @@ const Collaborateurs = () => {
             
             {/* Statistical Highlights with Animated Counters */}
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 pt-10 border-t border-grey-100"
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 pt-10 border-t border-[#f0f0f0] dark:border-[#374151]"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -1859,14 +1999,14 @@ const Collaborateurs = () => {
         
         .bg-grid-pattern {
           background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
           background-size: 20px 20px;
         }
         
         /* Focus styles for accessibility */
         button:focus-visible, a:focus-visible {
-          outline: 2px solid rgb(249, 115, 22);
+          outline: 2px solid #ff914d;
           outline-offset: 2px;
         }
         
@@ -1881,12 +2021,36 @@ const Collaborateurs = () => {
         }
         
         .modal-content::-webkit-scrollbar-thumb {
-          background: rgba(249, 115, 22, 0.5);
+          background: rgba(255, 145, 77, 0.5);
           border-radius: 10px;
         }
         
         .modal-content::-webkit-scrollbar-thumb:hover {
-          background: rgba(249, 115, 22, 0.7);
+          background: rgba(255, 145, 77, 0.7);
+        }
+        
+        /* Prevent text selection during drag operations */
+        .carousel-perspective {
+          user-select: none;
+        }
+        
+        /* Dark mode enhancements */
+        @media (prefers-color-scheme: dark) {
+          .bg-grid-pattern {
+            background-image: 
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          }
+        }
+        
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
         }
       `}</style>
     </motion.section>
