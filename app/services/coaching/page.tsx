@@ -497,14 +497,6 @@ const CareerCoachingPage = () => {
                 : 'Trouvez des réponses aux questions courantes sur notre service de Coaching de Carrière'}
             </p>
           </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <FAQ 
-              faqs={service.faqs}
-              color={service.textColor}
-              language={language}
-            />
-          </div>
         </div>
       </section>
       
