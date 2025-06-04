@@ -62,8 +62,22 @@ const Footer = () => {
   };
 
   const currentYear = new Date().getFullYear();
-  const currentDateTime = "2025-06-04 17:06:38";
+  // Updated with the real data
+  const currentDateTime = "2025-06-04 21:01:11";
   const currentUser = "Sdiabate1337";
+  
+  // Real company data
+  const companyData = {
+    email: "careerguidance212@gmail.com",
+    phone: "+212 631466976",
+    address: "90 Bd de la Résistance Hassania II Bloc A 3eme ETG ALIA, Mohammedia",
+    registrationInfo: {
+      rc: "35889- Mohammedia",
+      taxe: "39502159",
+      if: "66047713",
+      ice: "003550037000036"
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -171,7 +185,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-medium text-[#545454] dark:text-white mb-1">{language === 'en' ? 'Our Office' : 'Notre Bureau'}</p>
-                    <p className="text-sm">123 Career Street, Suite 101<br />Montreal, QC H3Z 2Y7</p>
+                    <p className="text-sm">{companyData.address}</p>
                   </div>
                 </motion.div>
                 
@@ -187,7 +201,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-medium text-[#545454] dark:text-white mb-1">{language === 'en' ? 'Call Us' : 'Appelez-nous'}</p>
-                    <p className="text-sm">+1 (514) 555-0123</p>
+                    <p className="text-sm">{companyData.phone}</p>
                   </div>
                 </motion.div>
                 
@@ -203,7 +217,27 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-medium text-[#545454] dark:text-white mb-1">{language === 'en' ? 'Email Us' : 'Écrivez-nous'}</p>
-                    <p className="text-sm">info@careerguidance.com</p>
+                    <p className="text-sm">{companyData.email}</p>
+                  </div>
+                </motion.div>
+                
+                {/* Registration Information */}
+                <motion.div 
+                  className="flex items-start group"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#fff8f3] dark:bg-[#1f2937] flex items-center justify-center mr-3 group-hover:bg-[#ffebd9] dark:group-hover:bg-[#374151] transition-colors duration-300">
+                    <svg className="h-5 w-5 text-[#ff914d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-[#545454] dark:text-white mb-1">{language === 'en' ? 'Legal Information' : 'Informations Légales'}</p>
+                    <p className="text-sm">RC: {companyData.registrationInfo.rc}</p>
+                    <p className="text-sm">Taxe Professionnelle: {companyData.registrationInfo.taxe}</p>
+                    <p className="text-sm">IF: {companyData.registrationInfo.if}</p>
+                    <p className="text-sm">ICE: {companyData.registrationInfo.ice}</p>
                   </div>
                 </motion.div>
               </div>
@@ -311,11 +345,10 @@ const Footer = () => {
             
             <ul className="space-y-4">
               {[
-                { href: "/services/career-coaching", en: 'Career Coaching', fr: 'Coaching de Carrière' },
+                { href: "/services/coaching", en: 'Career Coaching', fr: 'Coaching de Carrière' },
                 { href: "/services/resume-optimization", en: 'Resume Optimization', fr: 'Optimisation de CV' },
-                { href: "/services/linkedin-profile", en: 'LinkedIn Profile', fr: 'Profil LinkedIn' },
-                { href: "/services/interview-preparation", en: 'Interview Preparation', fr: 'Préparation aux Entretiens' },
-                { href: "/services/career-transition", en: 'Career Transition', fr: 'Transition de Carrière' }
+                { href: "/services/linkedin", en: 'LinkedIn Profile', fr: 'Profil LinkedIn' },
+                { href: "/services/training", en: 'Certified Training Programs', fr: 'Programmes de Formation Certifiés' }
               ].map((item, index) => (
                 <motion.li key={item.href} 
                   initial={{ opacity: 0, x: -20 }}
@@ -559,13 +592,13 @@ const Footer = () => {
           <div className="flex items-center text-sm text-[#6b7280] dark:text-[#9ca3af]">
             <span className="inline-flex items-center">
               <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              {language === 'en' ? 'Secure & Trusted' : 'Sécurisé et Fiable'}
+              {language === 'en' ? 'Last updated:' : 'Dernière mise à jour:'} <span className="font-medium text-[#545454] dark:text-white ml-1">{currentDateTime}</span>
             </span>
             <span className="mx-3">•</span>
             <span>
-              {language === 'en' ? 'Made with ❤️ in Montreal' : 'Créé avec ❤️ à Montréal'}
+              <span className="text-[#ff914d]">{currentUser}</span>
             </span>
           </div>
         </div>

@@ -132,7 +132,6 @@ const config: Config = {
       }),
     },
   },
-  plugins: [typography()],
   darkMode: 'media', // Respects the user's system preference
 }
 

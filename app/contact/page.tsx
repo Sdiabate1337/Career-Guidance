@@ -19,9 +19,24 @@ export default function ContactPage() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   
-  // Current timestamp and user
-  const currentDateTime = "2025-06-04 20:36:50";
+  // Current timestamp and user - LATEST VALUES
+  const currentDateTime = "2025-06-04 20:55:05";
   const currentUser = "Sdiabate1337";
+  
+  // Real company data
+  const companyData = {
+    email: "careerguidance212@gmail.com",
+    phone: "+212 631466976",
+    address: "90 Bd de la Résistance Hassania II Bloc A 3eme ETG ALIA, Mohammedia",
+    hours: language === 'en' ? 'Mon-Fri: 9AM-6PM' : 'Lun-Ven: 9h-18h',
+    coordinates: { lat: 33.6929, lng: -7.3828 }, // Mohammedia coordinates
+    registrationInfo: {
+      rc: "35889- Mohammedia",
+      taxe: "39502159",
+      if: "66047713",
+      ice: "003550037000036"
+    }
+  };
   
   // Intersection observers for animations
   const { ref: heroRef, inView: heroInView } = useInView({
@@ -57,37 +72,6 @@ export default function ContactPage() {
         { value: 'school', label: 'Recherche & Inscription Scolaire' },
         { value: 'other', label: 'Autre Demande' },
       ];
-  
-  // Office locations
-  const offices = [
-    {
-      city: language === 'en' ? 'Paris Headquarters' : 'Siège de Paris',
-      address: '15 Rue de Rivoli, 75004 Paris, France',
-      phone: '+33 1 42 68 53 09',
-      email: 'paris@careerguidance.com',
-      hours: language === 'en' ? 'Mon-Fri: 9AM-6PM' : 'Lun-Ven: 9h-18h',
-      coordinates: { lat: 48.856614, lng: 2.352222 },
-      primary: true
-    },
-    {
-      city: language === 'en' ? 'London Office' : 'Bureau de Londres',
-      address: '120 Oxford Street, London W1D 1LT, UK',
-      phone: '+44 20 7123 4567',
-      email: 'london@careerguidance.com',
-      hours: language === 'en' ? 'Mon-Fri: 9AM-5:30PM' : 'Lun-Ven: 9h-17h30',
-      coordinates: { lat: 51.5074, lng: -0.1278 },
-      primary: false
-    },
-    {
-      city: language === 'en' ? 'New York Office' : 'Bureau de New York',
-      address: '350 Fifth Avenue, New York, NY 10118, USA',
-      phone: '+1 212-736-3100',
-      email: 'nyc@careerguidance.com',
-      hours: language === 'en' ? 'Mon-Fri: 8:30AM-5PM' : 'Lun-Ven: 8h30-17h',
-      coordinates: { lat: 40.7128, lng: -74.006 },
-      primary: false
-    }
-  ];
   
   // Social media links
   const socialLinks = [
@@ -226,7 +210,7 @@ export default function ContactPage() {
               </a>
               
               <a 
-                href="#office-locations" 
+                href="#office-location" 
                 className="group px-8 py-3.5 bg-white text-[#545454] rounded-xl text-lg font-medium transition-all duration-300 border border-[#545454]/10 hover:border-[#ff914d]/30 hover:shadow-lg hover:text-[#ff914d]"
               >
                 <span className="flex items-center">
@@ -234,7 +218,7 @@ export default function ContactPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  {language === 'en' ? 'Office Locations' : 'Nos Bureaux'}
+                  {language === 'en' ? 'Office Location' : 'Notre Bureau'}
                 </span>
               </a>
             </motion.div>
@@ -262,7 +246,7 @@ export default function ContactPage() {
                   </h2>
                   
                   <div className="space-y-6">
-                    {/* Main Office */}
+                    {/* Office */}
                     <div>
                       <div className="flex items-start mb-3">
                         <div className="w-10 h-10 rounded-lg bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mr-3 mt-1">
@@ -271,8 +255,8 @@ export default function ContactPage() {
                           </svg>
                         </div>
                         <div>
-                          <h3 className="font-bold text-[#545454]">{language === 'en' ? 'Main Office' : 'Bureau Principal'}</h3>
-                          <p className="text-[#545454]/70 mt-1">15 Rue de Rivoli, 75004 Paris, France</p>
+                          <h3 className="font-bold text-[#545454]">{language === 'en' ? 'Mohammedia Office' : 'Bureau de Mohammedia'}</h3>
+                          <p className="text-[#545454]/70 mt-1">{companyData.address}</p>
                         </div>
                       </div>
                     </div>
@@ -287,8 +271,8 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h3 className="font-bold text-[#545454]">{language === 'en' ? 'Phone' : 'Téléphone'}</h3>
-                          <p className="text-[#545454]/70 mt-1">+33 1 42 68 53 09</p>
-                          <p className="text-[#545454]/70 mt-1">{language === 'en' ? 'Mon-Fri: 9AM-6PM' : 'Lun-Ven: 9h-18h'}</p>
+                          <p className="text-[#545454]/70 mt-1">{companyData.phone}</p>
+                          <p className="text-[#545454]/70 mt-1">{companyData.hours}</p>
                         </div>
                       </div>
                     </div>
@@ -304,15 +288,28 @@ export default function ContactPage() {
                         <div>
                           <h3 className="font-bold text-[#545454]">Email</h3>
                           <p className="text-[#545454]/70 mt-1">
-                            <a href="mailto:info@careerguidance.com" className="hover:text-[#ff914d] transition-colors">
-                              info@careerguidance.com
+                            <a href={`mailto:${companyData.email}`} className="hover:text-[#ff914d] transition-colors">
+                              {companyData.email}
                             </a>
                           </p>
-                          <p className="text-[#545454]/70 mt-1">
-                            <a href="mailto:support@careerguidance.com" className="hover:text-[#ff914d] transition-colors">
-                              support@careerguidance.com
-                            </a>
-                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Company Registration Info */}
+                    <div>
+                      <div className="flex items-start mb-3">
+                        <div className="w-10 h-10 rounded-lg bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mr-3 mt-1">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-[#545454]">{language === 'en' ? 'Registration Info' : 'Informations Légales'}</h3>
+                          <p className="text-[#545454]/70 mt-1">RC: {companyData.registrationInfo.rc}</p>
+                          <p className="text-[#545454]/70 mt-1">Taxe Professionnelle: {companyData.registrationInfo.taxe}</p>
+                          <p className="text-[#545454]/70 mt-1">IF: {companyData.registrationInfo.if}</p>
+                          <p className="text-[#545454]/70 mt-1">ICE: {companyData.registrationInfo.ice}</p>
                         </div>
                       </div>
                     </div>
@@ -532,8 +529,8 @@ export default function ContactPage() {
         </div>
       </section>
       
-      {/* Map and Office Locations Section */}
-      <section id="office-locations" ref={mapRef} className="py-20 relative z-10">
+      {/* Map and Office Location Section */}
+      <section id="office-location" ref={mapRef} className="py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -549,7 +546,7 @@ export default function ContactPage() {
                 transition={{ duration: 0.6, delay: 0.1, type: "spring" }}
               >
                 <span className="w-2 h-2 rounded-full bg-[#ff914d] mr-2 animate-pulse"></span>
-                {language === 'en' ? 'Our Locations' : 'Nos Emplacements'}
+                {language === 'en' ? 'Visit Us' : 'Visitez-Nous'}
               </motion.span>
             </div>
             
@@ -559,7 +556,7 @@ export default function ContactPage() {
               animate={{ opacity: mapInView ? 1 : 0, y: mapInView ? 0 : 20 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              {language === 'en' ? 'Visit Our Offices' : 'Visitez Nos Bureaux'}
+              {language === 'en' ? 'Our Office Location' : 'Notre Emplacement'}
               <span className="inline-block ml-2 text-[#ff914d] animate-pulse-slow">.</span>
             </motion.h2>
             
@@ -570,8 +567,8 @@ export default function ContactPage() {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               {language === 'en' 
-                ? 'With offices in key global locations, we\'re ready to assist you wherever you are.'
-                : 'Avec des bureaux dans des emplacements clés à travers le monde, nous sommes prêts à vous aider où que vous soyez.'}
+                ? 'Visit our office in Mohammedia to meet with our career experts in person.'
+                : 'Visitez notre bureau à Mohammedia pour rencontrer nos experts en carrière en personne.'}
             </motion.p>
           </motion.div>
           
@@ -582,130 +579,92 @@ export default function ContactPage() {
             animate={{ opacity: mapInView ? 1 : 0, y: mapInView ? 0 : 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {/* Placeholder for the Google Map (would be replaced with actual Google Maps component) */}
-            <div className="absolute inset-0 bg-[url('/images/contact/world-map.jpg')] bg-cover bg-center opacity-70"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-white/0 to-white/50"></div>
-            
-            {/* Location Pins */}
-            <div className="absolute top-1/3 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="relative">
-                <div className="w-4 h-4 bg-[#ff914d] rounded-full animate-ping absolute"></div>
-                <div className="w-4 h-4 bg-[#ff914d] rounded-full relative z-10"></div>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white py-1 px-3 rounded-full shadow-md text-xs font-medium whitespace-nowrap">
-                  Paris HQ
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute top-1/3 left-1/5 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="relative">
-                <div className="w-3 h-3 bg-[#ff914d] rounded-full animate-ping absolute opacity-75"></div>
-                <div className="w-3 h-3 bg-[#ff914d] rounded-full relative z-10"></div>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white py-1 px-3 rounded-full shadow-md text-xs font-medium whitespace-nowrap">
-                  London
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute top-1/3 right-1/3 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="relative">
-                <div className="w-3 h-3 bg-[#ff914d] rounded-full animate-ping absolute opacity-75"></div>
-                <div className="w-3 h-3 bg-[#ff914d] rounded-full relative z-10"></div>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white py-1 px-3 rounded-full shadow-md text-xs font-medium whitespace-nowrap">
-                  New York
-                </div>
-              </div>
-            </div>
+            {/* Map iframe - Using Google Maps embed */}
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3319.530567963641!2d-7.3864587!3d33.6929011!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7b6f0df37db59%3A0xe3a9c1c5c097df4!2s90%20Bd%20de%20la%20R%C3%A9sistance%2C%20Mohammedia%2C%20Morocco!5e0!3m2!1sen!2sus!4v1654318458773!5m2!1sen!2sus" 
+              width="100%" 
+              height="100%" 
+              style={{border:0}} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0"
+            ></iframe>
             
             <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-xs">
               <p className="text-sm text-[#545454] font-medium">
                 {language === 'en' 
-                  ? 'We have offices in major cities across Europe and North America to serve you better.'
-                  : 'Nous disposons de bureaux dans les principales villes d\'Europe et d\'Amérique du Nord pour mieux vous servir.'}
+                  ? 'Our office is conveniently located on Boulevard de la Résistance in Mohammedia.'
+                  : 'Notre bureau est idéalement situé sur le Boulevard de la Résistance à Mohammedia.'}
               </p>
             </div>
           </motion.div>
           
-          {/* Office Locations Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {offices.map((office, idx) => (
-              <motion.div 
-                key={idx}
-                className={`bg-white rounded-xl shadow-lg border ${
-                  office.primary ? 'border-[#ff914d]/30' : 'border-[#545454]/10'
-                } overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: mapInView ? 1 : 0, y: mapInView ? 0 : 30 }}
-                transition={{ duration: 0.6, delay: 0.3 + (idx * 0.1) }}
-              >
-                <div className={`h-2 bg-gradient-to-r ${
-                  office.primary ? 'from-[#ff914d] to-[#ff8133]' : 'from-[#545454]/20 to-[#545454]/30'
-                } w-full`}></div>
-                
-                <div className="p-6">
-                  <div className="flex items-start mb-4">
-                    <div className={`w-10 h-10 rounded-lg ${
-                      office.primary ? 'bg-[#ff914d]/10 text-[#ff914d]' : 'bg-[#545454]/10 text-[#545454]'
-                    } flex items-center justify-center mr-3 mt-1`}>
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className={`font-bold ${office.primary ? 'text-[#ff914d]' : 'text-[#545454]'}`}>
-                        {office.city}
-                      </h3>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <p className="text-[#545454]/80 text-sm">
-                      {office.address}
-                    </p>
-                    
-                    <div className="flex items-center">
-                      <svg className="w-4 h-4 text-[#545454]/70 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                      <p className="text-[#545454]/80 text-sm">{office.phone}</p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <svg className="w-4 h-4 text-[#545454]/70 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-[#545454]/80 text-sm">
-                        <a href={`mailto:${office.email}`} className="hover:text-[#ff914d] transition-colors">
-                          {office.email}
-                        </a>
-                      </p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <svg className="w-4 h-4 text-[#545454]/70 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-[#545454]/80 text-sm">{office.hours}</p>
-                    </div>
-                  </div>
-                  
-                  <a
-                    href={`https://www.google.com/maps?q=${office.coordinates.lat},${office.coordinates.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`mt-5 block w-full py-2.5 rounded-lg font-medium text-center transition-all duration-300 text-sm ${
-                      office.primary 
-                        ? 'bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white hover:shadow-lg hover:shadow-[#ff914d]/20' 
-                        : 'bg-[#545454]/10 text-[#545454] hover:bg-[#545454]/20'
-                    }`}
-                  >
-                    {language === 'en' ? 'Get Directions' : 'Obtenir l\'Itinéraire'}
-                  </a>
+          {/* Office Location Card */}
+          <motion.div 
+            className="bg-white rounded-xl shadow-lg border border-[#ff914d]/30 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl max-w-lg mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: mapInView ? 1 : 0, y: mapInView ? 0 : 30 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="h-2 bg-gradient-to-r from-[#ff914d] to-[#ff8133] w-full"></div>
+            
+            <div className="p-6">
+              <div className="flex items-start mb-4">
+                <div className="w-12 h-12 rounded-lg bg-[#ff914d]/10 text-[#ff914d] flex items-center justify-center mr-4 mt-1">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#ff914d]">
+                    {language === 'en' ? 'Mohammedia Office' : 'Bureau de Mohammedia'}
+                  </h3>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-[#545454]/80">
+                  {companyData.address}
+                </p>
+                
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-[#545454]/70 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <p className="text-[#545454]/80">{companyData.phone}</p>
+                </div>
+                
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-[#545454]/70 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-[#545454]/80">
+                    <a href={`mailto:${companyData.email}`} className="hover:text-[#ff914d] transition-colors">
+                      {companyData.email}
+                    </a>
+                  </p>
+                </div>
+                
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-[#545454]/70 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-[#545454]/80">{companyData.hours}</p>
+                </div>
+              </div>
+              
+              <a
+                href="https://goo.gl/maps/3Ks1HJtTuWmATZW56"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 block w-full py-3 rounded-lg font-medium text-center transition-all duration-300 bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white hover:shadow-lg hover:shadow-[#ff914d]/20"
+              >
+                {language === 'en' ? 'Get Directions' : 'Obtenir l\'Itinéraire'}
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
       
@@ -765,7 +724,7 @@ export default function ContactPage() {
                       <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      {language === 'en' ? 'Book Free Consultation' : 'Réserver Consultation Gratuite'}
+                      {language === 'en' ? 'Book Free Consultation' : 'Prendre un Rendez-vous'}
                     </span>
                   </Link>
                   
