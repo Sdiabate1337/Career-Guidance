@@ -193,6 +193,8 @@ const CategoryTab = memo(({
 
 CategoryTab.displayName = 'CategoryTab';
 
+
+
 const FAQ = () => {
   const { language } = useContext(LanguageContext);
   const [activeCategory, setActiveCategory] = useState<string | null>("linkedin");

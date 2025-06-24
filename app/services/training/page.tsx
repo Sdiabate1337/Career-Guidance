@@ -1,8 +1,11 @@
 "use client";
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Head from 'next/head';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LanguageContext } from '../../contexts/LanguageContext';
 import Testimonial from '../Testimonial';
 import PricingTable from '../PricingTable';
@@ -13,26 +16,75 @@ const TrainingProgramsPage = () => {
   const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [activeProgram, setActiveProgram] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  
+  // References for section navigation
+  const heroRef = useRef(null);
+  const programsRef = useRef(null);
+  const processRef = useRef(null);
+  const testimonialsRef = useRef(null);
+  const faqRef = useRef(null);
   
   // Current user and timestamp - Updated as requested
   const currentUser = "Sdiabate1337";
-  const currentDateTime = "2025-05-28 18:42:56";
+  const currentDateTime = "2025-06-14 13:07:02";
   
-  // Track scroll position for parallax effects
+  // SEO metadata
+  const pageTitle = language === 'en' ? 'Certified Training Programs | Career Guidance' : 'Programmes de Formation Certifiés | Career Guidance';
+  const pageDescription = language === 'en' 
+    ? 'Enhance your career with our industry-recognized certification programs. Expert instruction, flexible scheduling, and hands-on projects to boost your resume.'
+    : 'Améliorez votre carrière avec nos programmes de certification reconnus par l\'industrie. Instruction par des experts, horaires flexibles et projets pratiques.';
+  
+  // Track scroll position for back-to-top button and reduce performance impact
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      // Using requestAnimationFrame to optimize scroll performance
+      requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+        setShowBackToTop(window.scrollY > 600);
+      });
     };
     
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
-  // Animated counter component for statistics
-  const Counter: React.FC<{ value: number; duration?: number; suffix?: string }> = ({ value, duration = 2, suffix = "" }) => {
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  
+  // Optimized Counter component for statistics
+  const Counter = ({ value, duration = 2, suffix = "" }) => {
     const [count, setCount] = useState(0);
+    const counterRef = useRef(null);
+    const [isInView, setIsInView] = useState(false);
     
     useEffect(() => {
+      if (!counterRef.current) return;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            // Disconnect after triggering once for performance
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.1 }
+      );
+      
+      observer.observe(counterRef.current);
+      
+      return () => observer.disconnect();
+    }, []);
+    
+    useEffect(() => {
+      if (!isInView) return;
+      
       let start = 0;
       const end = value;
       const increment = end / (duration * 60);
@@ -45,12 +97,10 @@ const TrainingProgramsPage = () => {
         }
       }, 1000 / 60);
       
-      return () => {
-        clearInterval(timer);
-      };
-    }, [value, duration]);
+      return () => clearInterval(timer);
+    }, [value, duration, isInView]);
     
-    return <span className="font-bold">{count}{suffix}</span>;
+    return <span ref={counterRef} className="font-bold">{count}{suffix}</span>;
   };
   
   // Certified Training Programs service data
@@ -116,7 +166,7 @@ const TrainingProgramsPage = () => {
         }
       ],
     icon: (
-      <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
       </svg>
     ),
@@ -130,7 +180,7 @@ const TrainingProgramsPage = () => {
     textColor: "text-[#4CAF50]",
     borderColor: "border-[#4CAF50]",
     bgColor: "bg-[#4CAF50]",
-    lightBg: "bg-white dark:bg-grey-800",
+    lightBg: "bg-white dark:bg-gray-800",
     process: language === 'en' ? 
       [
         "Skill assessment and program selection",
@@ -350,1060 +400,904 @@ const TrainingProgramsPage = () => {
   };
 
   return (
-    <div className="bg-grey-50 dark:bg-grey-900 min-h-screen overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div 
-          className="absolute top-0 right-0 w-1/3 h-1/3 bg-green-500/5 dark:bg-green-500/10 rounded-full blur-[100px]"
-          style={{ transform: `translate(20%, -20%) rotate(${scrollY * 0.02}deg)` }}
-        ></div>
-        <div 
-          className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px]"
-          style={{ transform: `translate(-20%, 20%) rotate(${-scrollY * 0.02}deg)` }}
-        ></div>
-      </div>
-
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-20 bg-white dark:bg-grey-800 overflow-hidden z-10">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 -right-40 w-80 h-80 bg-green-100 dark:bg-green-900/20 rounded-full blur-3xl opacity-60"></div>
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl opacity-50"></div>
-        </div>
+    <>
+      {/* SEO Optimization */}
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={language === 'en' ? 'certification, training programs, professional development, career advancement, skills development' : 'certification, programmes de formation, développement professionnel, avancement de carrière, développement des compétences'} />
         
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative z-10">
-              <div className="inline-flex items-center mb-6 rounded-full border border-grey-200 dark:border-grey-700 py-1 pl-1 pr-4 group overflow-hidden">
-                <div className="bg-green-100 dark:bg-green-900/30 rounded-full p-1 mr-2">
-                  <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19l-7-7 7-7m5 14l7-7-7-7" />
-                  </svg>
-                </div>
-                <Link 
-                  href="/services" 
-                  className="text-grey-600 dark:text-black hover:text-green-600 dark:hover:text-green-600 text-sm font-medium transition-colors"
+        {/* Open Graph / Social Media */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content="/images/training-programs-social.jpg" />
+        <meta property="og:url" content="https://careerguidance.com/services/training" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content="/images/training-programs-social.jpg" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://careerguidance.com/services/training" />
+        
+        {/* Structured Data for SEO */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Course",
+              "name": "${language === 'en' ? 'Certified Training Programs' : 'Programmes de Formation Certifiés'}",
+              "description": "${pageDescription}",
+              "provider": {
+                "@type": "Organization",
+                "name": "Career Guidance",
+                "sameAs": "https://careerguidance.com"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "1999",
+                "priceCurrency": "USD"
+              }
+            }
+          `}
+        </script>
+      </Head>
+
+      <main className="min-h-screen bg-white text-gray-800">
+
+        {/* Back to Top Button - Accessible */}
+        <AnimatePresence>
+          {showBackToTop && (
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              onClick={scrollToTop}
+              className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-green-600 rounded-full text-white shadow-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center"
+              aria-label={language === 'en' ? 'Back to top' : 'Retour en haut'}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* Hero Section - Pure White Background */}
+        <section 
+          ref={heroRef} 
+          className="relative pt-28 pb-20 overflow-hidden z-10 bg-white"
+          aria-labelledby="hero-heading"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <div className="relative z-10">
+                <nav aria-label="Breadcrumb" className="mb-6">
+                  <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                    <li className="inline-flex items-center">
+                      <Link 
+                        href="/"
+                        className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600"
+                      >
+                        <svg className="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        {language === 'en' ? 'Home' : 'Accueil'}
+                      </Link>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <svg className="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                        </svg>
+                        <Link 
+                          href="/services" 
+                          className="ml-1 text-sm font-medium text-gray-700 hover:text-green-600 md:ml-2"
+                        >
+                          {language === 'en' ? 'Services' : 'Services'}
+                        </Link>
+                      </div>
+                    </li>
+                    <li aria-current="page">
+                      <div className="flex items-center">
+                        <svg className="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                        </svg>
+                        <span className="ml-1 text-sm font-medium text-green-600 md:ml-2">
+                          {language === 'en' ? 'Training Programs' : 'Programmes de Formation'}
+                        </span>
+                      </div>
+                    </li>
+                  </ol>
+                </nav>
+                
+                <h1 
+                  id="hero-heading"
+                  className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
                 >
-                  {language === 'en' ? 'Back to All Services' : 'Retour à Tous les Services'}
-                </Link>
-              </div>
-              
-              <h1 className="text-4xl lg:text-5xl font-bold text-black dark:text-black mb-6 relative">
-                <span className="relative">
-                  {service.title}
-                  <div className="absolute -bottom-3 left-0 h-1 bg-green-500 rounded-full w-full"></div>
-                </span>
-              </h1>
-              
-              <p className="text-xl text-grey-700 dark:text-black mb-8">
-                {service.description}
-              </p>
-              
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="relative overflow-hidden rounded-full">
+                  <span className="inline-block relative">
+                    {service.title}
+                    <span className="absolute -bottom-2 left-0 h-1 bg-green-500 rounded-full w-full"></span>
+                  </span>
+                </h1>
+                
+                <p className="text-xl text-gray-600 leading-relaxed mb-8 max-w-2xl">
+                  {service.description}
+                </p>
+                
+                <div className="flex flex-wrap gap-5 mb-10">
                   <Link 
                     href={`/services/${service.id}/apply`}
-                    className="relative z-10 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full font-medium transition-all duration-300 text-lg flex items-center group hover:shadow-lg hover:-translate-y-1"
+                    className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg font-medium text-lg shadow-md hover:bg-green-700 transition-all duration-300"
                   >
-                    <span className="mr-2">{service.cta}</span>
-                    <span className="animate-bounce">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </span>
+                    <span className="mr-3">{service.cta}</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </Link>
+                  
+                  <Link 
+                    href="#programs"
+                    className="inline-flex items-center px-6 py-3 bg-white border border-gray-200 text-gray-800 rounded-lg font-medium text-lg shadow-sm hover:bg-gray-50 transition-all duration-300"
+                  >
+                    <span className="mr-3">{language === 'en' ? 'View Programs' : 'Voir les Programmes'}</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </Link>
                 </div>
                 
-                <div>
-                  <Link 
-                    href="#programs"
-                    className="px-8 py-4 bg-white dark:bg-grey-700 border border-grey-200 dark:border-grey-600 text-black dark:text-black rounded-full font-medium hover:shadow-xl transition-all duration-300 text-lg flex items-center hover:-translate-y-1"
-                  >
-                    <span className="mr-2">{language === 'en' ? 'View Programs' : 'Voir les Programmes'}</span>
-                    <span className="animate-bounce">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
+                <div className="flex flex-wrap items-center space-x-8">
+                  <div className="flex items-center mb-4 md:mb-0">
+                    <div className="flex text-amber-400" aria-label={`Rating: ${service.rating} out of 5 stars`}>
+                      {[...Array(5)].map((_, i) => (
+                        <svg 
+                          key={i} 
+                          className={`w-5 h-5 ${i < Math.floor(service.rating) ? "text-amber-400" : "text-gray-300"}`}
+                          fill="currentColor" 
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                      
+                      {/* Fractional star for decimal ratings */}
+                      {service.rating % 1 !== 0 && (
+                        <div className="relative">
+                          <svg className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          <div className="absolute top-0 left-0 overflow-hidden" style={{ width: `${(service.rating % 1) * 100}%` }}>
+                            <svg className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <span className="ml-2 text-gray-600 font-medium">
+                      {service.rating.toFixed(1)} ({service.reviewCount.toLocaleString()} {language === 'en' ? 'reviews' : 'avis'})
                     </span>
-                  </Link>
+                  </div>
+                  
+                  <div className="hidden md:block h-8 w-px bg-gray-200"></div>
+                  
+                  <div className="flex items-center text-gray-600 text-sm sm:text-base">
+                    <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span className="font-medium">{language === 'en' ? 'Trusted by 15,000+ professionals' : 'Approuvé par plus de 15 000 professionnels'}</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center">
-                  <div className={`flex ${service.textColor}`}>
-                    {[...Array(5)].map((_, i) => (
-                      <svg 
-                        key={i} 
-                        className="w-5 h-5" 
-                        fill={i < Math.floor(service.rating) ? "currentColor" : "none"} 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="ml-2 text-grey-700 dark:text-black">
-                    {service.rating} ({service.reviewCount} {language === 'en' ? 'reviews' : 'avis'})
-                  </span>
-                </div>
-                
-                <div className="h-6 w-px bg-grey-300 dark:bg-grey-700"></div>
-                
-                <div className="text-grey-700 dark:text-black flex items-center text-sm">
-                  <svg className="w-5 h-5 mr-1 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>{language === 'en' ? 'Trusted by 15,000+ professionals' : 'Approuvé par plus de 15 000 professionnels'}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative z-10">
-              <div className="relative">
-                {/* Card glow effect */}
-                <div className="absolute -inset-2 bg-gradient-to-r from-green-600/20 to-blue-600/20 rounded-2xl blur-xl opacity-70"></div>
-                
-                <div className="rounded-2xl bg-gradient-to-br from-green-600 to-green-800 p-10 text-white shadow-xl relative overflow-hidden z-10">
-                  <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                    <svg className="w-full h-full" viewBox="0 0 100 100">
-                      <defs>
-                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                          <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100" height="100" fill="url(#grid)" />
-                    </svg>
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <div className="w-20 h-20 mb-6 animate-pulse">
-                      {service.icon}
-                    </div>
-                    
-                    <h3 className="text-2xl font-bold mb-4">
-                      {language === 'en' ? 'Key Outcomes' : 'Résultats Clés'}
-                    </h3>
-                    
-                    <ul className="space-y-3">
-                      {service.outcomes.map((outcome, idx) => (
-                        <li 
-                          key={idx}
-                          className="flex items-start"
-                        >
-                          <div className="mr-3 flex-shrink-0 mt-0.5 bg-white/20 rounded-full p-1">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                          <span className="font-medium">{outcome}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  {/* Decorative circle */}
-                  <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-white/10"></div>
-                  <div className="absolute top-10 -left-10 w-32 h-32 rounded-full bg-white/5"></div>
-                </div>
-                
-                {/* Floating stats cards */}
-                <div className="absolute -bottom-6 -left-6 bg-white dark:bg-grey-700 rounded-xl shadow-xl p-3 transform hover:-translate-y-1 transition-transform">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-600">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-xl font-bold text-black dark:text-black">
-                        <Counter value={service.stat1.value} suffix={service.stat1.suffix} />
+              <div className="relative z-10 h-full">
+                <div className="relative">
+                  {/* Card with key outcomes */}
+                  <div className="rounded-2xl bg-gradient-to-br from-green-600 to-green-700 p-8 text-white shadow-xl relative overflow-hidden z-10">
+                    <div className="relative z-10">
+                      <div className="w-16 h-16 mb-8">
+                        {service.icon}
                       </div>
-                      <div className="text-xs text-grey-600 dark:text-black/80">{service.stat1.label}</div>
+                      
+                      <h2 className="text-2xl font-bold mb-6 flex items-center">
+                        <svg className="w-6 h-6 mr-2 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        {language === 'en' ? 'Key Outcomes' : 'Résultats Clés'}
+                      </h2>
+                      
+                      <ul className="space-y-4" aria-label={language === 'en' ? 'Program outcomes' : 'Résultats du programme'}>
+                        {service.outcomes.map((outcome, idx) => (
+                          <li 
+                            key={idx}
+                            className="flex items-start"
+                          >
+                            <div className="mr-3 flex-shrink-0 mt-1 bg-white/20 rounded-full p-1">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <span className="font-medium">{outcome}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                </div>
-                
-                <div className="absolute -bottom-6 -right-6 bg-white dark:bg-grey-700 rounded-xl shadow-xl p-3 transform hover:-translate-y-1 transition-transform">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-600">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-xl font-bold text-black dark:text-black">
-                        <Counter value={service.stat2.value} suffix={service.stat2.suffix} />
+                  
+                  {/* Statistics cards */}
+                  <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-md p-4 border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-green-100 text-green-600">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                       </div>
-                      <div className="text-xs text-grey-600 dark:text-black/80">{service.stat2.label}</div>
+                      <div>
+                        <div className="text-xl font-bold text-gray-900">
+                          <Counter value={service.stat1.value} suffix={service.stat1.suffix} />
+                        </div>
+                        <div className="text-xs text-gray-600">{service.stat1.label}</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-md p-4 border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-100 text-blue-600">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xl font-bold text-gray-900">
+                          <Counter value={service.stat2.value} suffix={service.stat2.suffix} />
+                        </div>
+                        <div className="text-xs text-gray-600">{service.stat2.label}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Features Section */}
-      <section className="py-20 relative z-10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-600 text-sm font-medium mb-4">
-                {language === 'en' ? 'Program Benefits' : 'Avantages du Programme'}
-              </span>
-            </div>
             
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Training Features' : 'Caractéristiques de la Formation'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Industry-recognized certification programs to enhance your career prospects'
-                : 'Des programmes de certification reconnus par l\'industrie pour améliorer vos perspectives de carrière'}
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {service.features.map((feature, idx) => (
-              <div 
-                key={idx}
-                className="bg-white dark:bg-grey-800 rounded-xl p-6 shadow-lg border border-grey-100 dark:border-grey-700 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300"
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 dark:bg-green-500/10 rounded-full -mt-10 -mr-10 transition-transform group-hover:scale-150 duration-500"></div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-center mb-4">
-                    <div className={`w-12 h-12 rounded-lg ${service.bgColor} flex items-center justify-center shadow-lg mr-4 text-2xl`}>
-                      {feature.icon}
-                    </div>
-                    <h3 className={`text-xl font-bold text-black dark:text-black`}>
-                      {feature.title}
-                    </h3>
+            {/* Trusted by brands */}
+            <div className="mt-16">
+              <p className="text-center text-gray-500 text-sm uppercase tracking-wider font-medium mb-6">
+                {language === 'en' ? 'Trusted by leading companies worldwide' : 'Approuvé par des entreprises leaders dans le monde entier'}
+              </p>
+              
+              <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
+                {service.employers.map((employer, idx) => (
+                  <div 
+                    key={idx}
+                    className="text-gray-400 font-medium text-xl hover:text-gray-600 transition-colors"
+                  >
+                    {employer}
                   </div>
-                  
-                  <p className="text-grey-600 dark:text-black">
-                    {feature.description}
-                  </p>
-                  
-                  <div className="mt-4 pt-4 border-t border-grey-100 dark:border-grey-700">
-                    <span className="inline-flex items-center text-green-600 dark:text-green-500 text-sm font-medium group hover:translate-x-1 transition-transform">
-                      {language === 'en' ? 'Learn more' : 'En savoir plus'}
-                      <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-                
-                <div className={`absolute bottom-0 left-0 right-0 h-1 ${service.bgColor} transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100`}></div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
-      
-      {/* Available Programs Section */}
-      <section id="programs" className="py-20 bg-white dark:bg-grey-800 relative z-10">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-grey-50 to-transparent dark:from-grey-900 dark:to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-grey-50 to-transparent dark:from-grey-900 dark:to-transparent"></div>
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-100/40 dark:bg-green-900/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-100/40 dark:bg-blue-900/10 rounded-full blur-3xl"></div>
-        </div>
+        </section>
         
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-500 text-sm font-medium mb-4">
-                {language === 'en' ? 'Certification Tracks' : 'Parcours de Certification'}
-              </span>
+        {/* Programs Section - Now with white background */}
+        <section 
+          id="programs" 
+          ref={programsRef}
+          className="py-20 relative z-10 bg-white"
+          aria-labelledby="programs-heading"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="text-center mb-16">
+              <h2 
+                id="programs-heading"
+                className="text-3xl font-bold mb-6 text-gray-900"
+              >
+                {language === 'en' ? 'Available Programs' : 'Programmes Disponibles'}
+              </h2>
+              
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                {language === 'en' 
+                  ? 'Choose from our range of industry-leading certification programs'
+                  : 'Choisissez parmi notre gamme de programmes de certification leaders de l\'industrie'}
+              </p>
             </div>
             
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Available Programs' : 'Programmes Disponibles'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Choose from our range of industry-leading certification programs'
-                : 'Choisissez parmi notre gamme de programmes de certification leaders de l\'industrie'}
-            </p>
-          </div>
-          
-          {/* Program selection tabs */}
-          <div className="flex flex-wrap justify-center mb-12 gap-3">
-            {service.availablePrograms.map((program, idx) => (
-              <button
-                key={idx}
-                className={`px-5 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 flex items-center transform hover:-translate-y-1 ${
-                  activeProgram === idx 
-                    ? 'bg-green-600 text-white shadow-lg shadow-green-500/20' 
-                    : 'bg-grey-100 dark:bg-grey-700 text-black dark:text-black hover:bg-grey-200 dark:hover:bg-grey-600'
-                }`}
-                onClick={() => setActiveProgram(idx)}
-              >
-                <span className="mr-2 text-lg">{program.icon}</span>
-                <span>{program.name}</span>
-              </button>
-            ))}
-          </div>
-          
-          {/* Program details */}
-          <div className="grid grid-cols-1 gap-8">
-            {service.availablePrograms.map((program, idx) => (
-              idx === activeProgram && (
-                <div 
-                  key={program.name}
-                  className={`rounded-xl overflow-hidden shadow-xl relative ${program.popular ? 'border-2 border-green-500' : 'border border-grey-200 dark:border-grey-700'} transform hover:-translate-y-2 transition-transform duration-300`}
+            {/* Program selection tabs - Accessible */}
+            <div 
+              className="flex flex-wrap justify-center gap-3 mb-12 px-4"
+              role="tablist"
+              aria-label={language === 'en' ? 'Training Programs' : 'Programmes de Formation'}
+            >
+              {service.availablePrograms.map((program, idx) => (
+                <button
+                  key={idx}
+                  role="tab"
+                  id={`tab-${idx}`}
+                  aria-selected={activeProgram === idx ? "true" : "false"}
+                  aria-controls={`tabpanel-${idx}`}
+                  className={`px-5 py-3 rounded-lg text-sm md:text-base font-medium transition-all ${
+                    activeProgram === idx 
+                      ? 'bg-green-600 text-white shadow-md' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                  }`}
+                  onClick={() => setActiveProgram(idx)}
                 >
-                  {program.popular && (
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-bl-lg z-10">
-                      {language === 'en' ? 'MOST POPULAR' : 'LE PLUS POPULAIRE'}
-                    </div>
-                  )}
-                  
-                  <div className="bg-white dark:bg-grey-800 p-8 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                      <div className="md:col-span-2">
-                        <div className="flex items-center gap-4 mb-6">
-                          <div className={`w-16 h-16 flex items-center justify-center rounded-full ${program.popular ? 'bg-green-100 dark:bg-green-900/30 text-green-600' : 'bg-grey-100 dark:bg-grey-700 text-grey-700 dark:text-black'} text-2xl`}>
-                            <span>{program.icon}</span>
-                          </div>
-                          <div>
-                            <h3 className={`text-2xl font-bold text-black dark:text-black ${program.popular ? 'text-green-600 dark:text-green-500' : ''}`}>
-                              {program.name}
-                            </h3>
-                            <p className="text-grey-600 dark:text-black mt-1">
-                              {program.description}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        <div className="bg-grey-50 dark:bg-grey-700/20 rounded-xl p-6 mb-6">
-                          <h4 className="text-lg font-bold text-black dark:text-black mb-4">
-                            {language === 'en' ? 'Program Details' : 'Détails du Programme'}
-                          </h4>
-                          <div className="space-y-4">
-                            <div className="flex items-center">
-                              <svg className={`w-5 h-5 text-green-600 dark:text-green-500 mr-2`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              <span className="text-grey-700 dark:text-black font-medium">{language === 'en' ? 'Duration:' : 'Durée:'} <span className="font-normal">{program.duration}</span></span>
+                  <span className="flex items-center gap-2">
+                    <span className="text-lg" aria-hidden="true">{program.icon}</span>
+                    <span>{program.name}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            
+            {/* Program details */}
+            <div className="grid grid-cols-1 gap-8">
+              {service.availablePrograms.map((program, idx) => (
+                <div 
+                  key={idx}
+                  role="tabpanel"
+                  id={`tabpanel-${idx}`}
+                  aria-labelledby={`tab-${idx}`}
+                  className={`${activeProgram === idx ? 'block' : 'hidden'}`}
+                >
+                  <div
+                    className={`rounded-xl overflow-hidden shadow-md relative ${program.popular ? 'ring-2 ring-green-500' : 'border border-gray-200'}`}
+                  >
+                    {program.popular && (
+                      <div className="absolute top-0 right-0 bg-green-600 text-white text-xs uppercase tracking-wider font-bold px-4 py-1 rounded-bl-lg z-10">
+                        {language === 'en' ? 'MOST POPULAR' : 'LE PLUS POPULAIRE'}
+                      </div>
+                    )}
+                    
+                    <div className="bg-white p-8 relative z-10">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2">
+                          <div className="flex items-center gap-5 mb-8">
+                            <div className={`w-16 h-16 flex items-center justify-center rounded-lg ${program.popular ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-700'} text-3xl`}>
+                              <span aria-hidden="true">{program.icon}</span>
                             </div>
-                            
-                            <div className="flex items-center">
-                              <svg className={`w-5 h-5 text-green-600 dark:text-green-500 mr-2`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                              </svg>
-                              <span className="text-grey-700 dark:text-black font-medium">{language === 'en' ? 'Format:' : 'Format:'} <span className="font-normal">{program.format}</span></span>
-                            </div>
-                            
-                            <div className="flex items-center">
-                              <svg className={`w-5 h-5 text-green-600 dark:text-green-500 mr-2`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                              </svg>
-                              <span className="text-grey-700 dark:text-black font-medium">{language === 'en' ? 'Certification:' : 'Certification:'} <span className="font-normal">{program.certification}</span></span>
+                            <div>
+                              <h3 className={`text-2xl font-bold text-gray-900 ${program.popular ? 'text-green-600' : ''}`}>
+                                {program.name}
+                              </h3>
+                              <p className="text-gray-600 mt-2">
+                                {program.description}
+                              </p>
                             </div>
                           </div>
-                        </div>
-                        
-                        <div className="inline-block transform hover:scale-105 transition-transform">
+                          
+                          <div className="bg-white border border-gray-100 rounded-lg p-6 mb-8 shadow-sm">
+                            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                              <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              {language === 'en' ? 'Program Details' : 'Détails du Programme'}
+                            </h4>
+                            <dl className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                              <div className="flex items-center">
+                                <dt className="sr-only">{language === 'en' ? 'Duration' : 'Durée'}</dt>
+                                <svg className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <dd>
+                                  <p className="text-gray-700 font-medium">{language === 'en' ? 'Duration' : 'Durée'}</p>
+                                  <p className="text-gray-900 font-bold">{program.duration}</p>
+                                </dd>
+                              </div>
+                              
+                              <div className="flex items-center">
+                                <dt className="sr-only">{language === 'en' ? 'Format' : 'Format'}</dt>
+                                <svg className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                                </svg>
+                                <dd>
+                                  <p className="text-gray-700 font-medium">{language === 'en' ? 'Format' : 'Format'}</p>
+                                  <p className="text-gray-900 font-bold">{program.format}</p>
+                                </dd>
+                              </div>
+                              
+                              <div className="flex items-center">
+                                <dt className="sr-only">{language === 'en' ? 'Certification' : 'Certification'}</dt>
+                                <svg className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <dd>
+                                  <p className="text-gray-700 font-medium">{language === 'en' ? 'Certification' : 'Certification'}</p>
+                                  <p className="text-gray-900 font-bold text-sm">{program.certification}</p>
+                                </dd>
+                              </div>
+                            </dl>
+                          </div>
+                          
                           <Link 
                             href={`/services/training/programs/${program.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium shadow-md hover:shadow-xl transition-all duration-300"
+                            className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg font-medium shadow-md hover:bg-green-700 transition-all duration-300"
                           >
                             <span className="mr-2">
                               {language === 'en' ? `Explore ${program.name}` : `Explorer ${program.name}`}
                             </span>
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                           </Link>
                         </div>
-                      </div>
-                      
-                      <div className="bg-green-50 dark:bg-green-900/10 rounded-xl p-6">
-                        <h4 className="text-lg font-bold text-black dark:text-black mb-4">
-                          {language === 'en' ? 'Skills You\'ll Learn' : 'Compétences à Acquérir'}
-                        </h4>
                         
-                        <ul className="space-y-3">
-                          {program.skills.map((skill, i) => (
-                            <li key={i} className="flex items-start">
-                              <svg className="w-5 h-5 text-green-600 dark:text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                              <span className="text-grey-700 dark:text-black">{skill}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        
-                        <div className="mt-6 pt-6 border-t border-green-100 dark:border-green-900/30">
-                          <div className="text-black dark:text-black text-sm">
-                            <span className="font-medium">
-                              {language === 'en' ? 'Career Potential:' : 'Potentiel de Carrière:'}
-                            </span>
-                            <div className="h-2 bg-grey-200 dark:bg-grey-700 rounded-full overflow-hidden mt-2">
-                              <div className="h-full bg-green-600 w-4/5"></div>
-                            </div>
-                            <div className="flex justify-between mt-1">
-                              <span className="text-xs text-grey-600 dark:text-black/80">
-                                {language === 'en' ? 'High demand' : 'Forte demande'}
-                              </span>
-                              <span className="text-xs text-green-600 dark:text-green-500 font-medium">
-                                {language === 'en' ? 'Excellent' : 'Excellent'}
-                              </span>
+                        <div className="bg-white border border-gray-100 rounded-lg p-6">
+                          <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            {language === 'en' ? 'Skills You\'ll Learn' : 'Compétences à Acquérir'}
+                          </h4>
+                          
+                          <ul className="space-y-4" aria-label={language === 'en' ? 'Skills covered in the program' : 'Compétences couvertes dans le programme'}>
+                            {program.skills.map((skill, i) => (
+                              <li key={i} className="flex items-start">
+                                <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3 flex-shrink-0 mt-0.5">
+                                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                </div>
+                                <span className="text-gray-700 font-medium">{skill}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          
+                          <div className="mt-6 pt-6 border-t border-gray-100">
+                            <div className="text-gray-900 text-sm">
+                              <p className="font-medium mb-2 flex items-center">
+                                <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {language === 'en' ? 'Career Potential' : 'Potentiel de Carrière'}
+                              </p>
+                              <div className="h-2 bg-gray-200 rounded-full overflow-hidden mt-2" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                                <div className="h-full bg-green-600 w-[85%]"></div>
+                              </div>
+                              <div className="flex justify-between mt-1">
+                                <span className="text-xs text-gray-600">
+                                  {language === 'en' ? 'High demand' : 'Forte demande'}
+                                </span>
+                                <span className="text-xs text-green-600 font-medium">
+                                  {language === 'en' ? 'Excellent' : 'Excellent'}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            ))}
-          </div>
-          
-          <div className="mt-12 text-center">
-            <div className="inline-block transform hover:scale-105 transition-transform">
-              <Link 
-                href="/services/training/compare"
-                className="inline-flex items-center px-6 py-3 bg-white dark:bg-grey-700 border border-grey-200 dark:border-grey-600 text-black dark:text-black rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-300"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <span>{language === 'en' ? 'Compare All Programs' : 'Comparer Tous les Programmes'}</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Process Section */}
-      <section className="py-20 bg-grey-50 dark:bg-grey-900 relative z-10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-500 text-sm font-medium mb-4">
-                {language === 'en' ? 'Our Methodology' : 'Notre Méthodologie'}
-              </span>
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Our Training Process' : 'Notre Processus de Formation'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'A comprehensive approach to ensure successful learning and certification'
-                : 'Une approche complète pour assurer un apprentissage et une certification réussis'}
-            </p>
-          </div>
-          
-          <div className="relative">
-            {/* Process timeline line - upgraded with gradient */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-green-300 via-green-500 to-blue-500 dark:from-green-500 dark:via-green-600 dark:to-blue-600 transform md:translate-x-[-0.5px]"></div>
-            
-            <div className="space-y-16 relative">
-              {service.process.map((step, idx) => (
-                <div 
-                  key={idx}
-                  className="relative"
-                >
-                  <div className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}>
-                    <div className="w-full md:w-1/2 pb-8 md:pb-0 flex flex-col items-center md:items-end md:pr-8">
-                      <div 
-                        className={`w-14 h-14 rounded-full bg-gradient-to-br ${idx % 2 === 0 ? 'from-green-500 to-green-700' : 'from-blue-500 to-blue-700'} text-white flex items-center justify-center font-bold text-xl mb-4 md:mb-0 z-10 shadow-lg hover:scale-110 transition-transform`}
-                      >
-                        {idx + 1}
-                      </div>
-                    </div>
-                    
-                    <div className="w-full md:w-1/2 md:pl-8">
-                      <div 
-                        className="bg-white dark:bg-grey-800 rounded-xl p-6 shadow-lg border border-grey-100 dark:border-grey-700 relative overflow-hidden hover:-translate-y-2 transition-transform"
-                      >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/5 to-blue-500/5 dark:from-green-500/10 dark:to-blue-500/10 rounded-full -mt-10 -mr-10"></div>
-                        
-                        <h3 className="text-xl font-bold mb-3 text-black dark:text-black">
-                          {step}
-                        </h3>
-                        
-                        <p className="text-grey-600 dark:text-black">
-                          {service.processDescriptions[idx]}
-                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+            
+            <div className="mt-12 text-center">
+              <Link 
+                href="/services/training/compare"
+                className="inline-flex items-center px-6 py-3 bg-white border border-gray-200 text-gray-800 rounded-lg font-medium shadow-sm hover:bg-gray-50 transition-all duration-300"
+              >
+                <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span>{language === 'en' ? 'Compare All Programs' : 'Comparer Tous les Programmes'}</span>
+              </Link>
+            </div>
           </div>
-          
-          {/* Process summary card */}
-          <div 
-            className="mt-16 bg-gradient-to-r from-green-600 to-green-800 rounded-xl p-8 shadow-xl relative overflow-hidden"
-          >
-            <div className="absolute inset-0 opacity-10">
-              <svg className="w-full h-full" viewBox="0 0 100 100">
-                <defs>
-                  <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
-                    <path d="M 8 0 L 0 0 0 8" fill="none" stroke="white" strokeWidth="0.5" />
-                  </pattern>
-                  <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-                    <rect width="80" height="80" fill="url(#smallGrid)" />
-                    <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" strokeWidth="1" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
+        </section>
+        
+        {/* Process Section - White background */}
+        <section 
+          ref={processRef} 
+          className="py-24 relative z-10 bg-white"
+          aria-labelledby="process-heading"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 
+                id="process-heading"
+                className="text-3xl font-bold mb-6 text-gray-900"
+              >
+                {language === 'en' ? 'Our Training Process' : 'Notre Processus de Formation'}
+              </h2>
+              
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                {language === 'en' 
+                  ? 'A comprehensive approach to ensure successful learning and certification'
+                  : 'Une approche complète pour assurer un apprentissage et une certification réussis'}
+              </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  {language === 'en' ? 'Your Path to Professional Growth' : 'Votre Chemin vers la Croissance Professionnelle'}
-                </h3>
-                <p className="text-white/90 mb-6">
-                  {language === 'en' 
-                    ? 'Our certification programs are designed to help you acquire the skills employers are actively seeking. With flexible learning options and expert instruction, you can advance your career while balancing your current responsibilities.'
-                    : 'Nos programmes de certification sont conçus pour vous aider à acquérir les compétences que les employeurs recherchent activement. Avec des options d\'apprentissage flexibles et une instruction par des experts, vous pouvez faire progresser votre carrière tout en équilibrant vos responsabilités actuelles.'}
-                </p>
-                <div className="inline-block transform hover:scale-105 transition-transform">
-                  <Link 
-                    href="/services/training/methodology"
-                    className="inline-flex items-center px-6 py-3 bg-white text-green-600 rounded-lg font-medium shadow-md hover:shadow-xl transition-all duration-300"
-                  >
-                    {language === 'en' ? 'Learn more about our methodology' : 'En savoir plus sur notre méthodologie'}
-                    <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
+            <div className="relative">
+              {/* Process timeline line */}
+                           <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-green-300 via-green-500 to-blue-500 transform md:translate-x-[-0.5px]"></div>
               
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { value: '15k+', label: language === 'en' ? 'Graduates' : 'Diplômés' },
-                  { value: '200+', label: language === 'en' ? 'Instructors' : 'Instructeurs' },
-                  { value: '97%', label: language === 'en' ? 'Satisfaction' : 'Satisfaction' },
-                  { value: '65+', label: language === 'en' ? 'Certifications' : 'Certifications' }
-                ].map((stat, idx) => (
+              <div className="space-y-16 relative">
+                {service.process.map((step, idx) => (
                   <div 
                     key={idx}
-                    className="bg-white/10 rounded-lg p-4 backdrop-blur-sm hover:-translate-y-1 transition-transform"
+                    className="relative"
                   >
-                    <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-white/80 text-sm">{stat.label}</div>
+                    <div className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}>
+                      <div className="w-full md:w-1/2 pb-8 md:pb-0 flex flex-col items-center md:items-end md:pr-12 relative z-10">
+                        <div 
+                          className={`w-16 h-16 rounded-full ${idx % 2 === 0 ? 'bg-green-600' : 'bg-blue-600'} text-white flex items-center justify-center font-bold text-xl mb-4 md:mb-0 shadow-md`}
+                          aria-hidden="true"
+                        >
+                          {idx + 1}
+                        </div>
+                      </div>
+                      
+                      <div className="w-full md:w-1/2 md:pl-12">
+                        <div 
+                          className="bg-white rounded-lg p-6 shadow-md border border-gray-100 relative overflow-hidden"
+                        >
+                          <h3 className={`text-xl font-bold mb-3 ${idx % 2 === 0 ? 'text-green-600' : 'text-blue-600'}`}>
+                            <span className="sr-only">Step {idx + 1}:</span> {step}
+                          </h3>
+                          
+                          <p className="text-gray-600 leading-relaxed">
+                            {service.processDescriptions[idx]}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
             
-            {/* Decorative elements */}
-            <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-white/10"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white dark:bg-grey-800 relative z-10">
-                <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-500 text-sm font-medium mb-4">
-                {language === 'en' ? 'Success Stories' : 'Histoires de Réussite'}
-              </span>
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Student Testimonials' : 'Témoignages d\'Étudiants'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Hear from our graduates who have transformed their careers through our training programs'
-                : 'Écoutez nos diplômés qui ont transformé leur carrière grâce à nos programmes de formation'}
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {service.testimonials.map((testimonial, idx) => (
-              <div 
-                key={idx}
-                className="bg-grey-50 dark:bg-grey-700 rounded-xl overflow-hidden shadow-lg border border-grey-100 dark:border-grey-600 relative group hover:-translate-y-2 transition-transform duration-300"
-              >
-                <div className="absolute top-0 right-0 w-40 h-40 bg-green-500/5 dark:bg-green-500/10 rounded-full -mt-20 -mr-20 transition-transform group-hover:scale-150 duration-500"></div>
-                
-                <div className="p-8 relative z-10">
-                  <div className="flex items-center mb-6">
-                    <div className="flex-shrink-0 mr-4 relative">
-                      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-green-200 dark:border-green-400">
-                        <div className="w-full h-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center text-green-500 dark:text-green-300 text-xl font-bold">
-                          {testimonial.name.charAt(0)}
-                        </div>
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-grey-700"></div>
-                    </div>
+            {/* Process summary card */}
+            <div className="mt-16 rounded-lg overflow-hidden relative">
+              <div className="bg-green-600 p-8 lg:p-10 text-white relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      {language === 'en' ? 'Your Path to Professional Growth' : 'Votre Chemin vers la Croissance Professionnelle'}
+                    </h3>
                     
-                    <div>
-                      <h3 className="text-xl font-bold text-black dark:text-black">
-                        {testimonial.name}
-                      </h3>
-                      <p className="text-green-600 dark:text-green-400">{testimonial.title}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="relative">
-                    <svg className="absolute top-0 left-0 w-10 h-10 text-green-200 dark:text-green-700/50 -translate-x-4 -translate-y-6 transform rotate-180" fill="currentColor" viewBox="0 0 32 32">
-                      <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                    </svg>
-                    
-                    <p className="text-grey-700 dark:text-black mb-6 pl-2">
-                      {testimonial.text}
+                    <p className="text-white/90 text-lg mb-6">
+                      {language === 'en' 
+                        ? 'Our certification programs are designed to help you acquire the skills employers are actively seeking. With flexible learning options and expert instruction, you can advance your career while balancing your current responsibilities.'
+                        : 'Nos programmes de certification sont conçus pour vous aider à acquérir les compétences que les employeurs recherchent activement. Avec des options d\'apprentissage flexibles et une instruction par des experts, vous pouvez faire progresser votre carrière tout en équilibrant vos responsabilités actuelles.'}
                     </p>
+                    
+                    <Link 
+                      href="/services/training/methodology"
+                      className="inline-flex items-center px-6 py-3 bg-white text-green-700 rounded-lg font-medium shadow-md hover:bg-gray-50 transition-all duration-300"
+                    >
+                      {language === 'en' ? 'Learn more about our methodology' : 'En savoir plus sur notre méthodologie'}
+                      <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </Link>
                   </div>
                   
-                  <div className="flex items-center justify-between pt-4 border-t border-grey-200 dark:border-grey-600">
-                    <div className="flex items-center">
-                      <div className="flex text-yellow-400">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="ml-2 text-sm text-grey-600 dark:text-black/80">
-                        {language === 'en' ? 'Verified Graduate' : 'Diplômé Vérifié'}
-                      </span>
-                    </div>
-                    
-                    <div className="transform hover:translate-x-1 transition-transform">
-                      <Link 
-                        href={`/testimonials/${testimonial.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="text-sm text-green-600 dark:text-green-400 font-medium flex items-center"
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { value: '15k+', label: language === 'en' ? 'Graduates' : 'Diplômés' },
+                      { value: '200+', label: language === 'en' ? 'Instructors' : 'Instructeurs' },
+                      { value: '97%', label: language === 'en' ? 'Satisfaction' : 'Satisfaction' },
+                      { value: '65+', label: language === 'en' ? 'Certifications' : 'Certifications' }
+                    ].map((stat, idx) => (
+                      <div 
+                        key={idx}
+                        className="bg-white/10 rounded-lg p-4"
                       >
-                        {language === 'en' ? 'Read full story' : 'Lire l\'histoire complète'}
-                        <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </Link>
-                    </div>
+                        <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                        <div className="text-white/80 text-sm">{stat.label}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-          
-          <div className="mt-12 text-center">
-            <div className="inline-block transform hover:scale-105 transition-transform">
+        </section>
+
+        {/* Testimonials Section - White background */}
+        <section 
+          ref={testimonialsRef} 
+          className="py-24 relative z-10 bg-white"
+          aria-labelledby="testimonials-heading"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 
+                id="testimonials-heading"
+                className="text-3xl font-bold mb-6 text-gray-900"
+              >
+                {language === 'en' ? 'Student Testimonials' : 'Témoignages d\'Étudiants'}
+              </h2>
+              
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                {language === 'en' 
+                  ? 'Hear from our graduates who have transformed their careers through our training programs'
+                  : 'Écoutez nos diplômés qui ont transformé leur carrière grâce à nos programmes de formation'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {service.testimonials.map((testimonial, idx) => (
+                <div 
+                  key={idx}
+                  className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden"
+                >
+                  <div className="p-6">
+                    <div className="flex items-center mb-6">
+                      <div className="flex-shrink-0 mr-4 relative">
+                        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-green-200">
+                          <div className="w-full h-full bg-green-100 flex items-center justify-center text-green-600 text-xl font-bold" aria-hidden="true">
+                            {testimonial.name.charAt(0)}
+                          </div>
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900">
+                          {testimonial.name}
+                        </h3>
+                        <p className="text-green-600">{testimonial.title}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="relative">
+                      <svg className="absolute top-0 left-0 w-10 h-10 text-gray-200 -translate-x-4 -translate-y-6 transform rotate-180" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
+                        <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                      </svg>
+                      
+                      <blockquote className="text-gray-700 mb-6 pl-2">
+                        <p>{testimonial.text}</p>
+                      </blockquote>
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                      <div className="flex items-center">
+                        <div className="flex text-amber-400" aria-label="5 out of 5 stars">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="ml-2 text-sm text-gray-600">
+                          {language === 'en' ? 'Verified Graduate' : 'Diplômé Vérifié'}
+                        </span>
+                      </div>
+                      
+                      <div>
+                        <Link 
+                          href={`/testimonials/${testimonial.name.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="text-sm text-green-600 font-medium flex items-center hover:text-green-700 transition-colors"
+                        >
+                          {language === 'en' ? 'Read full story' : 'Lire l\'histoire complète'}
+                          <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-12 text-center">
               <Link 
                 href="/testimonials"
-                className="inline-flex items-center px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-all duration-300"
+                className="inline-flex items-center px-6 py-3 bg-white border border-green-200 text-green-700 rounded-lg font-medium hover:bg-green-50 transition-all duration-300"
               >
                 {language === 'en' ? 'View All Success Stories' : 'Voir Toutes les Histoires de Réussite'}
-                <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Employer Recognition Section */}
-      <section className="py-16 bg-grey-50 dark:bg-grey-900">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold text-black dark:text-black mb-4">
-              {language === 'en' ? 'Certifications Recognized By Leading Employers' : 'Certifications Reconnues Par les Principaux Employeurs'}
-            </h3>
-            <p className="text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Our certification programs are valued by top companies worldwide'
-                : 'Nos programmes de certification sont valorisés par les meilleures entreprises du monde entier'}
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
-            {service.employers.map((employer, idx) => (
-              <div 
-                key={idx}
-                className="h-12 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-105"
+        {/* FAQ Section - White background */}
+        <section 
+          ref={faqRef} 
+          className="py-24 relative z-10 bg-white"
+          aria-labelledby="faq-heading"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 
+                id="faq-heading"
+                className="text-3xl font-bold mb-6 text-gray-900"
               >
-                <div className="w-32 h-12 bg-white dark:bg-grey-800 shadow-sm rounded-md flex items-center justify-center">
-                  <span className="text-grey-700 dark:text-black font-medium text-lg">
-                    {employer}
-                  </span>
+                {language === 'en' ? 'Frequently Asked Questions' : 'Questions Fréquemment Posées'}
+              </h2>
+              
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                {language === 'en' 
+                  ? 'Find answers to common questions about our certification programs'
+                  : 'Trouvez des réponses aux questions courantes sur nos programmes de certification'}
+              </p>
+            </div>
+            
+            <div className="max-w-4xl mx-auto space-y-6">
+              {service.faqs.map((faq, idx) => (
+                <div 
+                  key={idx}
+                  className="bg-white rounded-lg shadow-md border border-gray-100"
+                >
+                  <details className="group" id={`faq-${idx}`}>
+                    <summary className="flex items-center justify-between cursor-pointer p-6 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-lg">
+                      <h3 className="text-lg font-medium text-gray-900">{faq.question}</h3>
+                      <svg className="w-6 h-6 text-green-600 group-open:transform group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </summary>
+                    <div className="px-6 pb-6">
+                      <p className="text-gray-600">{faq.answer}</p>
+                    </div>
+                  </details>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-white dark:bg-grey-800 relative z-10">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-grey-50 to-transparent dark:from-grey-900 dark:to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-grey-50 to-transparent dark:from-grey-900 dark:to-transparent"></div>
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-100/40 dark:bg-green-900/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-100/40 dark:bg-blue-900/10 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-medium mb-4">
-                {language === 'en' ? 'Investment Options' : 'Options d\'Investissement'}
-              </span>
+              ))}
             </div>
             
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Training Packages' : 'Forfaits de Formation'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Flexible pricing options to fit your career development needs'
-                : 'Options de tarification flexibles pour répondre à vos besoins de développement de carrière'}
-            </p>
-          </div>
-          
-          {/* Enhanced Pricing Table */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {service.pricing.map((plan, idx) => (
-              <div 
-                key={idx}
-                className={`bg-white dark:bg-grey-800 rounded-xl shadow-lg overflow-hidden border ${plan.popular ? 'border-green-500 dark:border-green-400' : 'border-grey-200 dark:border-grey-700'} relative transform hover:-translate-y-2 transition-transform duration-300`}
-              >
-                {plan.popular && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-r from-green-600 to-green-700 text-white text-xs font-bold px-4 py-1.5 rounded-bl-lg z-10">
-                    {language === 'en' ? 'MOST POPULAR' : 'LE PLUS POPULAIRE'}
-                  </div>
-                )}
-                
-                <div className={`p-8 ${plan.popular ? 'bg-green-50 dark:bg-green-900/10' : ''}`}>
-                  <h3 className="text-2xl font-bold text-black dark:text-black mb-2">
-                    {plan.name}
-                  </h3>
-                  
-                  <div className="flex items-end mb-6">
-                    <span className="text-4xl font-bold text-black dark:text-black">{plan.price}</span>
-                    <span className="text-grey-600 dark:text-black/80 ml-2 pb-1">
-                      {plan.name !== (language === 'en' ? 'Enterprise' : 'Entreprise') ? 
-                        (language === 'en' ? '/program' : '/programme') : 
-                        ''}
-                    </span>
-                  </div>
-                  
-                  <div className="mb-8 transform hover:scale-105 transition-transform">
-                    <Link 
-                      href={`/services/${service.id}/pricing/${plan.name.toLowerCase().replace(/\s+/g, '-')}`}
-                      className={`block w-full py-3 px-4 text-center rounded-lg font-medium transition-all duration-300 ${
-                        plan.popular
-                          ? 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:shadow-lg hover:shadow-green-500/20'
-                          : 'bg-white dark:bg-grey-700 border border-grey-200 dark:border-grey-600 text-black dark:text-black hover:bg-grey-50 dark:hover:bg-grey-600'
-                      }`}
-                    >
-                      {language === 'en' ? 'Get Started' : 'Commencer'}
-                    </Link>
-                  </div>
-                  
-                  <ul className="space-y-4">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <svg className="w-5 h-5 text-green-600 dark:text-green-400 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-grey-700 dark:text-black">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {plan.popular && (
-                  <div className="bg-green-600 text-white text-center py-2 text-sm font-medium">
-                    {language === 'en' ? 'Most comprehensive value' : 'Valeur la plus complète'}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          
-          {/* Payment options */}
-          <div className="mt-12 flex justify-center">
-            <div className="bg-white dark:bg-grey-800 rounded-xl p-4 shadow-md border border-grey-100 dark:border-grey-700 flex items-center gap-4 max-w-xl hover:-translate-y-1 transition-transform">
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-black dark:text-black">
-                  {language === 'en' ? 'Flexible Payment Options Available' : 'Options de Paiement Flexibles Disponibles'}
-                </h4>
-                <p className="text-sm text-grey-600 dark:text-black">
-                  {language === 'en' 
-                    ? 'We offer interest-free installment plans and employer reimbursement programs'
-                    : 'Nous proposons des plans de paiement échelonnés sans intérêt et des programmes de remboursement par l\'employeur'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20 bg-grey-50 dark:bg-grey-900 relative z-10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-2 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-500 text-sm font-medium mb-4">
-                {language === 'en' ? 'Questions & Answers' : 'Questions & Réponses'}
-              </span>
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black dark:text-black">
-              {language === 'en' ? 'Frequently Asked Questions' : 'Questions Fréquemment Posées'}
-            </h2>
-            
-            <p className="text-xl text-grey-600 dark:text-black max-w-3xl mx-auto">
-              {language === 'en' 
-                ? 'Find answers to common questions about our certification programs'
-                : 'Trouvez des réponses aux questions courantes sur nos programmes de certification'}
-            </p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto space-y-6">
-            {service.faqs.map((faq, idx) => (
-              <div 
-                key={idx}
-                className="bg-white dark:bg-grey-800 rounded-xl overflow-hidden shadow-md border border-grey-100 dark:border-grey-700 hover:-translate-y-1 transition-transform"
-              >
-                <details className="group">
-                  <summary className="flex items-center justify-between cursor-pointer p-6">
-                    <h3 className="text-lg font-medium text-black dark:text-black">{faq.question}</h3>
-                    <svg className="w-6 h-6 text-green-600 dark:text-green-400 transform group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </summary>
-                  <div className="px-6 pb-6 pt-2">
-                    <p className="text-grey-700 dark:text-black">{faq.answer}</p>
-                  </div>
-                </details>
-              </div>
-            ))}
-          </div>
-          
-          {/* Additional support options */}
-          <div 
-            className="mt-12 p-8 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl shadow-lg border border-grey-100 dark:border-grey-700 text-center relative overflow-hidden hover:-translate-y-2 transition-transform"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-blue-500/5 dark:from-green-500/10 dark:to-blue-500/10"></div>
-            
-            <div className="relative z-10">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white mb-4 shadow-lg animate-pulse">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {/* Additional support options */}
+            <div className="mt-16 bg-white rounded-lg shadow-md border border-gray-100 p-8 text-center">
+              <div className="w-16 h-16 mx-auto bg-green-600 rounded-full flex items-center justify-center text-white mb-6">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
               
-              <h4 className="text-2xl font-bold text-black dark:text-black mb-3">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 {language === 'en' ? 'Need More Information?' : 'Besoin de Plus d\'Informations?'}
-              </h4>
+              </h3>
               
-              <p className="text-grey-700 dark:text-black mb-6 text-lg">
+              <p className="text-gray-600 mb-8 text-lg max-w-2xl mx-auto">
                 {language === 'en' 
                   ? 'Our program advisors are here to answer your questions and help you choose the right certification pathway.'
                   : 'Nos conseillers de programme sont là pour répondre à vos questions et vous aider à choisir le bon parcours de certification.'}
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
-                <div className="inline-block transform hover:scale-105 transition-transform">
-                  <Link 
-                    href="/contact"
-                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full font-medium shadow-md hover:shadow-xl transition-all duration-300"
-                  >
-                    <span>
-                      {language === 'en' ? 'Schedule a Free Consultation' : 'Planifier une Consultation Gratuite'}
-                    </span>
-                    <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </Link>
-                </div>
+                <Link 
+                  href="/contact"
+                  className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg font-medium shadow-md hover:bg-green-700 transition-all duration-300"
+                >
+                  <span>
+                    {language === 'en' ? 'Schedule a Free Consultation' : 'Planifier une Consultation Gratuite'}
+                  </span>
+                  <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </Link>
                 
-                <div className="inline-block transform hover:scale-105 transition-transform">
-                  <Link 
-                    href="/services/training/faq"
-                    className="inline-flex items-center px-6 py-3 bg-white dark:bg-grey-700 border border-grey-200 dark:border-grey-600 text-black dark:text-black rounded-full font-medium hover:shadow-lg transition-all duration-300"
-                  >
-                    <span>
-                      {language === 'en' ? 'View Detailed FAQ' : 'Voir FAQ Détaillée'}
-                    </span>
-                    <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
+                <Link 
+                  href="/services/training/faq"
+                  className="inline-flex items-center px-6 py-3 bg-white border border-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-50 transition-all duration-300"
+                >
+                  <span>
+                    {language === 'en' ? 'View Detailed FAQ' : 'Voir FAQ Détaillée'}
+                  </span>
+                  <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
               
-              <p className="mt-6 text-sm text-grey-600 dark:text-black/80">
+              <p className="mt-6 text-sm text-gray-500">
                 {language === 'en' 
                   ? 'Or call us directly at: (888) 555-CERT'
                   : 'Ou appelez-nous directement au: (888) 555-CERT'}
               </p>
             </div>
           </div>
-        </div>
-      </section>
-      
-      {/* CTA Section */}
-      <section className="py-20 relative z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-green-900 z-0"></div>
+        </section>
         
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute inset-0 bg-grid-pattern opacity-30"></div>
-        </div>
-        
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="w-24 h-24 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-8">
-              <span className="text-5xl animate-bounce">🏆</span>
-            </div>
-            
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
-              {language === 'en' 
-                ? 'Ready to Advance Your Career?' 
-                : 'Prêt à Faire Progresser Votre Carrière?'}
-            </h2>
-            
-            <p className="text-xl mb-10 text-white/90">
-              {language === 'en' 
-                ? 'Take the first step toward obtaining industry-recognized certifications that set you apart. Our expert instructors and flexible programs are designed for your success.'
-                : 'Faites le premier pas vers l\'obtention de certifications reconnues par l\'industrie qui vous distinguent. Nos instructeurs experts et nos programmes flexibles sont conçus pour votre succès.'}
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="relative transform hover:-translate-y-1 transition-transform">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-white/50 to-white/80 rounded-full blur-sm"></div>
-                <Link 
-                  href={`/services/${service.id}/apply`}
-                  className="relative px-8 py-4 bg-white text-green-600 rounded-full text-lg font-medium hover:shadow-xl transition-all duration-300"
-                >
-                  {service.cta}
-                </Link>
+        {/* CTA Section - Green background (keeping this for contrast) */}
+        <section className="py-20 relative z-10 bg-green-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl font-bold mb-6">
+                  {language === 'en' 
+                    ? 'Ready to Advance Your Career With Industry-Recognized Certifications?' 
+                    : 'Prêt à Faire Progresser Votre Carrière Avec des Certifications Reconnues?'}
+                </h2>
+                
+                <p className="text-xl text-white/90 mb-8">
+                  {language === 'en' 
+                    ? 'Join thousands of professionals who have transformed their careers through our certification programs. Apply now and take the first step toward your next career milestone.'
+                    : 'Rejoignez des milliers de professionnels qui ont transformé leur carrière grâce à nos programmes de certification. Postulez maintenant et faites le premier pas vers votre prochain jalon professionnel.'}
+                </p>
+                
+                <div className="flex flex-wrap gap-5">
+                  <Link 
+                    href="/services/training/apply"
+                    className="inline-flex items-center px-8 py-4 bg-white text-green-700 rounded-lg font-medium text-lg shadow-lg hover:bg-gray-50 transition-all duration-300"
+                  >
+                    <span className="mr-3">{language === 'en' ? 'Apply Now' : 'Postuler Maintenant'}</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </Link>
+                  
+                  <Link 
+                    href="/services/training/programs"
+                    className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-medium text-lg hover:bg-white/10 transition-all duration-300"
+                  >
+                    <span className="mr-3">{language === 'en' ? 'Browse All Programs' : 'Parcourir Tous les Programmes'}</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </Link>
+                </div>
+                
+                <div className="flex items-center mt-8 text-white/80">
+                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span className="text-sm">{language === 'en' ? 'No obligation. Free consultation & program assessment.' : 'Sans obligation. Consultation gratuite et évaluation de programme.'}</span>
+                </div>
               </div>
               
-              <div className="transform hover:-translate-y-1 transition-transform">
-                <Link 
-                  href="#programs"
-                  className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full text-lg font-medium hover:bg-white/10 hover:shadow-xl transition-all duration-300"
-                >
-                  {language === 'en' ? 'Browse Programs' : 'Parcourir les Programmes'}
-                </Link>
+              <div className="flex justify-center">
+                <div className="relative w-64 h-64 md:w-80 md:h-80">
+                  <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse-slow"></div>
+                  <div className="absolute inset-8 bg-white/20 rounded-full animate-pulse-slower"></div>
+                  <div className="absolute inset-16 bg-white/20 rounded-full animate-pulse-slowest"></div>
+                  
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white rounded-full w-24 h-24 flex items-center justify-center shadow-xl">
+                      <svg className="w-12 h-12 text-green-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
-            <div className="mt-10 flex justify-center items-center gap-2 text-white/80">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span className="text-sm">
-                {language === 'en' 
-                  ? 'Secure enrollment process with money-back guarantee'
-                  : 'Processus d\'inscription sécurisé avec garantie de remboursement'}
-              </span>
+            {/* Trusted by brands in footer */}
+            <div className="mt-16 pt-10 border-t border-white/20">
+              <p className="text-center text-white/60 text-sm uppercase tracking-wider font-medium mb-6">
+                {language === 'en' ? 'Certification programs recognized by industry leaders' : 'Programmes de certification reconnus par les leaders de l\'industrie'}
+              </p>
+              
+              <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
+                {service.employers.map((employer, idx) => (
+                  <div 
+                    key={idx}
+                    className="text-white/60 font-medium text-xl"
+                  >
+                    {employer}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+        </section>
+        
+        {/* Last Updated Footer */}
+        <div className="bg-white py-4 text-center text-gray-500 text-sm border-t border-gray-100">
+          <div className="flex items-center justify-center gap-2">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Last updated: {currentDateTime}</span>
+            <span>•</span>
+            <span className="text-green-600">{currentUser}</span>
+          </div>
         </div>
-      </section>
-
-      {/* Hidden attribution - current user and timestamp */}
-      <div className="hidden">
-        <span>{currentUser}</span>
-        <span>{currentDateTime}</span>
-      </div>
-      
-      {/* Add global styles for animations and effects */}
-      <style jsx global>{`
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-          background-size: 20px 20px;
-        }
-        
-        /* Focus styles for accessibility */
-        button:focus-visible, a:focus-visible {
-          outline: 2px solid rgb(74, 222, 128);
-          outline-offset: 2px;
-        }
-        
-        /* Enhanced scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: rgba(243, 244, 246, 0.5);
-          border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: rgba(74, 222, 128, 0.5);
-          border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(74, 222, 128, 0.7);
-        }
-        
-        /* Details/summary custom styling */
-        details > summary {
-          list-style: none;
-        }
-        details > summary::-webkit-details-marker {
-          display: none;
-        }
-        
-        /* Basic animations */
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(-25%);
-            animation-timing-function: cubic-bezier(0.8,0,1,1);
-          }
-          50% {
-            transform: none;
-            animation-timing-function: cubic-bezier(0,0,0.2,1);
-          }
-        }
-        .animate-bounce {
-          animation: bounce 1s infinite;
-        }
-        
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-      `}</style>
-    </div>
+      </main>
+    </>
   );
 };
 

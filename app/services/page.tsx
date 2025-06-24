@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
-import Image from 'next/image';
 import { LanguageContext } from '../contexts/LanguageContext';
 import FAQ from '../components/FAQ';
 
@@ -38,43 +37,39 @@ export default function ServicesPage() {
   const { language } = useContext(LanguageContext);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
-  
-  // Current timestamp and user - using the exact values provided
-  const currentDateTime = "2025-06-04 20:02:56";
-  const currentUser = "Sdiabate1337";
 
   // Set isClient to true when component mounts (to avoid hydration mismatch)
   useEffect(() => {
     setIsClient(true);
   }, []);
-  
+
   // Intersection observers for animations
   const { ref: headerRef, inView: headerInView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
-  
+
   const { ref: servicesRef, inView: servicesInView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
   });
-  
+
   const { ref: ctaRef, inView: ctaInView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
-  
-  // Service data with enhanced fields
+
+  // Unified services
   const services: Service[] = [
     {
       id: 'linkedin',
       title: language === 'en' ? 'LinkedIn Profile Management' : 'Gestion de Profil LinkedIn',
-      description: language === 'en' 
+      description: language === 'en'
         ? 'Optimize your professional presence with expert profile reviews, content strategy, and network growth tactics.'
         : 'Optimisez votre présence professionnelle avec des revues de profil expertes, une stratégie de contenu et des tactiques de croissance de réseau.',
-      features: language === 'en' ? 
-        ["Profile optimization", "Content strategy", "Network growth", "Engagement boost"] :
-        ["Optimisation de profil", "Stratégie de contenu", "Croissance du réseau", "Boost d'engagement"],
+      features: language === 'en'
+        ? ["Profile optimization", "Content strategy", "Network growth", "Engagement boost"]
+        : ["Optimisation de profil", "Stratégie de contenu", "Croissance du réseau", "Boost d'engagement"],
       icon: (
         <svg className="w-full h-full" fill="currentColor" viewBox="0 0 24 24">
           <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
@@ -93,50 +88,44 @@ export default function ServicesPage() {
       lightBg: "bg-white"
     },
     {
-      id: 'coaching',
-      title: language === 'en' ? 'Career Coaching' : 'Coaching de Carrière',
-      description: language === 'en' 
-        ? 'Personalized guidance to help you navigate career transitions, salary negotiations, and professional development.'
-        : 'Des conseils personnalisés pour vous aider à naviguer les transitions de carrière, les négociations salariales et le développement professionnel.',
-      features: language === 'en' ? 
-        ["1-on-1 sessions", "Career planning", "Salary negotiation", "Interview prep"] :
-        ["Sessions individuelles", "Planification de carrière", "Négociation salariale", "Préparation d'entretien"],
+      id: 'coaching-training',
+      title: language === 'en'
+        ? 'Certifying Trainings & Coaching'
+        : 'FORMATIONS CERTIFIANTES et COACHING',
+      description: language === 'en'
+        ? "Advance your career with expert-led coaching and industry-recognized certifications."
+        : "Faites évoluer votre carrière avec du coaching personnalisé et des formations certifiantes animées par des experts.",
+      features: language === 'en'
+        ? [
+            "1-on-1 coaching",
+            "Career planning",
+            "Salary negotiation",
+            "Interview prep",
+            "Industry certifications",
+            "Expert instructors",
+            "Flexible schedule",
+            "Hands-on projects"
+          ]
+        : [
+            "Coaching individuel",
+            "Plan de carrière",
+            "Négociation salariale",
+            "Préparation d'entretien",
+            "Certifications industrie",
+            "Formateurs experts",
+            "Horaires flexibles",
+            "Projets pratiques"
+          ],
       icon: (
         <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       ),
-      stat1: { value: 85, label: language === 'en' ? 'Career satisfaction' : 'Satisfaction de carrière', suffix: '%' },
-      stat2: { value: 25, label: language === 'en' ? 'Salary increase' : 'Augmentation de salaire', suffix: '%' },
-      rating: 4.8,
-      reviewCount: 189,
-      cta: language === 'en' ? 'Start Coaching' : 'Commencer le Coaching',
-      color: "#ff914d",
-      gradient: "from-[#ff914d] to-[#ff8133]",
-      textColor: "text-[#ff914d]",
-      borderColor: "border-[#ff914d]",
-      bgColor: "bg-[#ff914d]",
-      lightBg: "bg-white"
-    },
-    {
-      id: 'training',
-      title: language === 'en' ? 'Certified Training Programs' : 'Programmes de Formation Certifiés',
-      description: language === 'en' 
-        ? 'Industry-recognized certification courses to enhance your skills and boost your resume with in-demand qualifications.'
-        : 'Des cours de certification reconnus par l\'industrie pour améliorer vos compétences et valoriser votre CV avec des qualifications recherchées.',
-      features: language === 'en' ? 
-        ["Industry certifications", "Expert instructors", "Flexible schedule", "Hands-on projects"] :
-        ["Certifications industrie", "Instructeurs experts", "Horaires flexibles", "Projets pratiques"],
-      icon: (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-        </svg>
-      ),
       stat1: { value: 94, label: language === 'en' ? 'Completion rate' : 'Taux d\'achèvement', suffix: '%' },
       stat2: { value: 92, label: language === 'en' ? 'Employment rate' : 'Taux d\'emploi', suffix: '%' },
-      rating: 4.7,
-      reviewCount: 315,
-      cta: language === 'en' ? 'Get Certified' : 'Obtenez une Certification',
+      rating: 4.8,
+      reviewCount: 504,
+      cta: language === 'en' ? 'Start Your Training or Coaching' : 'Commencer une Formation ou un Coaching',
       color: "#ff914d",
       gradient: "from-[#ff914d] to-[#ff8133]",
       textColor: "text-[#ff914d]",
@@ -146,23 +135,86 @@ export default function ServicesPage() {
     },
     {
       id: 'school',
-      title: language === 'en' ? 'School Search & Enrollment' : 'Recherche & Inscription Scolaire',
-      description: language === 'en' 
-        ? 'Comprehensive support for finding and applying to educational programs that align with your career goals and aspirations.'
-        : 'Un soutien complet pour trouver et postuler à des programmes éducatifs qui correspondent à vos objectifs de carrière et à vos aspirations.',
-      features: language === 'en' ? 
-        ["School matching", "Application guidance", "Visa support", "Scholarship assistance"] :
-        ["Correspondance d'écoles", "Guide de candidature", "Soutien aux visas", "Assistance aux bourses"],
+      title: language === 'en'
+        ? "Study Abroad: Morocco & France"
+        : "Études à l'Étranger : Maroc & France",
+      description: language === 'en'
+        ? `Get step-by-step support for your education in Morocco and France.`
+        : `Bénéficiez d’un accompagnement complet pour vos études au Maroc et en France.`,
+      features: language === 'en'
+        ? [
+            "School matching (Morocco & France)",
+            "Application guidance",
+            "Visa support",
+            "Scholarship assistance",
+            "Step-by-step process for both Morocco and France"
+          ]
+        : [
+            "Recherche d'écoles (Maroc & France)",
+            "Accompagnement inscription",
+            "Soutien visa",
+            "Aide aux bourses",
+            "Processus détaillé pour Maroc et France"
+          ],
       icon: (
         <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5m0 0l9-5-9-5-9 5 9 5m0 0v7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5m0 0v7m9-7v7" />
         </svg>
       ),
       stat1: { value: 95, label: language === 'en' ? 'Acceptance rate' : 'Taux d\'acceptation', suffix: '%' },
       stat2: { value: 40, label: language === 'en' ? 'Scholarship recipients' : 'Bénéficiaires de bourses', suffix: '%' },
       rating: 4.8,
       reviewCount: 178,
-      cta: language === 'en' ? 'Find Your School' : 'Trouvez Votre École',
+      cta: language === 'en'
+        ? 'Study in Morocco or France'
+        : 'Étudier au Maroc ou en France',
+      color: "#ff914d",
+      gradient: "from-[#ff914d] to-[#ff8133]",
+      textColor: "text-[#ff914d]",
+      borderColor: "border-[#ff914d]",
+      bgColor: "bg-[#ff914d]",
+      lightBg: "bg-white"
+    },
+    {
+      id: 'entrepreneur',
+      title: language === 'en'
+        ? 'Entrepreneurship & Company Creation'
+        : 'Entrepreneuriat & Création de Société',
+      description: language === 'en'
+        ? 'Launch your own business in Morocco—legal support, company registration, domiciliation, fiscal setup, and business plan writing, all managed for you in record time.'
+        : 'Lancez votre activité au Maroc : accompagnement légal, création de société, domiciliation, fiscalité, rédaction de business plan, tout est géré pour vous en un temps record.',
+      features: language === 'en'
+        ? [
+            "Company registration",
+            "Professional domiciliation",
+            "Business plan drafting",
+            "Full paperwork management",
+            "Fiscal & legal setup",
+            "Logo & business card included"
+          ]
+        : [
+            "Création d'entreprise",
+            "Domiciliation professionnelle",
+            "Rédaction Business plan",
+            "Gestion complète de la paperasse",
+            "Mise en place fiscale & légale",
+            "Logo & carte de visite inclus"
+          ],
+      icon: (
+        <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="#ff914d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="10" width="18" height="11" rx="2" fill="#fff8f3" />
+          <path d="M7 10V7a5 5 0 0110 0v3" />
+          <path d="M12 15v2" />
+          <path d="M9 21h6" />
+        </svg>
+      ),
+      stat1: { value: 4, label: language === 'en' ? 'Company creation packs' : 'Packs création société', suffix: '' },
+      stat2: { value: 299, label: language === 'en' ? 'Business plan from' : 'Business plan dès', suffix: '€' },
+      rating: 5.0,
+      reviewCount: 120,
+      cta: language === 'en'
+        ? 'Discover Entrepreneurship'
+        : 'Découvrir l’Entrepreneuriat',
       color: "#ff914d",
       gradient: "from-[#ff914d] to-[#ff8133]",
       textColor: "text-[#ff914d]",
@@ -171,30 +223,30 @@ export default function ServicesPage() {
       lightBg: "bg-white"
     }
   ];
-  
+
   // Set initial active service on mobile
   useEffect(() => {
     if (isClient && window.innerWidth < 768) {
       setActiveService(services[0].id);
     }
   }, [isClient, services]);
-  
+
   // Render stars for ratings
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center">
         {[1, 2, 3, 4, 5].map((star) => (
-          <svg 
-            key={star} 
+          <svg
+            key={star}
             className={`w-4 h-4 ${star <= Math.floor(rating) ? 'text-[#ff914d]' : star <= rating ? 'text-[#ff914d]' : 'text-gray-300'}`}
-            fill="currentColor" 
+            fill="currentColor"
             viewBox="0 0 20 20"
           >
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
         ))}
         <span className="ml-2 text-sm font-medium text-gray-600">
-          {rating.toFixed(1)} ({renderReviewCount(rating)})
+          {rating.toFixed(1)}
         </span>
       </div>
     );
