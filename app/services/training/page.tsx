@@ -58,9 +58,15 @@ const TrainingProgramsPage = () => {
   };
   
   // Optimized Counter component for statistics
-  const Counter = ({ value, duration = 2, suffix = "" }) => {
+  type CounterProps = {
+    value: number;
+    duration?: number;
+    suffix?: string;
+  };
+
+  const Counter: React.FC<CounterProps> = ({ value, duration = 2, suffix = "" }) => {
     const [count, setCount] = useState(0);
-    const counterRef = useRef(null);
+    const counterRef = useRef<HTMLSpanElement | null>(null);
     const [isInView, setIsInView] = useState(false);
     
     useEffect(() => {
@@ -859,7 +865,7 @@ const TrainingProgramsPage = () => {
                                 </svg>
                                 {language === 'en' ? 'Career Potential' : 'Potentiel de Carrière'}
                               </p>
-                              <div className="h-2 bg-gray-200 rounded-full overflow-hidden mt-2" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                              <div className="h-2 bg-gray-200 rounded-full overflow-hidden mt-2" role="progressbar" aria-valuenow={85} aria-valuemin={0} aria-valuemax={100}>
                                 <div className="h-full bg-green-600 w-[85%]"></div>
                               </div>
                               <div className="flex justify-between mt-1">

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { RefObject } from "react";
 
 // À placer dans ton composant parent (props ou state)
 const banqueFields = [
@@ -188,7 +189,7 @@ interface SectionCyclesFilieresProps {
   activeTab: string | number;
   setActiveTab: (id: string | number) => void;
   fieldsInView: boolean;
-  fieldsRef: React.RefObject<HTMLDivElement>;
+  fieldsRef?: RefObject<HTMLDivElement | null>
   showAllFields: boolean;
   setShowAllFields: (show: boolean) => void;
 }

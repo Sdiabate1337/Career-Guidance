@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,6 +8,7 @@ import { useInView } from 'react-intersection-observer';
 import { LanguageContext } from '../../contexts/LanguageContext';
 import SectionCyclesFilieres from '@/app/components/SectionCyclesFilieres';
 import CallToAction from '@/app/components/CallToAction';
+
 
 const educationCycles = [
   {
@@ -44,9 +45,11 @@ const educationCycles = [
 const SchoolSearchPage = () => {
   const { language } = useContext(LanguageContext);
 
-  const [activeTab, setActiveTab] = useState('licence');
+  const [activeTab, setActiveTab] = useState<string | number>("defaultTabId");
   const [showAllFields, setShowAllFields] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  const dummyRef = useRef<HTMLDivElement>(null);
 
   const { ref: fieldsRef, inView: fieldsInView } = useInView({
     threshold: 0.1,
@@ -139,13 +142,13 @@ const SchoolSearchPage = () => {
       <SectionCyclesFilieres
         educationCycles={educationCycles}
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
         fieldsInView={fieldsInView}
-        fieldsRef={fieldsRef}
         showAllFields={showAllFields}
         setShowAllFields={setShowAllFields}
-        language={language}
-      />
+        language={language} setActiveTab={function (id: string | number): void {
+          throw new Error('Function not implemented.');
+        } } 
+        fieldsRef={dummyRef}  />
 
       <CallToAction />
     </div>
