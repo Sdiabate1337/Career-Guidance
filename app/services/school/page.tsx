@@ -7,8 +7,14 @@ import { LanguageContext } from '../../contexts/LanguageContext';
 import Image from "next/image";
 
 
+type EducationCycle = {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+};
+
 // ===== Cycles data =====
-const educationCycles = [
+const educationCycles: EducationCycle[]  = [
   {
     id: 'licence',
     title: 'Licence / Bachelor',
@@ -243,12 +249,12 @@ function SectionCyclesFilieres({
   activeTab,
   setActiveTab,
   fieldsInView,
-  fieldsRef,
+  fieldsRef,  
   language,
   showAllFields,
   setShowAllFields,
 }: {
-  educationCycles: typeof educationCycles,
+  educationCycles: EducationCycle[],
   activeTab: string,
   setActiveTab: (id: string) => void,
   fieldsInView: boolean,
@@ -525,7 +531,7 @@ export default function SchoolSearchPage() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         fieldsInView={fieldsInView}
-        fieldsRef={dummyRef}
+        fieldsRef={dummyRef as React.RefObject<HTMLDivElement>  }
         language={language}
         showAllFields={showAllFields}
         setShowAllFields={setShowAllFields}
