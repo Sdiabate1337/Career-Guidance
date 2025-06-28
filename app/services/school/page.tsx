@@ -1,15 +1,13 @@
 "use client";
 
 import { useContext, useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { LanguageContext } from '../../contexts/LanguageContext';
-import SectionCyclesFilieres from '@/app/components/SectionCyclesFilieres';
-import CallToAction from '@/app/components/CallToAction';
+import Image from "next/image";
 
 
+// ===== Cycles data =====
 const educationCycles = [
   {
     id: 'licence',
@@ -31,7 +29,7 @@ const educationCycles = [
     ),
   },
   {
-    id: 'engineering',
+    id: 'ingenieurie',
     title: 'Cycle Ingénieur',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,28 +40,338 @@ const educationCycles = [
   },
 ];
 
-const SchoolSearchPage = () => {
+// ===== Filières data =====
+const filieresByCycle = {
+  licence: [
+    {
+      title: "BANQUE & FINANCE",
+      color: "#ff914d",
+      fields: [
+        "BANQUE ET ASSURANCE",
+        "BANQUE FINANCE",
+        "BANQUE FINANCE ET ASSURANCE",
+        "ACTUARIAT ET GESTION DES RISQUES",
+        "SCIENCES ECONOMIQUES",
+        "ECONOMIE ET MANAGEMENT DIGITAUX",
+        "ECONONIE ET GESTION",
+        "COMPTABILITE CONTROLE ET AUDIT",
+        "ETUDES ECONOMIQUES ET STATISTIQUES",
+        "FINANCE AUDIT CONTROLE DE GESTION",
+        "INGENIERIE FINANCIERE",
+        "EXPERT FINANCIER"
+      ]
+    },
+    {
+      title: "DROIT, SCIENCES POLITIQUES & FISCALITE",
+      color: "#ff914d",
+      fields: [
+        "DROIT DES AFFAIRES",
+        "DROIT DES AFFAIRES OHADA",
+        "SCIENCES POLITIQUES",
+        "RELATIONS INTERNATIONALES",
+        "FISCALITE D’ENTREPRISE",
+      ]
+    },
+    {
+      title: "MANAGEMENT & COMMUNICATION",
+      color: "#ff914d",
+      fields: [
+        "ADMINISTRATION DES AFFAIRES",
+        "MANAGEMENT DE PROJET ET ENTREPREUNARIAT",
+        "RESSOURCES HUMAINES ET COMMUNICATION",
+        "MARKETING ET COMMUNICATION DIGITALE",
+        "MEDIAS COMMUNICATION  ET JOURNALISME"
+      ]
+    },
+    {
+      title: "INFORMATIQUE & RESEAUX",
+      color: "#ff914d",
+      fields: [
+        "INGENIERIE INFORMATIQUE",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES INFORMATIQUES",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES RESEAUX ET TELECOMMUNICATIONS",
+        "INTELLIGENCE ARTIFICIELLE",
+        "GENIE INFORMATIQUE",
+        "GENIE LOGICIEL",
+        "CYBERSECURITE",
+        "DATA SCIENCE"
+      ]
+    },
+    {
+      title: "MATHEMATIQUES & SCIENCES",
+      color: "#ff914d",
+      fields: [
+        "MATHEMATIQUE-INFORMATIQUE-PHYSIQUE",
+        "MATHEMATIQUES ET INFORMATIQUES",
+        "MATHEMATIQUES ET SCIENCES DE DONNEES"
+      ]
+    }
+  ],
+  master: [
+    {
+      title: "BANQUE & FINANCE",
+      color: "#ff914d",
+      fields: [
+        "BANQUE ET ASSURANCE",
+        "BANQUE FINANCE",
+        "BANQUE FINANCE ET ASSURANCE",
+        "ACTUARIAT ET GESTION DES RISQUES",
+        "SCIENCES ECONOMIQUES",
+        "ECONOMIE ET MANAGEMENT DIGITAUX",
+        "ECONONIE ET GESTION",
+        "COMPTABILITE CONTROLE ET AUDIT",
+        "ETUDES ECONOMIQUES ET STATISTIQUES",
+        "FINANCE AUDIT CONTROLE DE GESTION",
+        "INGENIERIE FINANCIERE",
+        "EXPERT FINANCIER"
+      ]
+    },
+    {
+      title: "DROIT, SCIENCES POLITIQUES & FISCALITE",
+      color: "#ff914d",
+      fields: [
+        "DROIT DES AFFAIRES",
+        "DROIT DES AFFAIRES OHADA",
+        "SCIENCES POLITIQUES",
+        "RELATIONS INTERNATIONALES",
+        "FISCALITE D’ENTREPRISE",
+      ]
+    },
+    {
+      title: "MANAGEMENT & COMMUNICATION",
+      color: "#ff914d",
+      fields: [
+        "ADMINISTRATION DES AFFAIRES",
+        "MANAGEMENT DE PROJET ET ENTREPREUNARIAT",
+        "RESSOURCES HUMAINES ET COMMUNICATION",
+        "MARKETING ET COMMUNICATION DIGITALE",
+        "MEDIAS COMMUNICATION  ET JOURNALISME"
+      ]
+    },
+    {
+      title: "ELECTRO-TECH, MECANIQUE & PHYSIQUE",
+      color: "#ff914d",
+      fields: [
+        "GENIE ELECTRIQUE",
+        "GENIE MECANIQUE",
+        "GENIE PHISIQUE",
+        "INGENIERIE ET PHYSIQUE DE MATERIAUX AVANCEE",
+        "MECANIQUE AVANCEE",
+        "MECANIQUE ROBOTIQUE ET MATERIAUX INNOVANTS"
+      ]
+    },
+    {
+      title: "INFORMATIQUE & RESEAUX",
+      color: "#ff914d",
+      fields: [
+        "INGENIERIE INFORMATIQUE",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES INFORMATIQUES",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES RESEAUX ET TELECOMMUNICATIONS",
+        "INTELLIGENCE ARTIFICIELLE",
+        "GENIE INFORMATIQUE",
+        "GENIE LOGICIEL",
+        "CYBERSECURITE",
+        "DATA SCIENCE"
+      ]
+    },
+    {
+      title: "AUTRES",
+      color: "#ff914d",
+      fields: [
+        "GEO RESSOURCES ET GEO MINES",
+        "MINES & CARRIERES",
+        "TRADING ET FINANCE DES MARCHES",
+        "TOURISME ET HOTELLERIE",
+        "ARCHITECTURE"
+      ]
+    }
+  ],
+  ingenieurie: [
+    {
+      title: "ELECTRO-TECH, MECANIQUE & PHYSIQUE",
+      color: "#ff914d",
+      fields: [
+        "GENIE ELECTRIQUE",
+        "GENIE MECANIQUE",
+        "GENIE PHISIQUE",
+        "INGENIERIE ET PHYSIQUE DE MATERIAUX AVANCEE",
+        "MECANIQUE AVANCEE",
+        "MECANIQUE ROBOTIQUE ET MATERIAUX INNOVANTS"
+      ]
+    },
+    {
+      title: "SCIENCES DE LA SANTE",
+      color: "#ff914d",
+      fields: [
+        "INFIRMIER EN ANESTHESIE ET REANIMATION",
+        "INFIRMIER EN SOINS D’URGENCES ET SOINS INTENSIFS",
+        "ORTHOPHONIE",
+        "PSYCHOLOGIE",
+        "PSYCHOMOTRICITE",
+        "MEDECIN"
+      ]
+    },
+    {
+      title: "INFORMATIQUE & RESEAUX",
+      color: "#ff914d",
+      fields: [
+        "INGENIERIE INFORMATIQUE",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES INFORMATIQUES",
+        "INGENIERIE INTELLIGENTE DES SYSTEMES RESEAUX ET TELECOMMUNICATIONS",
+        "INTELLIGENCE ARTIFICIELLE",
+        "GENIE INFORMATIQUE",
+        "GENIE LOGICIEL",
+        "CYBERSECURITE",
+        "DATA SCIENCE"
+      ]
+    },
+    {
+      title: "MATHEMATIQUES & SCIENCES",
+      color: "#ff914d",
+      fields: [
+        "MATHEMATIQUE-INFORMATIQUE-PHYSIQUE",
+        "MATHEMATIQUES ET INFORMATIQUES",
+        "MATHEMATIQUES ET SCIENCES DE DONNEES"
+      ]
+    }
+  ]
+};
+
+// ===== SectionCyclesFilieres =====
+function SectionCyclesFilieres({
+  educationCycles,
+  activeTab,
+  setActiveTab,
+  fieldsInView,
+  fieldsRef,
+  language,
+  showAllFields,
+  setShowAllFields,
+}: {
+  educationCycles: typeof educationCycles,
+  activeTab: string,
+  setActiveTab: (id: string) => void,
+  fieldsInView: boolean,
+  fieldsRef: React.RefObject<HTMLDivElement>,
+  language: string,
+  showAllFields: boolean,
+  setShowAllFields: (show: boolean) => void,
+}) {
+  const filieresToShow = filieresByCycle[activeTab as keyof typeof filieresByCycle] || [];
+  return (
+    <section id="filieres" className="py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-sm font-medium mb-4">
+            <span className="w-2 h-2 rounded-full bg-[#ff914d] mr-2 animate-pulse"></span>
+            {language === "en" ? "Educational Paths" : "NOS CYCLES"}
+          </span>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6 text-[#545454]">
+            {language === "en" ? "Study Programs" : "FILIERES"}
+            <span className="inline-block ml-2 text-[#ff914d] animate-pulse-slow">.</span>
+          </h2>
+        </div>
+        <div className="flex flex-nowrap justify-center mb-10 gap-4 overflow-x-auto pb-4 hide-scrollbar">
+          {educationCycles.map((cycle) => (
+            <button
+              key={cycle.id}
+              className={`px-8 py-5 text-base md:text-lg font-medium transition-all duration-300 flex items-center hover:-translate-y-1 flex-shrink-0 relative ${
+                activeTab === cycle.id
+                  ? "text-[#ff914d]"
+                  : "text-[#545454] hover:text-[#ff914d]"
+              }`}
+              onClick={() => setActiveTab(cycle.id as string)}
+            >
+              <div className={`mr-3 w-12 h-12 rounded-full flex items-center justify-center ${
+                activeTab === cycle.id
+                  ? "bg-[#ff914d]/10 text-[#ff914d]"
+                  : "bg-white shadow-sm border border-[#545454]/10 text-[#545454]"
+              } transition-all duration-300`}>
+                {cycle.icon}
+              </div>
+              <span>{cycle.title}</span>
+            </button>
+          ))}
+        </div>
+        <div ref={fieldsRef} className="mt-8 mb-12">
+          <div className="bg-white/80 backdrop-blur-sm rounded-[30px] shadow-xl p-8 mb-8 border border-[#545454]/10">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filieresToShow.map((cat) => (
+                <div key={cat.title}>
+                  <div className="flex items-center mb-3">
+                    <div className="w-10 h-10 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mr-3">
+                      {/* Optionally add an icon here */}
+                    </div>
+                    <h4 className="text-lg font-bold text-[#545454]">{cat.title}</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm pl-3">
+                    {cat.fields.map((field, i) => (
+                      <li key={i} className="flex items-center text-[#545454]">
+                        <span className="inline-block w-2 h-2 rounded-full bg-[#ff914d] mr-2"></span>
+                        {field}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ========== PAGE PRINCIPALE ==========
+import CallToAction from '@/app/components/CallToAction';
+import React from 'react';
+
+export default function SchoolSearchPage() {
   const { language } = useContext(LanguageContext);
-
-  const [activeTab, setActiveTab] = useState<string | number>("defaultTabId");
+  const [activeTab, setActiveTab] = useState('licence');
   const [showAllFields, setShowAllFields] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
   const dummyRef = useRef<HTMLDivElement>(null);
-
   const { ref: fieldsRef, inView: fieldsInView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
 
+  const heroImages = ["/maroc.png", "/tour.jpg"];
+  const [heroIndex, setHeroIndex] = useState(0);
+  
+  // Slider automatique
   useEffect(() => {
-    setIsVisible(true);
+    const interval = setInterval(() => {
+      setHeroIndex((i) => (i + 1) % heroImages.length);
+    }, 3500);
+    return () => clearInterval(interval);
   }, []);
-
   return (
     <div className="relative bg-[#fcfcfc] overflow-hidden min-h-screen">
-      {/* Hero Section */}
+
+      {/* Hero Section avec slideshow en background */}
       <section className="relative pt-28 pb-20 overflow-hidden z-10">
+        {/* Background slider */}
+        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none" style={{ minHeight: 320 }}>
+          {heroImages.map((src, idx) => (
+            <Image
+              key={src}
+              src={src}
+              alt=""
+              fill
+              priority={idx === 0}
+              sizes="100vw"
+              className={`
+                object-cover object-center transition-opacity duration-1000 ease-in-out
+                ${heroIndex === idx ? "opacity-100" : "opacity-0"}
+              `}
+              style={{ zIndex: 1 }}
+            />
+          ))}
+          {/* Overlay for contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#fff8f3]/80 to-white/70 z-10" />
+        </div>
+        <div className="relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <motion.h1
@@ -72,65 +380,139 @@ const SchoolSearchPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
             >
-              Études à l&apos;Étranger : Maroc & France
+              {language === "en"
+                ? "Study Abroad: Morocco & France"
+                : "Études à l'Étranger : Maroc & France"}
             </motion.h1>
             <p className="text-lg text-[#545454] max-w-3xl mx-auto">
-              Vous verrez les éléments tels que demandés.<br />
-              Prière de tenir compte des ajouts qui ont été faits au niveau de la partie INSCRIPTIONS dans les écoles (A remplacer par Etudes à l&apos;Etranger car on fera Maroc et France).<br />
-              Cette rubrique est désormais présentée en deux parties distinctes pour répondre à vos besoins.
+              {language === "en" ? (
+                <>
+                  Explore all the opportunities to pursue your higher education in Morocco or France with personalized guidance.<br /><br />
+                  This section has been completely redesigned to offer you a clear and tailored experience, with dedicated spaces for each country.<br /><br />
+                  Compare your options, get expert support at every step, and find the study path that suits you best. Your future starts here!
+                </>
+              ) : (
+                <>
+                  Découvrez toutes les opportunités pour poursuivre vos études supérieures au Maroc ou en France avec un accompagnement sur-mesure.<br /><br />
+                  Cette rubrique a été entièrement repensée pour vous offrir une expérience claire et personnalisée, avec un espace dédié à chaque pays.<br /><br />
+                  Comparez vos options, bénéficiez d’un accompagnement expert à chaque étape, et trouvez le parcours qui vous ressemble. Votre avenir commence ici !
+                </>
+              )}
             </p>
+            {/* Toggle button FR/EN */}
+                  {/* CTA "Voir les filières" */}
+            <div className="flex justify-center mt-6">
+              <a
+                href="#filieres"
+                className="inline-block px-8 py-3 rounded-full bg-[#ff914d] text-white font-bold text-lg shadow-lg hover:bg-[#ff7c1a] transition-colors duration-200"
+              >
+                {language === "en" ? "See Programs" : "Voir les filières"}
+              </a>
+            </div>
+
           </div>
+        </div>
         </div>
       </section>
 
-      {/* Section "Bienvenue sur notre plateforme d’Etudes à l’Etranger" */}
-      <section className="py-16 bg-white relative z-10">
-        <div className="max-w-5xl mx-auto px-4">
+      {/* ...le reste de ta page... */}
+      <section className="py-24 bg-gradient-to-br from-white via-[#fff8f3] to-[#ffe2d0] relative z-10">
+        <div className="max-w-6xl mx-auto px-6">
           <motion.div
-            className="rounded-3xl shadow-xl border border-[#ececec] bg-gradient-to-br from-[#fff8f3] to-white p-8 mb-10"
-            initial={{ opacity: 0, y: 20 }}
+            className="rounded-[2.5rem] shadow-2xl border-0 bg-white/90 backdrop-blur-xl p-0 md:p-0 flex flex-col md:flex-row overflow-hidden relative"
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8, ease: [0.16,1,0.3,1] }}
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-[#ff914d] mb-6 text-center">
-              Bienvenue sur notre plateforme d’<span className="text-[#232323]">Études à l’Étranger</span>
-            </h2>
-            <div className="grid md:grid-cols-2 gap-10">
-              {/* Maroc */}
-              <div>
-                <h3 className="font-bold text-lg text-[#ff914d] mb-2 flex items-center">
-                  <span className="w-3 h-3 rounded-full bg-[#ff914d] mr-2"></span>
-                  Étudier au Maroc
-                </h3>
-                <p className="text-[#434343] mb-2">
-                  Career Guidance se charge d’accompagner tous les étudiants en provenance de l’Afrique subsaharienne, désireux d’intégrer une école reconnue ou accréditée au Maroc.<br /><br />
-                  En effet, notre structure étant en partenariats avec plusieurs écoles sur le territoire Marocain, nous permet de faciliter les procédures en interne pour nos différents candidats afin d’intégrer l’école de leur rêve.<br /><br />
-                  Grâce à ce soutien, les étudiants peuvent naviguer plus facilement dans les étapes complexes d’inscription, de validation des dossiers et de demande de visa pour réussir leur projet d’études dans n’importe quelle ville du Maroc.
-                </p>
+            {/* Morocco Card */}
+            <div className="w-full md:w-1/2 flex flex-col items-center md:items-start gap-8 py-12 px-8 bg-gradient-to-br from-[#ffede0] via-[#fff8f3] to-white relative">
+              <div className="flex items-center gap-4">
+                <div className="rounded-2xl shadow-xl border-2 border-[#ff914d]/20 bg-white p-2">
+                  <Image
+                    src="/maroc.png"
+                    alt="Morocco illustration"
+                    width={90}
+                    height={90}
+                    className="rounded-xl object-contain"
+                    priority
+                  />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-[#ff914d] flex items-center gap-2 tracking-tight">
+                    <span className="w-3 h-3 rounded-full bg-[#ff914d]"></span>
+                    Étudier au Maroc
+                  </h3>
+                  <p className="text-sm text-[#ff914d]/80 font-medium mt-1 uppercase tracking-wide">
+                    #DreamBigMaroc
+                  </p>
+                </div>
               </div>
-              {/* France */}
-              <div>
-                <h3 className="font-bold text-lg text-[#002fa7] mb-2 flex items-center">
-                  <span className="w-3 h-3 rounded-full bg-[#002fa7] mr-2"></span>
-                  Étudier en France
-                </h3>
-                <p className="text-[#434343] mb-2">
-                  Career Guidance se charge d’accompagner tous les étudiants en provenance de l’Afrique subsaharienne et du Maroc. Notre jeune équipe composée d’experts, vous accompagne dans toutes les procédures pour étudier en France.<br /><br />
-                  En effet, elle aide à constituer et suivre les dossiers jusqu’à l’obtention d’une acceptation sur la plateforme officielle « Études en France » de Campus France, qui centralise les candidatures aux établissements français.
-                </p>
-                <ul className="list-disc ml-6 mt-2 space-y-1 text-[#3d3d3d] text-base">
-                  <li>Choix des filières et Universités</li>
-                  <li>Dépôt de Candidature</li>
-                  <li>Conception d’un CV professionnel</li>
-                  <li>Rédaction des lettres de motivation à envoyer aux universités</li>
-                  <li>Ouverture du Dossier et Inscription</li>
-                  <li>Versement d’un Acompte</li>
-                  <li>Signature de votre Contrat avec Career Guidance</li>
-                  <li>Création du Compte Campus France</li>
-                </ul>
-                <ul className="list-disc ml-6 mt-4 space-y-1 text-[#3d3d3d] text-base">
-                  <li>Coaching et Préparation de l’entretien Campus France</li>
-                  <li>Assistance dans la procédure de Demande de Visa</li>
+              <p className="text-gray-700 leading-relaxed text-base mt-3 mb-0">
+                <span className="font-semibold">Career Guidance</span> accompagne les étudiants d’Afrique subsaharienne vers les meilleures écoles reconnues ou accréditées au Maroc.<br /><br />
+                Notre réseau de partenaires facilite toutes les démarches : <span className="font-semibold">choix d’école, inscription, suivi du dossier, obtention du visa</span> – pour que vous puissiez concrétiser sereinement votre rêve d’études au Maroc, dans la ville de votre choix.
+              </p>
+              <div className="flex gap-2 mt-2">
+                <span className="inline-block px-3 py-1 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-bold uppercase">Écoles partenaires</span>
+                <span className="inline-block px-3 py-1 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-bold uppercase">Visa simplifié</span>
+              </div>
+            </div>
+
+            {/* Separator - Show on large screens */}
+            <div className="hidden md:block w-[3px] bg-gradient-to-b from-[#ff914d]/0 via-[#ff914d]/30 to-[#002fa7]/0 my-12 mx-0 rounded-full"></div>
+
+            {/* France Card */}
+            <div className="w-full md:w-1/2 flex flex-col items-center md:items-start gap-8 py-12 px-8 bg-gradient-to-br from-[#e6ecfb] via-white to-[#f4f7fd] relative">
+              <div className="flex items-center gap-4">
+                <div className="rounded-2xl shadow-xl border-2 border-[#002fa7]/20 bg-white p-2">
+                  <Image
+                    src="/tour.jpg"
+                    alt="France illustration"
+                    width={90}
+                    height={90}
+                    className="rounded-xl object-contain"
+                    priority
+                  />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-[#002fa7] flex items-center gap-2 tracking-tight">
+                    <span className="w-3 h-3 rounded-full bg-[#002fa7]"></span>
+                    Étudier en France
+                  </h3>
+                  <p className="text-sm text-[#002fa7]/80 font-medium mt-1 uppercase tracking-wide">
+                    #CampusFrance
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-700 leading-relaxed text-base mt-3 mb-0">
+                <span className="font-semibold">Career Guidance</span> accompagne les étudiants d’Afrique subsaharienne et du Maroc pour toutes les démarches d’études en France.<br /><br />
+                Notre équipe vous aide de <span className="font-semibold">A à Z</span> : <span className="font-semibold">choix des filières, constitution du dossier, accompagnement Campus France, coaching entretien, procédure de visa</span> et plus encore, jusqu’à l’intégration en établissement.
+              </p>
+              <div className="w-full">
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-[#002fa7] text-[15px] mt-4 list-none">
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    Choix des filières & universités
+                  </li>
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    Dépôt de candidature
+                  </li>
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    CV & lettre de motivation
+                  </li>
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    Suivi du dossier Campus France
+                  </li>
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    Coaching entretien & visa
+                  </li>
+                  <li className="flex gap-2 items-center">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#002fa7]"></span>
+                    Intégration établissement
+                  </li>
                 </ul>
               </div>
             </div>
@@ -138,21 +520,18 @@ const SchoolSearchPage = () => {
         </div>
       </section>
 
-      {/* Section Cycles & Filières */}
       <SectionCyclesFilieres
         educationCycles={educationCycles}
         activeTab={activeTab}
+        setActiveTab={setActiveTab}
         fieldsInView={fieldsInView}
+        fieldsRef={dummyRef}
+        language={language}
         showAllFields={showAllFields}
         setShowAllFields={setShowAllFields}
-        language={language} setActiveTab={function (id: string | number): void {
-          throw new Error('Function not implemented.');
-        } } 
-        fieldsRef={dummyRef}  />
+      />
 
       <CallToAction />
     </div>
   );
-};
-
-export default SchoolSearchPage;
+}

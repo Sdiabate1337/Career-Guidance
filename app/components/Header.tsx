@@ -4,7 +4,8 @@ import { useContext, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { LanguageContext } from '../contexts/LanguageContext';
-
+import Image from "next/image";
+import { motion } from 'framer-motion';
 const Header = () => {
   const { language, setLanguage } = useContext(LanguageContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -140,28 +141,20 @@ const scrollToServicesSection = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex justify-between items-center h-20">
-          {/* Enhanced Logo with Animation */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center group" onClick={() => setActiveItem('/')}>
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#ff914d] to-[#ff8133] flex items-center justify-center mr-3.5 shadow-md transition-all duration-300 group-hover:shadow-[#ff914d]/30 group-hover:scale-105 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute -inset-full w-1/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-15 group-hover:animate-shine"></div>
-                <span className="text-white font-serif font-bold text-lg relative z-10">CG</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-serif font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors duration-300">
-                  <span className="relative z-10">Career</span>
-                  <span className="relative z-10 text-[#ff914d] ml-1.5">Guidance</span>
-                </h1>
-                <p className="text-xs text-[#545454]/70 mt-0.5">
-                  <span className="relative inline-block">
-                    {language === 'en' ? 'Guiding you, our duty' : 'Vous guider, notre devoir'}
-                    <span className="absolute bottom-0 left-0 w-0 group-hover:w-full h-[1px] bg-[#ff914d] transition-all duration-300 ease-out"></span>
-                  </span>
-                </p>
-              </div>
-            </Link>
-          </div>
+        {/* Enhanced Logo with Animation */}
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center group" onClick={() => setActiveItem('/')}> 
+              {/* Use next/image for your logo */}
+              <Image
+                src="/logo.png"
+                alt="Career Guidance Logo"
+                width={320}
+                height={32}
+                className="object-contain relative z-10"
+                priority
+              />
+          </Link>
+        </div>
           
           {/* Enhanced Desktop Navigation with Active States */}
           <nav className="hidden md:flex items-center space-x-8">
@@ -211,24 +204,25 @@ const scrollToServicesSection = () => {
               </span>
               <span className="absolute inset-0 bg-[#f0f0f0] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
             </button>
-            <Link 
-              href="/appointment" 
-              className="group px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white font-medium hover:shadow-lg hover:shadow-[#ff914d]/20 transition-all relative overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center group-hover:translate-x-0.5 transition-transform duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                {language === 'en' ? 'Book Appointment' : 'Prendre Rendez-vous'}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1.5 opacity-0 group-hover:opacity-100 transform -translate-x-1 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </span>
-              <div className="absolute top-0 bottom-0 left-0 w-full h-full">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#ff8133] to-[#ff914d] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                <div className="absolute -inset-full w-1/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-15 group-hover:animate-shine"></div>
-              </div>
-            </Link>
+              <motion.a 
+                href="https://calendly.com/careerguidance212/echange-avec-career-guidance?month=2025-06"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative px-10 py-4 rounded-full bg-white text-orange-600 text-lg font-medium shadow-xl hover:shadow-2xl hover:shadow-orange-900/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-orange-500 overflow-hidden"
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  transition: { duration: 0.3 }
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="relative z-10">
+                  {language === 'en' 
+                    ? 'Schedule a Free Consultation' 
+                    : 'Planifier une Consultation Gratuite'}
+                </span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-grey-100 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></span>
+            </motion.a>
           </div>
           
           {/* Enhanced Mobile Menu Button with Animation */}
@@ -318,8 +312,10 @@ const scrollToServicesSection = () => {
               <div className="h-px w-full bg-gradient-to-r from-[#f0f0f0] via-[#ff914d]/10 to-[#f0f0f0] my-2"></div>
             </div>
             <div className="px-4">
-              <Link 
-                href="/appointment" 
+              <a
+                href="https://calendly.com/careerguidance212/echange-avec-career-guidance?month=2025-06"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group block w-full px-4 py-3.5 rounded-xl text-base font-medium text-white bg-gradient-to-r from-[#ff914d] to-[#ff8133] hover:from-[#ff8133] hover:to-[#ff914d] shadow-md transition-all text-center flex items-center justify-center relative overflow-hidden"
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -340,7 +336,7 @@ const scrollToServicesSection = () => {
                   {language === 'en' ? 'Book Appointment' : 'Prendre Rendez-vous'}
                 </span>
                 <div className="absolute -inset-full w-1/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-15 group-hover:animate-shine"></div>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

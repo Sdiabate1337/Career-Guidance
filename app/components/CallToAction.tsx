@@ -205,9 +205,10 @@ const CallToAction = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              {/* Schedule button with FIXED hover effect */}
-              <motion.a 
-                href="/consultation"
+           <motion.a 
+                href="https://calendly.com/careerguidance212/echange-avec-career-guidance?month=2025-06"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group relative px-10 py-4 rounded-full bg-white text-orange-600 text-lg font-medium shadow-xl hover:shadow-2xl hover:shadow-orange-900/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-orange-500 overflow-hidden"
                 whileHover={{ 
                   scale: 1.05, 
@@ -217,10 +218,12 @@ const CallToAction = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <span className="relative z-10">
-                  {language === 'en' ? 'Schedule a Free Consultation' : 'Planifier une Consultation Gratuite'}
+                  {language === 'en' 
+                    ? 'Schedule a Free Consultation' 
+                    : 'Planifier une Consultation Gratuite'}
                 </span>
                 <span className="absolute inset-0 rounded-full bg-gradient-to-r from-grey-100 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></span>
-              </motion.a>
+            </motion.a>
               
               {/* Services button */}
               <motion.a

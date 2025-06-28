@@ -114,41 +114,41 @@ const HeroSection = () => {
                 {language === 'en' ? 'Trusted by professionals from:' : 'Approuvé par les professionnels de:'}
               </p>
               
-              {/* Mobile Carousel View with Enhanced Design */}
-              <div className="flex md:hidden space-x-4 overflow-x-auto pb-4 scrollbar-hide">
-                {[
-                  { name: 'Microsoft' },
-                  { name: 'Google' },
-                  { name: 'Amazon' },
-                  { name: 'IBM' },
-                  { name: 'Apple' }
-                ].map((company, index) => (
-                  <div 
-                    key={index} 
-                    className="flex-shrink-0 w-32 h-12 bg-white backdrop-blur-sm rounded-xl shadow-sm flex items-center justify-center border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-                  >
-                    <span className="text-base font-medium text-[#545454]">{company.name}</span>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Desktop Grid View with Modern Design */}
-              <div className="hidden md:grid md:grid-cols-5 gap-6">
-                {[
-                  { name: 'Microsoft' },
-                  { name: 'Google' },
-                  { name: 'Amazon' },
-                  { name: 'IBM' },
-                  { name: 'Apple' }
-                ].map((company, index) => (
-                  <div 
-                    key={index} 
-                    className="h-12 bg-white rounded-xl shadow-sm flex items-center justify-center px-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
-                  >
-                    <span className="text-base font-medium text-[#545454] group-hover:text-[#ff914d] transition-colors duration-300">{company.name}</span>
-                  </div>
-                ))}
-              </div>
+            {/* Mobile Carousel View with Enhanced Design */}
+            <div className="flex md:hidden space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+              {Array.from({ length: 9 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-32 h-12 bg-white backdrop-blur-sm rounded-xl shadow-sm flex items-center justify-center border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                >
+                  <img
+                    src={`/sp${index + 1}.jpeg`}
+                    alt={`Sponsor ${index + 1}`}
+                    className="h-8 object-contain"
+                    style={{ maxWidth: "90%" }}
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Grid View with Modern Design */}
+            <div className="hidden md:grid md:grid-cols-5 gap-6">
+              {Array.from({ length: 9 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-12 bg-white rounded-xl shadow-sm flex items-center justify-center px-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
+                >
+                  <img
+                    src={`/sp${index + 1}.jpeg`}
+                    alt={`Sponsor ${index + 1}`}
+                    className="h-8 object-contain group-hover:scale-105 transition-transform duration-300"
+                    style={{ maxWidth: "90%" }}
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
             </div>
           </div>
           

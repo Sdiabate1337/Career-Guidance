@@ -273,279 +273,279 @@ const LinkedInServicePage = () => {
 
       {/* Hero Section */}
       <section className="relative pt-28 pb-20 overflow-hidden z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-16 lg:gap-x-16 items-center">
-            {/* Left Content Column - Enhanced Transitions */}
-            <div className={`lg:col-span-6 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-              {/* Back to Services Link */}
-              <div className="inline-flex items-center mb-7 px-4 py-1.5 bg-gradient-to-r from-[#ff914d]/10 to-[#ff914d]/5 text-[#ff914d] rounded-full text-sm font-medium shadow-sm backdrop-blur-sm">
-                <span className="w-2 h-2 rounded-full bg-[#ff914d] mr-2 animate-pulse"></span>
-                <Link 
-                  href="/services" 
-                  className="text-[#ff914d] hover:text-[#ff8133] transition-colors"
-                >
-                  {language === 'en' ? 'Back to All Services' : 'Retour à Tous les Services'}
-                </Link>
-              </div>
-              
-              {/* Enhanced Main Headline with Modern Typography */}
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#545454] mb-8 leading-tight tracking-tight">
-                <span className="text-[#545454]">
-                  {language === 'en' 
-                    ? 'LinkedIn Account' 
-                    : 'Gestion de compte'}
-                </span>
-                <br />
-                <span className="relative inline-block text-[#ff914d] mt-2 animate-pulse-slow">
-                  {language === 'en' ? 'Management' : 'LinkedIn'}
-                  <svg className="absolute -bottom-2 left-0 w-full h-2" viewBox="0 0 200 8">
-                    <path d="M0,5 Q50,0 100,5 T200,5" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#ff914d]/50" />
-                  </svg>
-                </span>
-              </h1>
-              
-              {/* Refined Subheading with Better Typography */}
-              <p className="text-xl text-[#545454]/80 mb-12 max-w-xl md:max-w-2xl leading-relaxed">
-                {language === 'en' 
-                  ? 'Optimize your professional presence with expert profile reviews, content strategy, and network growth tactics. Partnering with CAREER GUIDANCE maximizes your opportunities and personal branding, helping you appear among LinkedIn\'s recommended profiles.'
-                  : 'Optimisez votre présence professionnelle avec des revues de profil expertes, une stratégie de contenu et des tactiques de croissance de réseau. Collaborer avec CAREER GUIDANCE, c\'est maximiser vos chances en matière d\'opportunités et de Personal Branding, ce qui vous permettra d\'apparaître parmi les profils recommandés par LINKEDIN.'}
-              </p>
-              
-              {/* Modern CTA Buttons with Enhanced Interactions */}
-              <div className="flex flex-col sm:flex-row space-y-5 sm:space-y-0 sm:space-x-5 mb-16">
-                <Link 
-                  href="#pricing" 
-                  className="group px-8 py-4 bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white text-lg font-medium rounded-xl hover:shadow-[#ff914d]/30 hover:shadow-xl transition-all duration-300 ease-out overflow-hidden relative"
-                >
-                  <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
-                    {language === 'en' ? 'See Our Plans' : 'Voir Nos Formules'}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#ff8133] to-[#ff914d] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                </Link>
-                <Link 
-                  href="/contact" 
-                  className="group px-8 py-4 bg-white backdrop-blur-sm text-[#ff914d] text-lg font-medium rounded-xl border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 ease-out relative overflow-hidden"
-                >
-                  <span className="relative z-10 flex items-center justify-center">
-                    {language === 'en' ? 'Contact Us' : 'Contactez-Nous'}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </span>
-                  <span className="absolute inset-0 bg-[#ff914d]/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                </Link>
-              </div>
-              
-              {/* LinkedIn Stats with Modern Design */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">8,000+</div>
-                    <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Quality Connections' : 'Relations de qualité'}</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </div>
-                    <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">35+</div>
-                    <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Professional Posts' : 'Publications professionnelles'}</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group col-span-2 md:col-span-1">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                    </div>
-                    <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">3</div>
-                    <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Certifying Trainings' : 'Formations certifiantes'}</p>
-                  </div>
-                </div>
-              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-16 lg:gap-x-16 items-center">
+          {/* Left Content Column - Enhanced Transitions */}
+          <div className={`lg:col-span-6 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
+            {/* Back to Services Link */}
+            <div className="inline-flex items-center mb-7 px-4 py-1.5 bg-gradient-to-r from-[#ff914d]/10 to-[#ff914d]/5 text-[#ff914d] rounded-full text-sm font-medium shadow-sm backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-[#ff914d] mr-2 animate-pulse"></span>
+              <Link 
+                href="/services" 
+                className="text-[#ff914d] hover:text-[#ff8133] transition-colors"
+              >
+                {language === 'en' ? 'Back to All Services' : 'Retour à Tous les Services'}
+              </Link>
             </div>
             
-            {/* Right Illustration Column - Enhanced with Modern Design Elements */}
-            <div className={`lg:col-span-6 relative transition-all duration-1000 ease-out delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-              <div className="relative">
-                {/* LinkedIn Branding Visual */}
-                <div className="relative aspect-square max-w-xl mx-auto">
-                  <div className="absolute inset-0 bg-white/80 backdrop-blur-lg rounded-[30px] shadow-xl border border-[#545454]/10 overflow-hidden">
-                    {/* LinkedIn Header */}
-                    <div className="h-32 bg-gradient-to-r from-[#0077b5] to-[#0077b5]/80 relative">
-                      <div className="absolute inset-0 opacity-10">
-                        <svg className="w-full h-full" viewBox="0 0 100 100">
-                          <defs>
-                            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
-                            </pattern>
-                          </defs>
-                          <rect width="100" height="100" fill="url(#grid)" />
-                        </svg>
-                      </div>
-                      
-                      <div className="absolute bottom-0 translate-y-1/2 left-8">
-                        <div className="w-24 h-24 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-[#0077b5]">
-                          <svg className="w-14 h-14" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Profile Content */}
-                    <div className="pt-16 px-8">
-                      <h3 className="text-xl font-bold text-[#1e293b]">Career Guidance</h3>
-                      <p className="text-sm text-[#64748b]">{language === 'en' ? 'Professional LinkedIn Management Services' : 'Services Professionnels de Gestion LinkedIn'}</p>
-                      
-                      <div className="mt-4 flex items-center space-x-3">
-                        <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
-                          {language === 'en' ? 'Personal Branding' : 'Personal Branding'}
-                        </div>
-                        <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
-                          {language === 'en' ? 'Content Strategy' : 'Stratégie de contenu'}
-                        </div>
-                        <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
-                          {language === 'en' ? 'Network Growth' : 'Croissance du réseau'}
-                        </div>
-                      </div>
-                      
-                      <div className="mt-6 space-y-3">
-                        <div className="p-4 bg-[#f8fafc] rounded-lg">
-                          <div className="flex justify-between items-start">
-                            <div className="flex space-x-3">
-                              <div className="w-10 h-10 rounded-full bg-[#0077b5] flex items-center justify-center text-white text-xs font-bold">CG</div>
-                              <div>
-                                <p className="text-sm font-medium text-[#1e293b]">Career Guidance</p>
-                                <p className="text-xs text-[#64748b]">2h</p>
-                              </div>
-                            </div>
-                            <div>
-                              <svg className="w-5 h-5 text-[#64748b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                              </svg>
-                            </div>
-                          </div>
-                          
-                          <div className="mt-3">
-                            <p className="text-sm text-[#1e293b]">
-                              {language === 'en' 
-                                ? 'Optimizing your LinkedIn profile is the first step toward professional visibility and success...' 
-                                : 'Optimiser votre profil LinkedIn est la première étape vers une visibilité et une réussite professionnelle...'}
-                            </p>
-                          </div>
-                          
-                          <div className="mt-3 flex items-center space-x-4">
-                            <div className="flex items-center space-x-1 text-[#64748b]">
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                              </svg>
-                              <span className="text-xs">184</span>
-                            </div>
-                            <div className="flex items-center space-x-1 text-[#64748b]">
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                              </svg>
-                              <span className="text-xs">32</span>
-                            </div>
-                            <div className="flex items-center space-x-1 text-[#64748b]">
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                              </svg>
-                              <span className="text-xs">76</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="p-4 bg-[#f8fafc] rounded-lg opacity-60">
-                          <div className="flex justify-between items-start">
-                            <div className="flex space-x-3">
-                              <div className="w-10 h-10 rounded-full bg-[#0077b5] flex items-center justify-center text-white text-xs font-bold">CG</div>
-                              <div>
-                                <p className="text-sm font-medium text-[#1e293b]">Career Guidance</p>
-                                <p className="text-xs text-[#64748b]">1d</p>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="mt-3">
-                            <p className="text-sm text-[#1e293b]">
-                              {language === 'en' 
-                                ? 'Building a quality network is essential for professional growth...' 
-                                : 'Construire un réseau de qualité est essentiel pour la croissance professionnelle...'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Network Stats */}
-                      <div className="mt-6 grid grid-cols-3 gap-4">
-                        <div className="text-center">
-                          <p className="text-sm font-bold text-[#1e293b]">8,572</p>
-                          <p className="text-xs text-[#64748b]">{language === 'en' ? 'Connections' : 'Relations'}</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-bold text-[#1e293b]">245</p>
-                          <p className="text-xs text-[#64748b]">{language === 'en' ? 'Posts' : 'Publications'}</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-bold text-[#1e293b]">52K</p>
-                          <p className="text-xs text-[#64748b]">{language === 'en' ? 'Views' : 'Vues'}</p>
-                        </div>
-                      </div>
-                    </div>
+            {/* Enhanced Main Headline with Modern Typography */}
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#545454] mb-8 leading-tight tracking-tight">
+              <span className="text-[#545454]">
+                {language === 'en' 
+                  ? 'LinkedIn Account' 
+                  : 'Gestion de compte'}
+              </span>
+              <br />
+              <span className="relative inline-block text-[#ff914d] mt-2 animate-pulse-slow">
+                {language === 'en' ? 'Management' : 'LinkedIn'}
+                <svg className="absolute -bottom-2 left-0 w-full h-2" viewBox="0 0 200 8">
+                  <path d="M0,5 Q50,0 100,5 T200,5" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#ff914d]/50" />
+                </svg>
+              </span>
+            </h1>
+            
+            {/* Refined Subheading with Better Typography */}
+            <p className="text-xl text-[#545454]/80 mb-12 max-w-xl md:max-w-2xl leading-relaxed">
+              {language === 'en' 
+                ? "Welcome to our LinkedIn Account Management platform. Optimize your professional presence with expert profile reviews, content strategy, and network growth tactics. Partnering with CAREER GUIDANCE maximizes your opportunities and personal branding, helping you appear among LinkedIn's recommended profiles."
+                : "Bienvenue sur notre plateforme de Gestion de compte LinkedIn. Optimisez votre présence professionnelle avec des revues de profil expertes, une stratégie de contenu et des tactiques de croissance de réseau. Collaborer avec CAREER GUIDANCE, c’est maximiser vos chances en matière d’opportunités et de Personal Branding, ce qui vous permettra d’apparaître parmi les profils recommandés par LINKEDIN."}
+            </p>
+            
+            {/* Modern CTA Buttons with Enhanced Interactions */}
+            <div className="flex flex-col sm:flex-row space-y-5 sm:space-y-0 sm:space-x-5 mb-16">
+              <Link 
+                href="#pricing" 
+                className="group px-8 py-4 bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white text-lg font-medium rounded-xl hover:shadow-[#ff914d]/30 hover:shadow-xl transition-all duration-300 ease-out overflow-hidden relative"
+              >
+                <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
+                  {language === 'en' ? 'See Our Plans' : 'Voir Nos Formules'}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-[#ff8133] to-[#ff914d] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+              </Link>
+              <Link 
+                href="/contact" 
+                className="group px-8 py-4 bg-white backdrop-blur-sm text-[#ff914d] text-lg font-medium rounded-xl border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 ease-out relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  {language === 'en' ? 'Contact Us' : 'Contactez-Nous'}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </span>
+                <span className="absolute inset-0 bg-[#ff914d]/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+              </Link>
+            </div>
+            
+            {/* LinkedIn Stats with Modern Design */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
                   </div>
+                  <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">8,000+</div>
+                  <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Quality Connections' : 'Relations de qualité'}</p>
                 </div>
-                
-                {/* Floating UI Elements */}
-                <div className="absolute -top-6 -right-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-[#545454]/10 w-56 transition-all duration-1000 ease-out hover:shadow-2xl hover:-translate-y-1 group">
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center text-white">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                      </svg>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-[#545454] group-hover:text-[#0077b5] transition-colors duration-300">LinkedIn SSI</p>
-                      <p className="text-xs text-[#64748b]">{language === 'en' ? 'Social Selling Index' : 'Indice de vente sociale'}</p>
-                    </div>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
                   </div>
-                  <div className="h-2 bg-[#545454]/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-[#0077b5] to-[#00a0dc] rounded-full w-[85%] animate-pulse-slow"></div>
-                  </div>
-                  <p className="text-sm text-[#545454] mt-2 text-right font-medium">85/100</p>
+                  <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">35+</div>
+                  <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Professional Posts' : 'Publications professionnelles'}</p>
                 </div>
-                
-                <div className="absolute -bottom-6 -left-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-[#545454]/10 w-56 transition-all duration-1000 ease-out hover:shadow-2xl hover:-translate-y-1 group">
-                  <div className="flex items-center mb-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                    <p className="text-sm font-medium text-[#545454] group-hover:text-[#ff914d] transition-colors duration-300">{language === 'en' ? 'Profile Strength' : 'Force du profil'}</p>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group col-span-2 md:col-span-1">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#ff914d]/10 flex items-center justify-center text-[#ff914d] mb-3">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
                   </div>
-                  <div className="h-2 bg-[#545454]/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-[#ff914d] to-[#ff8133] rounded-full w-[95%] animate-pulse-slow"></div>
-                  </div>
-                  <div className="mt-2 flex justify-between items-center">
-                    <p className="text-xs text-[#64748b]">{language === 'en' ? 'All-Star' : 'All-Star'}</p>
-                    <p className="text-sm text-[#545454] font-medium">95%</p>
-                  </div>
+                  <div className="text-2xl font-bold text-[#545454] group-hover:text-[#ff914d] transition-colors">3</div>
+                  <p className="text-sm text-[#545454]/70 mt-1">{language === 'en' ? 'Certifying Trainings' : 'Formations certifiantes'}</p>
                 </div>
               </div>
             </div>
           </div>
+                
+                {/* Right Illustration Column - Enhanced with Modern Design Elements */}
+                <div className={`lg:col-span-6 relative transition-all duration-1000 ease-out delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+                  <div className="relative">
+                    {/* LinkedIn Branding Visual */}
+                    <div className="relative aspect-square max-w-xl mx-auto">
+                      <div className="absolute inset-0 bg-white/80 backdrop-blur-lg rounded-[30px] shadow-xl border border-[#545454]/10 overflow-hidden">
+                        {/* LinkedIn Header */}
+                        <div className="h-32 bg-gradient-to-r from-[#0077b5] to-[#0077b5]/80 relative">
+                          <div className="absolute inset-0 opacity-10">
+                            <svg className="w-full h-full" viewBox="0 0 100 100">
+                              <defs>
+                                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
+                                </pattern>
+                              </defs>
+                              <rect width="100" height="100" fill="url(#grid)" />
+                            </svg>
+                          </div>
+                          
+                          <div className="absolute bottom-0 translate-y-1/2 left-8">
+                            <div className="w-24 h-24 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-[#0077b5]">
+                              <svg className="w-14 h-14" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Profile Content */}
+                        <div className="pt-16 px-8">
+                          <h3 className="text-xl font-bold text-[#1e293b]">Career Guidance</h3>
+                          <p className="text-sm text-[#64748b]">{language === 'en' ? 'Professional LinkedIn Management Services' : 'Services Professionnels de Gestion LinkedIn'}</p>
+                          
+                          <div className="mt-4 flex items-center space-x-3">
+                            <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
+                              {language === 'en' ? 'Personal Branding' : 'Personal Branding'}
+                            </div>
+                            <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
+                              {language === 'en' ? 'Content Strategy' : 'Stratégie de contenu'}
+                            </div>
+                            <div className="px-3 py-1 rounded-full bg-[#0077b5]/10 text-[#0077b5] text-xs font-medium">
+                              {language === 'en' ? 'Network Growth' : 'Croissance du réseau'}
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 space-y-3">
+                            <div className="p-4 bg-[#f8fafc] rounded-lg">
+                              <div className="flex justify-between items-start">
+                                <div className="flex space-x-3">
+                                  <div className="w-10 h-10 rounded-full bg-[#0077b5] flex items-center justify-center text-white text-xs font-bold">CG</div>
+                                  <div>
+                                    <p className="text-sm font-medium text-[#1e293b]">Career Guidance</p>
+                                    <p className="text-xs text-[#64748b]">2h</p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <svg className="w-5 h-5 text-[#64748b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              
+                              <div className="mt-3">
+                                <p className="text-sm text-[#1e293b]">
+                                  {language === 'en' 
+                                    ? 'Optimizing your LinkedIn profile is the first step toward professional visibility and success...' 
+                                    : 'Optimiser votre profil LinkedIn est la première étape vers une visibilité et une réussite professionnelle...'}
+                                </p>
+                              </div>
+                              
+                              <div className="mt-3 flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-[#64748b]">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                  </svg>
+                                  <span className="text-xs">184</span>
+                                </div>
+                                <div className="flex items-center space-x-1 text-[#64748b]">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                  </svg>
+                                  <span className="text-xs">32</span>
+                                </div>
+                                <div className="flex items-center space-x-1 text-[#64748b]">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                  </svg>
+                                  <span className="text-xs">76</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="p-4 bg-[#f8fafc] rounded-lg opacity-60">
+                              <div className="flex justify-between items-start">
+                                <div className="flex space-x-3">
+                                  <div className="w-10 h-10 rounded-full bg-[#0077b5] flex items-center justify-center text-white text-xs font-bold">CG</div>
+                                  <div>
+                                    <p className="text-sm font-medium text-[#1e293b]">Career Guidance</p>
+                                    <p className="text-xs text-[#64748b]">1d</p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="mt-3">
+                                <p className="text-sm text-[#1e293b]">
+                                  {language === 'en' 
+                                    ? 'Building a quality network is essential for professional growth...' 
+                                    : 'Construire un réseau de qualité est essentiel pour la croissance professionnelle...'}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Network Stats */}
+                          <div className="mt-6 grid grid-cols-3 gap-4">
+                            <div className="text-center">
+                              <p className="text-sm font-bold text-[#1e293b]">8,572</p>
+                              <p className="text-xs text-[#64748b]">{language === 'en' ? 'Connections' : 'Relations'}</p>
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-bold text-[#1e293b]">245</p>
+                              <p className="text-xs text-[#64748b]">{language === 'en' ? 'Posts' : 'Publications'}</p>
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-bold text-[#1e293b]">52K</p>
+                              <p className="text-xs text-[#64748b]">{language === 'en' ? 'Views' : 'Vues'}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Floating UI Elements */}
+                    <div className="absolute -top-6 -right-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-[#545454]/10 w-56 transition-all duration-1000 ease-out hover:shadow-2xl hover:-translate-y-1 group">
+                      <div className="flex items-center mb-3">
+                        <div className="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-[#545454] group-hover:text-[#0077b5] transition-colors duration-300">LinkedIn SSI</p>
+                          <p className="text-xs text-[#64748b]">{language === 'en' ? 'Social Selling Index' : 'Indice de vente sociale'}</p>
+                        </div>
+                      </div>
+                      <div className="h-2 bg-[#545454]/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-[#0077b5] to-[#00a0dc] rounded-full w-[85%] animate-pulse-slow"></div>
+                      </div>
+                      <p className="text-sm text-[#545454] mt-2 text-right font-medium">85/100</p>
+                    </div>
+                    
+                    <div className="absolute -bottom-6 -left-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-[#545454]/10 w-56 transition-all duration-1000 ease-out hover:shadow-2xl hover:-translate-y-1 group">
+                      <div className="flex items-center mb-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+                        <p className="text-sm font-medium text-[#545454] group-hover:text-[#ff914d] transition-colors duration-300">{language === 'en' ? 'Profile Strength' : 'Force du profil'}</p>
+                      </div>
+                      <div className="h-2 bg-[#545454]/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-[#ff914d] to-[#ff8133] rounded-full w-[95%] animate-pulse-slow"></div>
+                      </div>
+                      <div className="mt-2 flex justify-between items-center">
+                        <p className="text-xs text-[#64748b]">{language === 'en' ? 'All-Star' : 'All-Star'}</p>
+                        <p className="text-sm text-[#545454] font-medium">95%</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
         </div>
       </section>
       

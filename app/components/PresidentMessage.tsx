@@ -123,10 +123,14 @@ Ensemble, nous construirons un avenir où chacun peut s’épanouir pleinement d
                     <div className="absolute inset-0 bg-gradient-to-br from-[#f8f8f8] to-[#f0f0f0]">
                       <div className="w-full h-full relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-[#f0f0f0] to-[#e8e8e8] flex items-center justify-center">
-                          <svg className="w-24 h-24 text-[#cccccc]" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                          </svg>
+                          <img
+                            src="image1.jpg"
+                            alt="Saint Noël Krahiboué"
+                            className="object-cover w-full h-full"
+                            style={{ borderRadius: "2.4rem" }}
+                          />
                         </div>
+                        <div className="absolute -inset-full w-1/3 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-15 group-hover:animate-shine"></div>
                         <div className="absolute -inset-full w-1/3 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-15 group-hover:animate-shine"></div>
                       </div>
                     </div>

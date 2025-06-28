@@ -338,7 +338,9 @@ export default function ServicesPage() {
               </Link>
               
               <Link 
-                href="/appointment" 
+                href="https://calendly.com/careerguidance212/echange-avec-career-guidance?month=2025-06"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group px-8 py-3.5 bg-white text-[#545454] rounded-xl text-lg font-medium transition-all duration-300 border border-[#545454]/10 hover:border-[#ff914d]/30 hover:shadow-lg hover:text-[#ff914d]"
               >
                 <span className="flex items-center">

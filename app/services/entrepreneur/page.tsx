@@ -5,6 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { section } from "framer-motion/client";
 
 const entrepreneurshipPacks = (language: string) => [
   {
@@ -262,101 +263,133 @@ export default function EntrepreneurshipPage() {
         </section>
 
         {/* PACKS */}
-        <section id="packs" className="py-16 bg-white">
+        <section id="packs" className="py-24 bg-gradient-to-b from-[#fff7f1] via-white to-[#f8fafc]">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="mb-10 text-center">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-[#ff914d]">
+            <div className="mb-14 text-center">
+              <span className="inline-block px-5 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-semibold mb-4 tracking-widest shadow-sm border border-[#ffd6b3]">
+                {language === "en"
+                  ? "Entrepreneurship Packs"
+                  : "Offres Entrepreneuriat"}
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 text-[#232323] tracking-tight">
                 {language === "en"
                   ? "Company Creation & Domiciliation Packs"
                   : "Packs Création de Société & Domiciliation"}
               </h2>
-              <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
                 {language === "en"
                   ? "Choose the package that fits your needs to launch your business in Morocco."
                   : "Choisissez la formule adaptée à vos besoins pour lancer votre entreprise au Maroc."}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {entrepreneurshipPacks(language).map((pack, idx) => (
                 <motion.div
                   key={pack.name}
-                  className={`relative bg-white rounded-2xl shadow-xl border-2 px-6 py-8 flex flex-col justify-between ${
-                    pack.highlight ? "border-[#ff914d] ring-2 ring-[#ff914d]/30" : "border-gray-200"
-                  }`}
+                  className={`relative bg-white rounded-3xl shadow-2xl border-2 px-8 py-12 flex flex-col justify-between transition-transform duration-300 hover:-translate-y-2 hover:shadow-3xl group
+                    ${pack.highlight ? "border-[#ff914d] ring-2 ring-[#ff914d]/30 z-10 scale-105" : "border-gray-100"}
+                  `}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.07 }}
+                  transition={{ duration: 0.6, delay: idx * 0.12 }}
                 >
                   {pack.highlight && (
-                    <span className="absolute top-6 right-6 bg-[#ff914d]/90 text-white text-xs px-4 py-1 rounded-full font-bold shadow tracking-wide z-10">
+                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#ff914d] text-white text-xs px-6 py-2 rounded-full font-bold shadow-lg tracking-wider z-20 uppercase">
                       {language === "en" ? "Most Popular" : "Le Plus Populaire"}
                     </span>
                   )}
-                  <h3 className="text-xl sm:text-2xl font-bold mb-1 text-gray-900 text-center">{pack.name}</h3>
-                  <div className="text-center text-2xl sm:text-3xl font-extrabold mb-1 text-[#ff914d]">{pack.price}</div>
-                  <div className="text-center text-xs mb-5 text-gray-500 font-semibold">{pack.duration}</div>
-                  <ul className="space-y-2 mb-8 text-gray-700 text-sm sm:text-base">
-                    {pack.features.map((feature, i) => (
-                      <li key={i} className="flex items-start">
-                        <span className="mt-1 mr-2 flex-shrink-0 w-4 h-4 rounded-full bg-[#ff914d]/10 text-[#ff914d] flex items-center justify-center">
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-center">
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-black mb-2 text-center text-[#232323] group-hover:text-[#ff914d] transition-colors">{pack.name}</h3>
+                    <div className="text-center text-3xl sm:text-4xl font-black mb-1 text-[#ff914d] drop-shadow">{pack.price}</div>
+                    <div className="text-center text-xs mb-7 text-gray-500 font-semibold tracking-wide">{pack.duration}</div>
+                    <ul className="space-y-3 mb-10 text-gray-800 text-base">
+                      {pack.features.map((feature, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="mt-1 mr-2 flex-shrink-0 w-5 h-5 rounded-full bg-[#ff914d]/15 text-[#ff914d] flex items-center justify-center">
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                          <span className="leading-snug">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="mt-auto pt-2 text-center">
                     <a
                       href={`/services/entrepreneurship/apply?pack=${encodeURIComponent(pack.name.toLowerCase())}`}
-                      className={`inline-block px-8 py-3 rounded-full font-bold text-base shadow transition ${
-                        pack.highlight
-                          ? "bg-[#ff914d] text-white hover:bg-[#ff8133]"
-                          : "bg-white border border-[#ff914d] text-[#ff914d] hover:bg-orange-50"
-                      }`}
+                      className={`inline-block w-full px-8 py-3 rounded-full font-bold text-base shadow transition-all duration-200
+                        ${pack.highlight
+                          ? "bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white hover:from-[#ff8133] hover:to-[#ff914d]"
+                          : "bg-white border border-[#ff914d] text-[#ff914d] hover:bg-orange-50"}
+                      `}
                     >
                       {language === "en" ? "Choose this pack" : "Choisir ce pack"}
                     </a>
                   </div>
+                  {/* Decorative Accent bar */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff914d]/0 via-[#ff914d]/30 to-[#ff914d]/0 rounded-b-3xl" />
                 </motion.div>
               ))}
+            </div>
+            <div className="mt-14 flex flex-col items-center">
+              <span className="text-sm text-gray-500">
+                {language === "en"
+                  ? "Need guidance? Contact our advisors for a custom solution."
+                  : "Besoin de conseils ? Contactez nos conseillers pour une solution personnalisée."}
+              </span>
+              <a
+                href="/contact"
+                className="mt-3 inline-block px-7 py-3 bg-[#ff914d] text-white rounded-full font-semibold shadow hover:bg-[#ff8133] text-base transition-all"
+              >
+                {language === "en" ? "Contact an Advisor" : "Contacter un Conseiller"}
+              </a>
             </div>
           </div>
         </section>
 
-        {/* BUSINESS PLAN */}
-        <section id="businessplan" className="py-16 bg-[#fff7f1]">
+       {/* BUSINESS PLAN */}
+        <section id="businessplan" className="py-24 bg-gradient-to-b from-[#fff7f1] via-[#fff4e8] to-white">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-5 text-[#ff914d]">
+            <span className="inline-block px-5 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-semibold mb-4 tracking-widest shadow-sm border border-[#ffd6b3]">
+              {language === "en"
+                ? "Tailored Solution"
+                : "Solution Sur-Mesure"}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black mb-6 text-[#232323] tracking-tight">
               {language === "en"
                 ? "Business Plan & Market Study"
                 : "Business Plan & Étude de Marché"}
             </h2>
-            <div className="text-xl sm:text-2xl font-extrabold mb-2 text-[#ff914d]">
+            <div className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#ff914d] drop-shadow">
               {businessPlan(language).price}
             </div>
-            <ul className="space-y-2 mb-8 text-gray-700 text-base sm:text-lg text-left mx-auto max-w-md">
+            <ul className="space-y-3 mb-10 text-gray-800 text-base sm:text-lg text-left mx-auto max-w-xl">
               {businessPlan(language).features.map((feature, i) => (
                 <li key={i} className="flex items-start">
-                  <span className="mt-1 mr-2 flex-shrink-0 w-4 h-4 rounded-full bg-[#ff914d]/10 text-[#ff914d] flex items-center justify-center">
+                  <span className="mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded-full bg-[#ff914d]/15 text-[#ff914d] flex items-center justify-center">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </span>
-                  <span>{feature}</span>
+                  <span className="leading-snug">{feature}</span>
                 </li>
               ))}
             </ul>
             <Link
               href="/services/entrepreneurship/apply?type=businessplan"
-              className="inline-block w-full sm:w-auto px-8 py-4 bg-[#ff914d] text-white rounded-full font-semibold shadow hover:bg-[#ff8133] transition-all text-lg text-center"
+              className="inline-block w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white rounded-full font-extrabold shadow-lg hover:from-[#ff8133] hover:to-[#ff914d] transition-all text-lg text-center tracking-wide"
             >
               {language === "en"
                 ? "Order My Business Plan"
                 : "Commander mon Business Plan"}
             </Link>
+            <div className="mt-8 text-gray-500 text-sm max-w-lg mx-auto">
+              {language === "en"
+                ? "Benefit from a complete, expert-crafted business plan and market study to start your business with confidence."
+                : "Profitez d’un business plan complet et d’une étude de marché réalisée par des experts pour lancer votre projet en toute sérénité."}
+            </div>
           </div>
         </section>
 

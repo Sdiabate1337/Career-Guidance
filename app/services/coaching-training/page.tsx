@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LanguageContext } from '../../contexts/LanguageContext';
 import FAQ from '../../components/FAQ';
+import CertifyingCoursesSection from '@/app/components/CertifyingCoursesSection';
 
 type CounterProps = {
   value: number;
@@ -112,7 +113,7 @@ export default function CoachingTrainingPage() {
     stat2: { value: 92, label: language === 'en' ? 'Employment rate' : 'Taux d\'emploi', suffix: '%' },
     rating: 4.8,
     reviewCount: 504,
-    cta: language === 'en' ? 'Start Your Training or Coaching' : 'Commencer une Formation ou un Coaching',
+    cta: language === 'en' ? 'Voir nos programmes' : 'See Our Programs',
     color: "#ff914d",
     gradient: "from-[#ff914d] to-[#ff8133]",
     textColor: "text-[#ff914d]",
@@ -121,24 +122,6 @@ export default function CoachingTrainingPage() {
     lightBg: "bg-white"
   };
 
-  const testimonials = [
-    {
-      name: "Jennifer Wei",
-      title: language === 'en' ? "Finance Manager" : "Responsable Finance",
-      image: "/testimonials/jennifer.jpg",
-      text: language === 'en'
-        ? "The career coaching program gave me clarity on my professional path when I was at a crossroads. My coach helped me leverage my experience to secure a role with a 32% salary increase."
-        : "Le programme de coaching de carrière m'a donné de la clarté sur mon parcours professionnel lorsque j'étais à la croisée des chemins. Mon coach m'a aidée à tirer parti de mon expérience pour obtenir un poste avec une augmentation de salaire de 32%."
-    },
-    {
-      name: "Carlos Mendez",
-      title: language === 'en' ? "Data Analyst" : "Analyste de Données",
-      image: "/testimonials/carlos.jpg",
-      text: language === 'en'
-        ? "The data science certification program was rigorous but incredibly rewarding. The hands-on projects gave me real-world experience that I was able to showcase in interviews, leading to multiple job offers."
-        : "Le programme de certification en science des données était rigoureux mais incroyablement enrichissant. Les projets pratiques m'ont donné une expérience réelle que j'ai pu mettre en valeur lors des entretiens, ce qui a conduit à de multiples offres d'emploi."
-    }
-  ];
 
   const pricing = [
     {
@@ -166,21 +149,6 @@ export default function CoachingTrainingPage() {
         language === 'en' ? "Salary negotiation" : "Comment négocier son Salaire ?"
       ],
       highlight: true,
-    },
-    {
-      name: language === 'en' ? "Single Certification" : "Certification Unique",
-      price: language === 'en' ? "From $1,999" : "À partir de 1 999€",
-      features: language === 'en'
-        ? ["One complete certification program", "Access to learning platform", "Hands-on projects", "Certification exam fee", "3 months of career support"]
-        : ["Un programme de certification complet", "Accès à la plateforme d'apprentissage", "Projets pratiques", "Frais d'examen de certification", "3 mois de soutien à la carrière"]
-    },
-    {
-      name: language === 'en' ? "Career Track" : "Parcours de Carrière",
-      price: language === 'en' ? "From $3,499" : "À partir de 3 499€",
-      highlight: true,
-      features: language === 'en'
-        ? ["Two complementary certifications", "Extended platform access", "Advanced projects", "All certification exam fees", "1-on-1 mentorship", "6 months of career support", "Job placement assistance"]
-        : ["Deux certifications complémentaires", "Accès étendu à la plateforme", "Projets avancés", "Tous les frais d'examen de certification", "Mentorat individuel", "6 mois de soutien à la carrière", "Assistance au placement professionnel"]
     }
   ];
 
@@ -265,14 +233,17 @@ export default function CoachingTrainingPage() {
         {/* HERO */}
         <section className="relative pt-28 pb-20 overflow-hidden z-10 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <span className="inline-block mb-7 px-6 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] font-semibold text-sm tracking-wider shadow-sm border border-[#ffd6b3]">
+              {language === 'en' ? 'See Our Programs' : 'Voir nos programmes'}
+            </span>
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">{service.title}</h1>
             <p className="text-xl text-gray-700 mb-8">{service.description}</p>
             <div className="flex flex-wrap gap-4 mb-8">
               <Link
-                href={`/services/${service.id}/apply`}
+                href={`#certifying-courses`}
                 className="px-8 py-4 bg-[#ff914d] text-white rounded-full font-semibold shadow hover:bg-[#ff8133] transition-all text-lg"
               >
-                {service.cta}
+                {language === 'en' ? 'View Certifying Courses' : 'Voir les Formations Certifiantes'}
               </Link>
               <Link
                 href="#pricing"
@@ -297,155 +268,173 @@ export default function CoachingTrainingPage() {
         </section>
 
         {/* FEATURES */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-24 bg-gradient-to-b from-[#fff7f1] via-[#f8fafc] to-white">
           <div className="max-w-6xl mx-auto px-4">
             <div className="mb-16 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
+              <span className="inline-block px-5 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-semibold mb-4 tracking-widest">
+                {language === 'en' ? 'Our Strengths' : 'Nos Atouts'}
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black mb-4 text-[#232323] tracking-tight">
                 {language === 'en' ? 'Service Features' : 'Caractéristiques du Service'}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 {language === 'en'
-                  ? 'Personalized career coaching and industry-recognized certifications to achieve your professional goals'
-                  : 'Coaching de carrière personnalisé et certifications reconnues pour atteindre vos objectifs professionnels'}
+                  ? 'Personalized career coaching and industry-recognized certifications to achieve your professional goals.'
+                  : 'Coaching de carrière personnalisé et certifications reconnues pour atteindre vos objectifs professionnels.'}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
               {service.features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl p-6 shadow hover:shadow-lg border border-gray-100"
+                  className="relative bg-white rounded-2xl p-8 shadow-xl border border-[#ff914d]/10 transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl group"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-[#ff914d] flex items-center justify-center mb-4 text-white text-2xl">
-                    ✓
+                  <div className="absolute top-6 right-6 opacity-10 text-7xl font-black select-none pointer-events-none">
+                    0{idx + 1}
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-[#ff914d]">{feature}</h3>
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-[#ff914d] to-[#ffb47a] flex items-center justify-center mb-5 text-white text-3xl shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-[#232323] group-hover:text-[#ff914d] transition-colors">{feature}</h3>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* OUTCOMES */}
-        <section className="py-20 bg-white">
+          {/* OUTCOMES */}
+        <section className="py-24 bg-white">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
+            <div className="mb-14 text-center">
+              <span className="inline-block px-5 py-2 rounded-full bg-[#ff914d]/10 text-[#ff914d] text-xs font-semibold mb-4 tracking-widest">
+                {language === 'en' ? 'What You Get' : 'Ce que vous obtenez'}
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black mb-4 text-[#232323] tracking-tight">
                 {language === 'en' ? 'Key Outcomes' : 'Résultats Clés'}
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-[#fef7f1] rounded-xl p-8 text-center">
-                <span className="text-4xl font-bold text-[#ff914d]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <div className="relative bg-gradient-to-b from-[#fff7f1] to-[#ffe4d9] rounded-2xl p-10 text-center shadow-xl border border-[#ff914d]/10 flex flex-col items-center justify-center">
+                <span className="block text-5xl font-black text-[#ff914d] mb-2 drop-shadow-md">
                   <Counter value={service.stat1.value} suffix={service.stat1.suffix} />
                 </span>
-                <div className="text-lg text-[#545454] font-medium mt-2">{service.stat1.label}</div>
+                <div className="text-base text-[#545454] font-semibold">{service.stat1.label}</div>
               </div>
-              <div className="bg-[#fef7f1] rounded-xl p-8 text-center">
-                <span className="text-4xl font-bold text-[#ff914d]">
+              <div className="relative bg-gradient-to-b from-[#fff7f1] to-[#ffe4d9] rounded-2xl p-10 text-center shadow-xl border border-[#ff914d]/10 flex flex-col items-center justify-center">
+                <span className="block text-5xl font-black text-[#ff914d] mb-2 drop-shadow-md">
                   <Counter value={service.stat2.value} suffix={service.stat2.suffix} />
                 </span>
-                <div className="text-lg text-[#545454] font-medium mt-2">{service.stat2.label}</div>
+                <div className="text-base text-[#545454] font-semibold">{service.stat2.label}</div>
               </div>
-              <div className="bg-[#fef7f1] rounded-xl p-8 flex flex-col justify-center items-center">
-                <div className="flex items-center text-[#ff914d] mb-2">
+              <div className="relative bg-gradient-to-b from-[#fff7f1] to-[#ffe4d9] rounded-2xl p-10 flex flex-col justify-center items-center shadow-xl border border-[#ff914d]/10">
+                <div className="flex items-center text-[#ff914d] mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-6 h-6" fill={i < Math.floor(service.rating) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                    <svg key={i} className="w-7 h-7" fill={i < Math.floor(service.rating) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                   ))}
                 </div>
-                <div className="text-lg text-[#545454] font-medium">
-                  {service.rating} / 5 ({service.reviewCount} {language === 'en' ? 'reviews' : 'avis'})
+                <div className="text-base text-[#545454] font-semibold">
+                  {service.rating} / 5 <span className="text-[#232323]/60">({service.reviewCount} {language === 'en' ? 'reviews' : 'avis'})</span>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-                {language === 'en' ? 'What Our Clients Say' : 'Ce Que Disent Nos Clients'}
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {testimonials.map((testimonial, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white rounded-xl p-8 shadow border border-gray-100 flex flex-col h-full"
-                >
-                  <div className="flex items-center mb-6">
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-[#ff914d] mr-4"
-                    />
-                    <div>
-                      <div className="font-bold text-lg text-[#ff914d]">{testimonial.name}</div>
-                      <div className="text-gray-600">{testimonial.title}</div>
-                    </div>
-                  </div>
-                  <blockquote className="italic text-gray-700 mb-4">"{testimonial.text}"</blockquote>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <CertifyingCoursesSection />
+
+  
 
         {/* PRICING */}
-        <section id="pricing" className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-                {language === 'en' ? 'Pricing & Packages' : 'Tarifs & Offres'}
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {pricing.map((offer, idx) => (
-                <div
-                  key={idx}
-                  className={`relative bg-gray-50 rounded-2xl shadow-xl border-2 px-8 py-10 transition-all duration-300 hover:scale-[1.025] hover:border-[#ff914d]
-                    ${offer.highlight ? "border-[#ff914d] ring-2 ring-[#ff914d]/30" : "border-gray-200"}
-                  `}
-                >
-                  {offer.highlight && (
-                    <span className="absolute top-6 right-6 bg-[#ff914d]/90 text-white text-xs px-4 py-1 rounded-full font-bold shadow">
-                      {language === 'en' ? "Most Popular" : "Le Plus Populaire"}
-                    </span>
-                  )}
-                  <h3 className="text-2xl font-bold mb-2 text-gray-900 text-center">
-                    {offer.name}
-                  </h3>
-                  <div className="text-center text-3xl font-black mb-6 text-[#ff914d]">{offer.price}</div>
-                  <ul className="space-y-3 mb-6">
+      <section id="pricing" className="py-20 bg-gradient-to-b from-[#fff8f3] to-white relative">
+        <div className="absolute inset-x-0 -top-10 h-32 bg-gradient-to-b from-[#ff914d]/10 to-transparent pointer-events-none z-0" />
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <div className="mb-14 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#ff914d]">
+              {language === 'en' ? 'Pricing & Packages' : 'Tarifs & Offres'}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {language === 'en'
+                ? "Flexible plans for every ambition. All packages include expert support and hands-on guidance."
+                : "Des formules flexibles pour chaque ambition. Tous les packs incluent un accompagnement expert et un suivi personnalisé."}
+            </p>
+          </div>
+          <div className="flex flex-col lg:flex-row gap-10 items-stretch justify-center">
+            {pricing.map((offer, idx) => (
+              <div
+                key={idx}
+                className={`
+                  flex-1 flex flex-col justify-between relative bg-white 
+                  rounded-3xl shadow-2xl border-2 px-8 py-10
+                  transition-all duration-300 hover:scale-[1.035] hover:shadow-3xl
+                  ${offer.highlight ? "border-[#ff914d] ring-2 ring-[#ff914d]/30 z-10" : "border-gray-200"}
+                  ${idx === 0 ? "lg:mr-[-20px] lg:z-0" : ""}
+                  ${idx === pricing.length-1 ? "lg:ml-[-20px] lg:z-0" : ""}
+                  ${offer.highlight ? "scale-105 shadow-3xl" : ""}
+                `}
+                style={{
+                  boxShadow: offer.highlight
+                    ? "0 8px 40px 0 rgba(255,145,77,0.15), 0 2px 8px 0 rgba(0,0,0,0.03)"
+                    : "0 2px 8px 0 rgba(0,0,0,0.02)",
+                  borderTop: offer.highlight ? "6px solid #ff914d" : undefined
+                }}
+              >
+                {offer.highlight && (
+                  <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#ff914d] text-white text-xs px-6 py-2 rounded-full font-bold shadow-lg tracking-wider z-20 uppercase">
+                    {language === 'en' ? "Most Popular" : "Le Plus Populaire"}
+                  </span>
+                )}
+                <div>
+                  <h3 className="text-2xl font-bold mb-2 text-center text-[#232323]">{offer.name}</h3>
+                  <div className="text-center text-4xl font-black mb-1 text-[#ff914d]">{offer.price}</div>
+                  <div className="w-16 h-1 mx-auto rounded bg-[#ff914d]/10 mb-6" />
+                  <ul className="space-y-3 mb-8">
                     {offer.features.map((feature, i) => (
-                      <li key={i} className="flex items-start text-gray-700">
-                        <span className="mt-1 mr-2 flex-shrink-0 w-4 h-4 rounded-full bg-[#ff914d]/10 text-[#ff914d] flex items-center justify-center">
+                      <li key={i} className="flex items-start text-gray-800">
+                        <span className="mt-1 mr-2 flex-shrink-0 w-5 h-5 rounded-full bg-[#ff914d]/15 text-[#ff914d] flex items-center justify-center">
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         </span>
-                        <span>{feature}</span>
+                        <span className="leading-snug">{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="text-center">
-                    <a
-                      href={`/services/coaching-training/apply?offer=${encodeURIComponent(offer.name.toLowerCase())}`}
-                      className={`inline-block px-8 py-3 rounded-full font-bold text-lg shadow transition 
-                        ${offer.highlight ? 'bg-[#ff914d] text-white hover:bg-[#ff8133]' : 'bg-white border border-[#ff914d] text-[#ff914d] hover:bg-orange-50'}
-                      `}
-                    >
-                      {language === 'en' ? 'Choose this offer' : 'Choisir cette offre'}
-                    </a>
-                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="mt-auto pt-4">
+                  <a
+                    href={`/services/coaching-training/apply?offer=${encodeURIComponent(offer.name.toLowerCase())}`}
+                    className={`
+                      block w-full px-8 py-3 rounded-full font-bold text-lg shadow transition
+                      ${offer.highlight
+                        ? 'bg-gradient-to-r from-[#ff914d] to-[#ff8133] text-white hover:from-[#ff8133] hover:to-[#ff914d]'
+                        : 'bg-white border border-[#ff914d] text-[#ff914d] hover:bg-orange-50'}
+                    `}
+                  >
+                    {language === 'en' ? 'Choose this offer' : 'Choisir cette offre'}
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
-        </section>
+          <div className="mt-14 flex flex-col items-center">
+            <span className="text-sm text-gray-500">
+              {language === 'en'
+                ? "Need help choosing? Contact us for a personalized recommendation."
+                : "Besoin d'aide pour choisir ? Contactez-nous pour un conseil personnalisé."}
+            </span>
+            <a
+              href="/contact"
+              className="mt-2 inline-block px-7 py-3 bg-[#ff914d] text-white rounded-full font-semibold shadow hover:bg-[#ff8133] text-base transition-all"
+            >
+              {language === 'en' ? "Contact our advisors" : "Contacter un conseiller"}
+            </a>
+          </div>
+        </div>
+      </section>
 
         {/* FAQ */}
         <section className="py-20 bg-gray-50">
@@ -477,18 +466,6 @@ export default function CoachingTrainingPage() {
             </div>
           </div>
         </section>
-
-        {/* Footer / Last Updated */}
-        <div className="bg-white py-4 text-center text-gray-500 text-sm border-t border-gray-100">
-          <div className="flex items-center justify-center gap-2">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>Last updated: {currentDateTime}</span>
-            <span>•</span>
-            <span className="text-[#ff914d]">{currentUser}</span>
-          </div>
-        </div>
       </main>
     </>
   );
