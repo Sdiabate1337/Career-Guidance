@@ -111,7 +111,7 @@ const HeroSection = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#ff914d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                {language === 'en' ? 'Trusted by professionals from:' : 'Approuvé par les professionnels de:'}
+                {language === 'en' ? 'Trusted by our partners:' : 'Approuvé par nos partenaires:'}
               </p>
               
             {/* Mobile Carousel View with Enhanced Design */}

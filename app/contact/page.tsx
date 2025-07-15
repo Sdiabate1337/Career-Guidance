@@ -26,7 +26,7 @@ export default function ContactPage() {
   // Real company data
   const companyData = {
     email: "careerguidance212@gmail.com",
-    phone: "+212 631466976",
+    phone: "+212 631466976 \n +212 707-721233",
     address: "90 Bd de la Résistance Hassania II Bloc A 3eme ETG ALIA, Mohammedia",
     hours: language === 'en' ? 'Mon-Fri: 9AM-6PM' : 'Lun-Ven: 9h-18h',
     coordinates: { lat: 33.6929, lng: -7.3828 }, // Mohammedia coordinates
@@ -271,7 +271,7 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h3 className="font-bold text-[#545454]">{language === 'en' ? 'Phone' : 'Téléphone'}</h3>
-                          <p className="text-[#545454]/70 mt-1">{companyData.phone}</p>
+                          <p className="text-[#545454]/70 mt-1 whitespace-pre-line">{companyData.phone}</p>. 
                           <p className="text-[#545454]/70 mt-1">{companyData.hours}</p>
                         </div>
                       </div>

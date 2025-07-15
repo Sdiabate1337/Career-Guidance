@@ -19,6 +19,7 @@ type Collaborator = {
   name: string;
   role: string;
   bio?: string;
+  image?: string;
 };
 
 // Données réelles des collaborateurs
@@ -27,34 +28,40 @@ const collaborators: Collaborator[] = [
     id: "collab-1",
     name: "M. TAHA CHRAIBI",
     role: "RH chez VEEPEE PARIS",
-    bio: "Ex-RH chez MANPOWER. Ex-RH chez CENTRALE DANONE."
+    bio: "Ex-RH chez MANPOWER. Ex-RH chez CENTRALE DANONE.",
+    image: "/chraibi.jpg",
   },
   {
     id: "collab-2",
     name: "M. IDRISSI JANATI",
-    role: "Juriste Social chez ARMA"
+    role: "Juriste Social chez ARMA",
+    image: "/janati.jpg",
   },
   {
     id: "collab-3",
     name: "M. ABDOUL AZIZ BALDE",
-    role: "Assistant Comptable chez AB LENS"
+    role: "Assistant Comptable chez AB LENS",
+    image: "/balde.jpg",
   },
   {
     id: "collab-4",
     name: "Mme. LEONCE KOUAKOU",
     role: "Responsable des Partenariats chez Presse Numérique de Côte D’Ivoire.",
-    bio: "Ex-Responsable Marketing et Communication chez AFRICA RADIO"
+    bio: "Ex-Responsable Marketing et Communication chez AFRICA RADIO",
+    image: "/kouakou.jpg",
   },
   {
     id: "collab-5",
     name: "M. MACK ARIEL KOFFI",
     role: "Chargé de Recrutement chez BARRY CALLEBAUT GROUP.",
-    bio: "Ex-HR Business Partner & Communication chez ORANGE."
+    bio: "Ex-HR Business Partner & Communication chez ORANGE.",
+    image: "/koffi.jpg",
   },
   {
     id: "collab-6",
     name: "M. ISMAEL BALOGUN",
-    role: "Chef de Département Comptabilité et Fiscalité chez AIR COTE D’IVOIRE"
+    role: "Chef de Département Comptabilité et Fiscalité chez AIR COTE D’IVOIRE",
+    image: "/balogun.jpg",
   }
 ];
 
@@ -166,11 +173,19 @@ const CollaboratorCard = memo(({
         } : { scale: 1 }}
       >
         <div className="relative h-72 overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#f9f9f9] to-[#f0f0f0] dark:from-[#2d3748] dark:to-[#1f2937]">
-          <span className="text-[#e0e0e0] dark:text-[#4a5568] text-8xl">
-            <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-            </svg>
-          </span>
+          {collaborator.image ? (
+            <img
+              src={collaborator.image}
+              alt={collaborator.name}
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <span className="text-[#e0e0e0] dark:text-[#4a5568] text-8xl">
+              <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
+            </span>
+          )}
         </div>
         <div className="p-6 flex flex-col flex-grow">
           <h4 className="text-xl font-bold text-[#1f2937] dark:text-white mb-1">{collaborator.name}</h4>
@@ -265,9 +280,17 @@ const CollaboratorModal = memo(({
               whileHover={{ scale: 1.05, y: "40%" }}
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
             >
-              <svg className="w-20 h-20 text-[#ff914d]" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
+              {collaborator.image ? (
+                <img
+                  src={collaborator.image}
+                  alt={collaborator.name}
+                  className="object-cover w-36 h-36 rounded-full"
+                />
+              ) : (
+                <svg className="w-20 h-20 text-[#ff914d]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              )}
             </motion.div>
           </motion.div>
           {/* Content */}

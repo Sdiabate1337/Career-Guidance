@@ -92,7 +92,8 @@ export default function CoachingTrainingPage() {
           "Industry certifications",
           "Expert instructors",
           "Flexible schedule",
-          "Hands-on projects"
+          "Hands-on projects",
+          "Mentoring"
         ]
       : [
           "Coaching individuel",
@@ -102,7 +103,8 @@ export default function CoachingTrainingPage() {
           "Certifications industrie",
           "Formateurs experts",
           "Horaires flexibles",
-          "Projets pratiques"
+          "Projets pratiques",
+          "Mentorat"
         ],
     icon: (
       <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -356,10 +358,10 @@ export default function CoachingTrainingPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#ff914d]">
               {language === 'en' ? 'Pricing & Packages' : 'Tarifs & Offres'}
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto whitespace-pre-line">
               {language === 'en'
-                ? "Flexible plans for every ambition. All packages include expert support and hands-on guidance."
-                : "Des formules flexibles pour chaque ambition. Tous les packs incluent un accompagnement expert et un suivi personnalisé."}
+                ? "Flexible plans for every ambition.\nAll packages include expert support and hands-on guidance."
+                : "Des formules flexibles pour chaque ambition.\nTous les packs incluent un accompagnement expert et un suivi personnalisé."}
             </p>
           </div>
           <div className="flex flex-col lg:flex-row gap-10 items-stretch justify-center">

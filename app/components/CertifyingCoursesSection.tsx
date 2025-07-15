@@ -16,7 +16,6 @@ const categories = [
       "Droit des sociétés pour non-juriste",
       "Fiscalité d’entreprise (Maroc/Côte d'Ivoire)",
       "Les techniques de recouvrement",
-      "Sage",
     ],
   },
   {
@@ -35,6 +34,7 @@ const categories = [
       "Python",
       "Comptabilité",
       "Canva",
+      "Sage",
     ],
   },
   {

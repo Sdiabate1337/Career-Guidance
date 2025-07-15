@@ -131,7 +131,6 @@ const LinkedInServicePage = () => {
     },
     {
       id: 'recommande',
-      name: language === 'en' ? 'RECOMMENDED' : 'RECOMMANDE',
       duration: language === 'en' ? '6 MONTHS' : '06 MOIS',
       priceAfrica: language === 'en' ? '€179' : '179 Euros',
       priceEurope: language === 'en' ? '€209' : '209 Euros TTC',

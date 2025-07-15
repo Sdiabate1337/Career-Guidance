@@ -69,7 +69,7 @@ const Footer = () => {
   // Real company data
   const companyData = {
     email: "careerguidance212@gmail.com",
-    phone: "+212 631466976",
+    phone: "+212 631466976 +212 707-721233",
     address: "90 Bd de la Résistance Hassania II Bloc A 3eme ETG ALIA, Mohammedia",
     registrationInfo: {
       rc: "35889- Mohammedia",
@@ -201,7 +201,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-medium text-[#545454] dark:text-white mb-1">{language === 'en' ? 'Call Us' : 'Appelez-nous'}</p>
-                    <p className="text-sm">{companyData.phone}</p>
+                    <p className="text-sm whitespace-pre-line" >{companyData.phone}</p>
                   </div>
                 </motion.div>
                 
