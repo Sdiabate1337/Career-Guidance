@@ -116,7 +116,7 @@ const HeroSection = () => {
               
             {/* Mobile Carousel View with Enhanced Design */}
             <div className="flex md:hidden space-x-4 overflow-x-auto pb-4 scrollbar-hide">
-              {Array.from({ length: 9 }).map((_, index) => (
+              {Array.from({ length: 10 }).map((_, index) => (
                 <div
                   key={index}
                   className="flex-shrink-0 w-32 h-12 bg-white backdrop-blur-sm rounded-xl shadow-sm flex items-center justify-center border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
@@ -134,7 +134,7 @@ const HeroSection = () => {
 
             {/* Desktop Grid View with Modern Design */}
             <div className="hidden md:grid md:grid-cols-5 gap-6">
-              {Array.from({ length: 9 }).map((_, index) => (
+              {Array.from({ length: 10 }).map((_, index) => (
                 <div
                   key={index}
                   className="h-12 bg-white rounded-xl shadow-sm flex items-center justify-center px-4 border border-[#545454]/10 hover:border-[#ff914d]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"

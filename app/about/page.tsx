@@ -123,8 +123,15 @@ export default function AboutPage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: heroInView ? 1 : 0, x: heroInView ? 0 : 30 }}
             transition={{ duration: 0.8, delay: 0.2 }}>
-            <div className="relative h-96 w-full rounded-2xl overflow-hidden shadow-xl bg-[url('/images/about/team-collaboration.jpg')] bg-cover bg-center" />
+            <div className="relative h-96 w-full rounded-2xl overflow-hidden shadow-xl">
+              <img 
+                src="/guidance.jpg"
+                alt="Career guidance"
+                className="object-cover object-center w-full h-full"
+              />
+            </div>
           </motion.div>
+        
         </div>
       </section>
       
